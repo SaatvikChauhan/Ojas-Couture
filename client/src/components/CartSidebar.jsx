@@ -1,72 +1,62 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
+  
+  // Prevent background scrolling when the sidebar panel is active
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
+
   return (
     <>
-     
-      <div
-        className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${
-          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
-        onClick={onClose}
-      />
+      {/* Dark tint backdrop overlay layer */}
+      <div className={`cart-overlay ${isOpen ? 'open' : ''}`} onClick={onClose} />
 
-     
-      <div
-        className={`fixed top-0 right-0 h-full w-80 md:w-96 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-      >
+      {/* Main Sliding Panel Container */}
+      <div className={`cart-sidebar-panel ${isOpen ? 'open' : ''}`}>
         
-        <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-lg font-semibold text-gray-800">Your Cart</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-black text-2xl font-bold focus:outline-none"
-          >
-            &times;
-          </button>
+        {/* Header Section */}
+        <div className="cart-header">
+          <h2>Your Cart</h2>
+          <button onClick={onClose} className="cart-close-btn">&times;</button>
         </div>
 
-        {}
-        <div className="p-4 overflow-y-auto h-[calc(100vh-180px)]">
+        {/* Scrollable Items Container */}
+        <div className="cart-items-body">
           {cartItems.length === 0 ? (
-            <div className="text-center text-gray-500 mt-10">
-              Your cart is currently empty.
+            <div style={{ textAlign: 'center', color: '#888', marginTop: '40px' }}>
+              Your cart is empty.
             </div>
           ) : (
-            <div className="space-y-4">
-              {cartItems.map((item) => (
-                <div key={item._id} className="flex items-center justify-between border-b pb-2">
-                  <div className="flex items-center gap-3">
-                    <img 
-                      src={item.image || "https://via.placeholder.com/60"} 
-                      alt={item.name} 
-                      className="w-12 h-12 object-cover rounded"
-                    />
-                    <div>
-                      <h4 className="text-sm font-medium">{item.name}</h4>
-                      <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
-                    </div>
+            cartItems.map((item) => (
+              <div key={item._id} className="cart-item-row">
+                <div className="cart-item-info">
+                  <img 
+                    src={item.image || "https://via.placeholder.com/60"} 
+                    alt={item.name} 
+                    className="cart-item-img" 
+                  />
+                  <div>
+                    <h4 style={{ margin: 0, fontSize: '14px', fontWeight: '500' }}>{item.name}</h4>
+                    <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#666' }}>Qty: {item.quantity}</p>
                   </div>
-                  <span className="text-sm font-semibold">₹{item.price}</span>
                 </div>
-              ))}
-            </div>
+                <span style={{ fontWeight: '600', fontSize: '14px' }}>₹{item.price}</span>
+              </div>
+            ))
           )}
         </div>
 
-        {}
-        <div className="absolute bottom-0 left-0 w-full p-4 border-t bg-white">
-          <div className="flex justify-between mb-4">
-            <span className="font-medium text-gray-700">Total:</span>
-            <span className="font-bold text-lg text-gray-900">
+        {/* Total calculation & Checkout panel */}
+        <div className="cart-footer">
+          <div className="cart-total-row">
+            <span style={{ color: '#555' }}>Total:</span>
+            <span style={{ fontWeight: '700', fontSize: '1.1rem' }}>
               ₹{cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}
             </span>
           </div>
-          <button className="w-full bg-black text-white py-2.5 rounded hover:bg-gray-800 transition duration-200 uppercase tracking-wider text-sm font-medium">
-            Proceed to Checkout
-          </button>
+          <button className="checkout-btn">Proceed to Checkout</button>
         </div>
       </div>
     </>

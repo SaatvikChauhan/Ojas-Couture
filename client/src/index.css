@@ -642,12 +642,13 @@ h5 {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100;
-  background: rgba(255, 254, 249, 0.95);
+  z-index: 1000;
+  background: rgba(255, 254, 249, 0.97);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid transparent;
   transition: all 0.3s ease;
-  height: 72px;
+  height: 64px;
 }
 
 .navbar.scrolled {
@@ -659,47 +660,24 @@ h5 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 72px;
+  height: 64px;
 }
 
 .navbar-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
   text-decoration: none;
+  z-index: 1001;
 }
 
 .logo-image {
-  height: 60px;
-  /* Matches the 48px height from your original SVG viewBox */
+  height: 44px;
   width: auto;
   object-fit: contain;
 }
 
-.logo-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1;
-}
-
-.logo-brand {
-  font-family: var(--font-display);
-  font-size: 1.35rem;
-  font-weight: 600;
-  color: var(--charcoal);
-  letter-spacing: 3px;
-}
-
-.logo-sub {
-  font-family: var(--font-body);
-  font-size: 8px;
-  font-weight: 400;
-  letter-spacing: 4px;
-  color: var(--gold);
-  text-transform: uppercase;
-}
-
-.navbar-nav {
+/* ── Desktop nav ── */
+.navbar-nav-desktop {
   display: flex;
   align-items: center;
   gap: 32px;
@@ -715,6 +693,7 @@ h5 {
   position: relative;
   padding-bottom: 3px;
   transition: color 0.2s ease;
+  white-space: nowrap;
 }
 
 .nav-link::after {
@@ -739,14 +718,26 @@ h5 {
   transform: scaleX(1);
 }
 
+/* ── Hamburger — hidden on desktop ── */
 .menu-toggle {
   display: none;
   background: none;
-  border: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
   color: var(--charcoal);
-  padding: 4px;
+  padding: 6px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
 }
 
+/* ── Mobile overlay — completely separate from header ── */
+.mobile-menu-overlay {
+  display: none;
+}
+
+/* ── Mobile breakpoint ── */
 @media (max-width: 900px) {
   .navbar {
     height: 60px;
@@ -756,51 +747,72 @@ h5 {
     height: 60px;
   }
 
-  /* Scale logo down to fit */
   .logo-image {
-    height: 40px;
+    height: 38px;
+  }
+
+  .navbar-nav-desktop {
+    display: none;
   }
 
   .menu-toggle {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
   }
 
-  /* Slide down from navbar instead of covering instantly */
-  .navbar-nav {
+  .mobile-menu-overlay {
     display: flex;
     position: fixed;
     top: 60px;
-    /* matches new mobile height */
+    /* sits exactly below the navbar */
     left: 0;
     right: 0;
     bottom: 0;
+    background: rgba(26, 26, 26, 0.4);
+    z-index: 999;
+    align-items: flex-start;
+    justify-content: stretch;
+  }
+
+  .mobile-menu-nav {
+    width: 100%;
     background: var(--warm-white);
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 36px;
-    z-index: 99;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(-8px);
-    transition: opacity 0.25s ease, transform 0.25s ease;
+    gap: 0;
+    padding: 12px 0 24px;
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   }
 
-  .navbar-nav.open {
-    opacity: 1;
-    pointer-events: all;
-    transform: translateY(0);
-  }
-
-  .nav-link {
+  .mobile-nav-link {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 18px 24px;
     font-size: 13px;
+    font-weight: 500;
     letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--charcoal-mid);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .mobile-nav-link:last-child {
+    border-bottom: none;
+  }
+
+  .mobile-nav-link:hover,
+  .mobile-nav-link.active {
+    background: var(--ivory);
+    color: var(--charcoal);
+  }
+
+  .mobile-nav-link.active {
+    color: var(--gold-dark);
   }
 }
 

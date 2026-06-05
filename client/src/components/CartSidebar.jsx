@@ -3,7 +3,7 @@ import React from 'react';
 const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
   return (
     <>
-      {/* Backdrop overlay when sidebar is open */}
+     
       <div
         className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${
           isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
@@ -11,13 +11,13 @@ const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
         onClick={onClose}
       />
 
-      {/* Sidebar Panel */}
+     
       <div
         className={`fixed top-0 right-0 h-full w-80 md:w-96 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        {/* Sidebar Header */}
+        
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-lg font-semibold text-gray-800">Your Cart</h2>
           <button
@@ -28,7 +28,7 @@ const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
           </button>
         </div>
 
-        {/* Sidebar Content / Items List */}
+        {}
         <div className="p-4 overflow-y-auto h-[calc(100vh-180px)]">
           {cartItems.length === 0 ? (
             <div className="text-center text-gray-500 mt-10">
@@ -56,7 +56,7 @@ const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
           )}
         </div>
 
-        {/* Sidebar Footer / Checkout Button */}
+        {}
         <div className="absolute bottom-0 left-0 w-full p-4 border-t bg-white">
           <div className="flex justify-between mb-4">
             <span className="font-medium text-gray-700">Total:</span>

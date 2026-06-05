@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
-import CartSidebar from './cartsidebar/CartSidebar'; // 2. Imported CartSidebar
+import CartSidebar from './components/CartSidebar'; // 2. Imported CartSidebar
 
 import Home from './pages/Home';
 import Shop from './pages/Shop';

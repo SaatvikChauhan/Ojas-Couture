@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FiMenu, FiX } from 'react-icons/fi';
+import { FiMenu, FiX, FiShoppingBag } from 'react-icons/fi'; // Imported FiShoppingBag
 
 const navLinks = [
   { label: 'Home', path: '/' },
@@ -10,7 +10,8 @@ const navLinks = [
   { label: 'Little Wonders', path: '/little-wonders' },
 ];
 
-export default function Navbar() {
+// Added 'onCartOpen' and 'cartCount' as props
+export default function Navbar({ onCartOpen, cartCount = 0 }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
@@ -39,7 +40,8 @@ export default function Navbar() {
   return (
     <>
       <header className={`navbar ${scrolled ? 'scrolled' : ''}`}>
-        <div className="navbar-inner container">
+        <div className="navbar-inner container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          
           <Link to="/" className="navbar-logo" onClick={() => setMenuOpen(false)}>
             <img src="/logo.avif" alt="Ojas Couture Logo" className="logo-image" />
           </Link>
@@ -57,13 +59,61 @@ export default function Navbar() {
             ))}
           </nav>
 
-          <button
-            className="menu-toggle"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            {menuOpen ? <FiX size={22} /> : <FiMenu size={22} />}
-          </button>
+          {/* Actions Container (Cart Icon + Mobile Menu Toggle) */}
+          <div className="navbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+            
+            {/* Shopping Cart Button */}
+            <button
+              onClick={onCartOpen}
+              className="cart-toggle-btn"
+              aria-label="Open Cart"
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                padding: '5px'
+              }}
+            >
+              <FiShoppingBag size={24} className="text-gray-700 hover:text-black transition-colors" />
+              
+              {/* Cart Count Badge */}
+              {cartCount > 0 && (
+                <span 
+                  className="cart-badge"
+                  style={{
+                    position: 'absolute',
+                    top: '-2px',
+                    right: '-2px',
+                    backgroundColor: '#ef4444', // Red badge
+                    color: 'white',
+                    fontSize: '10px',
+                    fontWeight: 'bold',
+                    borderRadius: '50%',
+                    width: '16px',
+                    height: '16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  {cartCount}
+                </span>
+              )}
+            </button>
+
+            {/* Hamburger Mobile Menu Toggle */}
+            <button
+              className="menu-toggle"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle menu"
+            >
+              {menuOpen ? <FiX size={22} /> : <FiMenu size={22} />}
+            </button>
+          </div>
+
         </div>
       </header>
 

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react'; // 1. Added useState
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
+import CartSidebar from './cartsidebar/CartSidebar'; // 2. Imported CartSidebar
 
 import Home from './pages/Home';
 import Shop from './pages/Shop';
@@ -19,9 +20,26 @@ import Contact from './pages/Contact';
 // import PrivacyPolicy from './pages/PrivacyPolicy';
 
 export default function App() {
+  // 3. State to manage whether the Cart Sidebar is sliding open or closed
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  // 4. Temporary cart item array state (Replace with Redux/Context when connecting to MongoDB later)
+  const [cartItems, setCartItems] = useState([
+    { _id: '1', name: 'Black Embroidered Kurta Set', price: 3900, quantity: 1, image: '' },
+    { _id: '2', name: 'Beige Chikankari Kurta Set', price: 4500, quantity: 2, image: '' }
+  ]);
+
+  // 5. Calculate total quantity of items to show on the Navbar badge icon
+  const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+
   return (
     <BrowserRouter>
-      <Navbar />
+      {/* 6. Passed properties to Navbar to trigger layout state change */}
+      <Navbar 
+        onCartOpen={() => setIsCartOpen(true)} 
+        cartCount={totalCartCount} 
+      />
+      
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />
@@ -38,6 +56,14 @@ export default function App() {
         <Route path="/terms" element={<TermsConditions />} />
         <Route path="/privacy" element={<PrivacyPolicy />} /> */}
       </Routes>
+
+      {/* 7. Added CartSidebar component right outside the main viewport tracks */}
+      <CartSidebar 
+        isOpen={isCartOpen} 
+        onClose={() => setIsCartOpen(false)} 
+        cartItems={cartItems} 
+      />
+
       <Footer />
       <WhatsAppButton />
     </BrowserRouter>

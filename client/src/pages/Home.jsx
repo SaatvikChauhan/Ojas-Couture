@@ -196,6 +196,49 @@ export default function Home() {
         </div>
       </section>
 
+{/* 5. Our Offering Section */}
+      <section className="our-offering section-pad" style={{ background: '#f5f5f5' }}>
+        <div className="container">
+          <h2 className="section-title" style={{ textAlign: 'center' }}>OUR OFFERING</h2>
+          <div className="divider-gold" />
+          
+          <div className="offering-grid" style={{ display: 'flex', gap: '40px', marginTop: '48px' }}>
+            {/* Card 1: Video Consultations */}
+            <div className="offering-card" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+              <div className="offering-img-wrapper" style={{ overflow: 'hidden', height: '400px', marginBottom: '24px' }}>
+                <img 
+                  src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600" 
+                  alt="Video Consultation" 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+              <h3 className="offering-card-title" style={{ fontSize: '20px', letterSpacing: '1px', marginBottom: '16px', textTransform: 'uppercase' }}>
+                Video Consultations
+              </h3>
+              <p className="offering-card-desc" style={{ color: '#666', lineHeight: '1.6', fontSize: '15px' }}>
+                <strong>A Private Couture Experience, Anywhere.</strong> If you cannot step into our store, let us bring our master craftsmanship to you. Connect with an in-house stylist via a personalized video call to explore our latest heritage designs and custom fits.
+              </p>
+            </div>
+
+            {/* Card 2: Custom Fittings */}
+            <div className="offering-card" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+              <div className="offering-img-wrapper" style={{ overflow: 'hidden', height: '400px', marginBottom: '24px' }}>
+                <img 
+                  src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600" 
+                  alt="Custom Fittings" 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+              <h3 className="offering-card-title" style={{ fontSize: '20px', letterSpacing: '1px', marginBottom: '16px', textTransform: 'uppercase' }}>
+                Custom Fittings
+              </h3>
+              <p className="offering-card-desc" style={{ color: '#666', lineHeight: '1.6', fontSize: '15px' }}>
+                <strong>Made-to-Measure Excellence!</strong> Experience perfection in every stitch. Our custom tailoring service transforms exquisite designs into garments uniquely crafted around your personal measurements and requirements.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* 5. The Ojas Promise */}
       <section className="why-ojas section-pad">

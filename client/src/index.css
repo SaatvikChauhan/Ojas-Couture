@@ -1979,3 +1979,16 @@ h5 {
   flex: 1;
   min-height: 450px;
 }
+
+
+/* Responsive adjustments for Our Offering section */
+@media (max-width: 768px) {
+  .offering-grid {
+    flex-direction: column !important;
+    gap: 32px !important;
+  }
+  
+  .offering-img-wrapper {
+    height: 300px !important; /* Slightly shorter height on mobile viewports */
+  }
+}

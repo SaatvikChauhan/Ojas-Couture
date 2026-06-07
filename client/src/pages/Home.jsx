@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { productAPI, testimonialAPI } from '../utils/api';
 import ProductCard from '../components/ProductCard';
@@ -19,25 +19,45 @@ const FALLBACK_TESTIMONIALS = [
 
 export default function Home() {
   const [products, setProducts] = useState([]);
+  const [specialProducts, setSpecialProducts] = useState([]); // State for Special Price section
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Separate references for both sliders
+  const newArrivalsSliderRef = useRef(null);
+  const specialPriceSliderRef = useRef(null);
+
   useEffect(() => {
     Promise.all([
-      productAPI.getAll({ limit: 8 }),
+      productAPI.getAll({ limit: 10 }), // New Arrivals
+      productAPI.getAll({ limit: 10, category: 'special-price' }), // Special Price (Adjust filter as per your backend)
       testimonialAPI.getAll({ featured: 'true' })
-    ]).then(([pRes, tRes]) => {
+    ]).then(([pRes, sRes, tRes]) => {
       setProducts(pRes.data.products?.length ? pRes.data.products : FALLBACK_PRODUCTS);
+      setSpecialProducts(sRes.data.products?.length ? sRes.data.products : FALLBACK_PRODUCTS);
       setTestimonials(tRes.data?.length ? tRes.data : FALLBACK_TESTIMONIALS);
     }).catch(() => {
       setProducts(FALLBACK_PRODUCTS);
+      setSpecialProducts(FALLBACK_PRODUCTS);
       setTestimonials(FALLBACK_TESTIMONIALS);
     }).finally(() => setLoading(false));
   }, []);
 
+  // Generic Scroll Function
+  const scroll = (ref, direction) => {
+    if (ref.current) {
+      const { scrollLeft, clientWidth } = ref.current;
+      const scrollAmount = direction === 'left' ? -clientWidth * 0.8 : clientWidth * 0.8;
+      ref.current.scrollTo({
+        left: scrollLeft + scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <div className="home">
-      {/* Hero */}
+      {/* 1. Hero Section */}
       <section className="hero">
         <div className="hero-bg">
           <img
@@ -47,8 +67,7 @@ export default function Home() {
           />
           <div className="hero-overlay" />
         </div>
-        <div className="hero-content container">
-          <p className="hero-eyebrow">Est. 2019 · Handcrafted in India</p>
+        <div className="hero-content container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
           <h1 className="hero-title">Ojas Couture</h1>
           <p className="hero-subtitle">Elegant Indian Women's Clothing Online</p>
           <div className="hero-actions">
@@ -62,7 +81,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Collections Banner */}
+      {/* 2. Collections Banner */}
       <section className="collections-banner section-pad">
         <div className="container">
           <h2 className="section-title">Our Collections</h2>
@@ -73,7 +92,7 @@ export default function Home() {
             <Link to="/little-wonders" className="collection-card large">
               <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800" alt="Little Wonders" />
               <div className="collection-overlay">
-                <p className="collection-eyebrow">Little Wonders · by Pratibha Rajput</p>
+                <p className="collection-eyebrow">Little Wonders · by Rajput</p>
                 <h3>Exclusive Collection</h3>
                 <p>Discover beautifully Customized stitched Indian Suits for every occasion.</p>
                 <span className="btn-outline-gold" style={{display:'inline-block', marginTop: 16}}>View Collection</span>
@@ -91,9 +110,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Products */}
+      {/* 3. New Arrivals Section */}
       <section className="featured-products section-pad" style={{ background: 'var(--ivory)' }}>
-        <div className="container">
+        <div className="container" style={{ position: 'relative' }}>
           <h2 className="section-title">New Arrivals</h2>
           <div className="divider-gold" />
           <p className="section-subtitle">Fresh from our collection</p>
@@ -101,8 +120,16 @@ export default function Home() {
           {loading ? (
             <div className="spinner"><div className="spinner-ring" /></div>
           ) : (
-            <div className="products-grid">
-              {products.slice(0, 8).map(p => <ProductCard key={p._id} product={p} />)}
+            <div className="slider-wrapper">
+              <button className="slider-btn left-btn" onClick={() => scroll(newArrivalsSliderRef, 'left')}>&#10094;</button>
+              <div className="products-slider-row" ref={newArrivalsSliderRef}>
+                {products.map(p => (
+                  <div className="slider-item" key={`new-${p._id}`}>
+                    <ProductCard product={p} />
+                  </div>
+                ))}
+              </div>
+              <button className="slider-btn right-btn" onClick={() => scroll(newArrivalsSliderRef, 'right')}>&#10095;</button>
             </div>
           )}
 
@@ -112,7 +139,36 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Why Ojas */}
+      {/*  Special Price Section */}
+      <section className="special-price-products section-pad" style={{ background: '#fff' }}>
+        <div className="container" style={{ position: 'relative' }}>
+          <h2 className="section-title">Special Price</h2>
+          <div className="divider-gold" />
+          <p className="section-subtitle">Unmissable deals on premium styles</p>
+
+          {loading ? (
+            <div className="spinner"><div className="spinner-ring" /></div>
+          ) : (
+            <div className="slider-wrapper">
+              <button className="slider-btn left-btn" onClick={() => scroll(specialPriceSliderRef, 'left')}>&#10094;</button>
+              <div className="products-slider-row" ref={specialPriceSliderRef}>
+                {specialProducts.map(p => (
+                  <div className="slider-item" key={`spec-${p._id}`}>
+                    <ProductCard product={p} />
+                  </div>
+                ))}
+              </div>
+              <button className="slider-btn right-btn" onClick={() => scroll(specialPriceSliderRef, 'right')}>&#10095;</button>
+            </div>
+          )}
+
+          <div style={{ textAlign: 'center', marginTop: 48 }}>
+            <Link to="/special-price" className="btn-secondary">View All Products</Link>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. The Ojas Promise */}
       <section className="why-ojas section-pad">
         <div className="container">
           <h2 className="section-title">The Ojas Promise</h2>
@@ -121,10 +177,10 @@ export default function Home() {
 
           <div className="promise-grid">
             {[
-              { icon: '✦', title: 'Handcrafted Excellence', desc: 'Every piece is crafted by skilled artisans using traditional techniques passed down through generations.' },
-              { icon: '♻', title: 'Ethically Sourced', desc: 'We work directly with artisan communities, ensuring fair wages and sustainable practices.' },
-              { icon: '✂', title: 'Custom Stitching', desc: 'Our Little Wonders collection offers fully personalized stitching to your exact measurements.' },
-              { icon: '⬡', title: 'Premium Quality', desc: 'Only the finest fabrics — pure cotton, silk, georgette, and velvet — make it to our collection.' },
+              { icon: '✦', title: 'Handcrafted Excellence', desc: 'Every piece is crafted by skilled artisans using traditional techniques.' },
+              { icon: '♻', title: 'Ethically Sourced', desc: 'We work directly with artisan communities ensuring fair wages.' },
+              { icon: '✂', title: 'Custom Stitching', desc: 'Fully personalized stitching to your exact measurements.' },
+              { icon: '⬡', title: 'Premium Quality', desc: 'Only the finest fabrics — pure cotton, silk, and georgette.' },
             ].map(item => (
               <div className="promise-item" key={item.title}>
                 <div className="promise-icon">{item.icon}</div>
@@ -136,7 +192,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* 6. Testimonials */}
       <section className="home-testimonials section-pad" style={{ background: 'var(--charcoal)' }}>
         <div className="container">
           <h2 className="section-title" style={{ color: 'var(--warm-white)' }}>Our Happy Family</h2>
@@ -155,18 +211,17 @@ export default function Home() {
               </div>
             ))}
           </div>
-
           <div style={{ textAlign: 'center', marginTop: 40 }}>
             <Link to="/testimonials" className="btn-outline-gold">Read All Reviews</Link>
           </div>
         </div>
       </section>
 
-      {/* Newsletter Banner */}
+      {/* 7. Newsletter Banner */}
       <section className="home-newsletter section-pad" style={{ background: 'var(--forest)', color: 'white', textAlign: 'center' }}>
         <div className="container">
           <h2 className="section-title" style={{ color: 'var(--warm-white)' }}>Join the Ojas Family</h2>
-          <p style={{ color: 'rgba(255,254,249,0.7)', marginBottom: 32, maxWidth: 480, margin: '0 auto 32px', fontSize: 15 }}>
+          <p style={{ color: 'rgba(255,254,249,0.7)', marginBottom: 32, maxWidth: 480, margin: '0 auto 32px' }}>
             Get first access to new arrivals, exclusive offers, and styling inspiration.
           </p>
           <Link to="/join-family" className="btn-primary">Become a Member</Link>

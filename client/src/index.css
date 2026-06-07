@@ -401,7 +401,7 @@ h5 {
 .whatsapp-float {
   position: fixed;
   bottom: 28px;
-  left: 28px;
+  right: 28px;
   z-index: 999;
   display: flex;
   align-items: center;
@@ -929,19 +929,19 @@ h5 {
 
 /* Collections */
 .collections-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-top: 48px;
+ display: flex;
+  gap: 24px;          
+  align-items: stretch; 
+  width: 100%;
 }
 
 .collection-card {
+  flex: 1;           
+  display: flex;
+  flex-direction: column;
   position: relative;
   overflow: hidden;
-  border-radius: var(--radius-lg);
-  display: block;
-  cursor: pointer;
-  aspect-ratio: 4/3;
+  height: 500px;
 }
 
 .collection-card.large {
@@ -949,10 +949,9 @@ h5 {
 }
 
 .collection-card img {
-  width: 100%;
+ width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.7s ease;
 }
 
 .collection-card:hover img {
@@ -1861,4 +1860,111 @@ h5 {
 
 .cart-anchor:hover .cart-svg-icon {
     transform: scale(1.05);
+}
+
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;    /* Centers everything horizontally */
+  justify-content: center; /* Centers everything vertically */
+  text-align: center;      /* Ensures the text lines align perfectly center */
+  width: 100%;
+}
+
+.hero-subtitle {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center; /* Ensures buttons remain side-by-side but centered */
+}
+
+/* Container holding row elements and arrows */
+.slider-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Horizontal track container */
+.products-slider-row {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  width: 100%;
+  padding: 12px 4px;
+  
+  /* Hide standard scrollbars across browsers */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.products-slider-row::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* Math formula forcing exactly 5 cards uniformly layout across row */
+.slider-item {
+  flex: 0 0 calc((100% - (16px * 4)) / 5);
+  min-width: calc((100% - (16px * 4)) / 5);
+  box-sizing: border-box;
+}
+
+/* Rounded Arrow Controls Buttons */
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: var(--charcoal, #1a1a1a);
+  color: var(--warm-white, #fff);
+  border: 1px solid var(--gold, #d4af37);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: all 0.2s ease-in-out;
+}
+
+.slider-btn:hover {
+  background-color: var(--gold, #d4af37);
+  color: #000;
+}
+
+.left-btn {
+  left: -22px;
+}
+
+.right-btn {
+  right: -22px;
+}
+
+/* Responsive scaling rules for small layouts */
+@media (max-width: 1200px) {
+  .slider-item {
+    flex: 0 0 calc((100% - (16px * 2)) / 3); /* 3 cards on tablets */
+    min-width: calc((100% - (16px * 2)) / 3);
+  }
+}
+
+@media (max-width: 650px) {
+  .slider-item {
+    flex: 0 0 78%; /* Peek of next element to signal swipe capability on mobile */
+    min-width: 78%;
+  }
+  .slider-btn {
+    display: none; /* Rely on natural finger gesture swipes on smaller responsive screen breakpoints */
+  }
 }

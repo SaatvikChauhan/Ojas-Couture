@@ -168,6 +168,63 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="categories-showcase section-pad" style={{ background: '#ffffff', paddingTop: 0 }}>
+        <div className="container">
+          <div className="collections-grid elements-three">
+            <div className="collection-card">
+              <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600" alt="Kurtas" />
+              <div className="collection-overlay">
+                <h3>KURTAS</h3>
+                <Link to="/shop?category=kurtas" className="btn-link">View All Products</Link>
+              </div>
+            </div>
+            <div className="collection-card">
+              <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600" alt="Suit Sets" />
+              <div className="collection-overlay">
+                <h3>SUIT SETS</h3>
+                <Link to="/shop?category=suits" className="btn-link">View All Products</Link>
+              </div>
+            </div>
+            <div className="collection-card">
+              <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600" alt="Sarees" />
+              <div className="collection-overlay">
+                <h3>SAREES</h3>
+                <Link to="/shop?category=sarees" className="btn-link">View All Products</Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. Your Brand New Section (Placed exactly underneath your categories grid layout) */}
+      <section className="custom-showcase-products section-pad" style={{ background: 'var(--ivory)' }}>
+        <div className="container" style={{ position: 'relative' }}>
+          <h2 className="section-title">Our Curated Pick</h2>
+          <div className="divider-gold" />
+          <p className="section-subtitle">Handpicked selection curated just for you</p>
+
+          {loading ? (
+            <div className="spinner"><div className="spinner-ring" /></div>
+          ) : (
+            <div className="slider-wrapper">
+              <button className="slider-btn left-btn" onClick={() => scroll(newArrivalsSliderRef, 'left')}>&#10094;</button>
+              <div className="products-slider-row">
+                {products.map(p => (
+                  <div className="slider-item" key={`curated-${p._id}`}>
+                    <ProductCard product={p} />
+                  </div>
+                ))}
+              </div>
+              <button className="slider-btn right-btn" onClick={() => scroll(newArrivalsSliderRef, 'right')}>&#10095;</button>
+            </div>
+          )}
+
+          <div style={{ textAlign: 'center', marginTop: 48 }}>
+            <Link to="/shop" className="btn-secondary">View All Products</Link>
+          </div>
+        </div>
+      </section>
+
       {/* 5. The Ojas Promise */}
       <section className="why-ojas section-pad">
         <div className="container">

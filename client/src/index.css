@@ -1968,3 +1968,14 @@ h5 {
     display: none; /* Rely on natural finger gesture swipes on smaller responsive screen breakpoints */
   }
 }
+
+.collections-grid.elements-three {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+}
+
+.collections-grid.elements-three .collection-card {
+  flex: 1;
+  min-height: 450px;
+}

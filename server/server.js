@@ -1,4 +1,3 @@
-console.log("FILE LOADED");
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -31,10 +30,19 @@ const connectDB = async () => {
   }
 };
 
-// --- GLOBAL MIDDLEWARE TO CONNECT DB ---
+
+app.get('/api/health', (req, res) => {
+  return res.json({ status: 'OK', message: 'Ojas Couture API running' });
+});
+
 app.use(async (req, res, next) => {
-  await connectDB();
-  next();
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("DB Error");
+  }
 });
 
 // --- ROUTES ---
@@ -45,12 +53,6 @@ app.use('/api/contact', require('./routes/contact'));
 app.use('/api/reviews', require('./routes/reviews'));
 // app.use('/api/faq', require('../routes/faq'));
 app.use('/api/newsletter', require('./routes/newsletter'));
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Ojas Couture API running' });
-});
-app.get('/api/debug', (req, res) => {
-  res.send("API HIT");
-});
 
 // --- EXPORT FOR VERCEL ---
 module.exports = serverless(app);

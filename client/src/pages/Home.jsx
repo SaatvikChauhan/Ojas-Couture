@@ -35,7 +35,7 @@ export default function Home() {
     ]).then(([pRes, sRes, tRes]) => {
       setProducts(pRes.data.products?.length ? pRes.data.products : FALLBACK_PRODUCTS);
       setSpecialProducts(sRes.data.products?.length ? sRes.data.products : FALLBACK_PRODUCTS);
-      setTestimonials(FALLBACK_TESTIMONIALS);
+      setTestimonials(tRes.data.products?.length ? tRes.data.products : FALLBACK_TESTIMONIALS);
     }).catch(() => {
       setProducts(FALLBACK_PRODUCTS);
       setSpecialProducts(FALLBACK_PRODUCTS);

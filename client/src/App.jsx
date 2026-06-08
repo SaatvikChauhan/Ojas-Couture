@@ -1,5 +1,6 @@
 import React, { useState } from 'react'; // 1. Added useState
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ScrollToTop from './components/ScrollToTop';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
@@ -35,6 +36,8 @@ export default function App() {
   return (
     <BrowserRouter>
       {/* 6. Passed properties to Navbar to trigger layout state change */}
+
+      <ScrollToTop/>
       <Navbar 
         onCartOpen={() => setIsCartOpen(true)} 
         cartCount={totalCartCount} 

@@ -56,6 +56,7 @@ export default function Home() {
   };
 
   return (
+    
     <div className="home">
       {/* 1. Hero Section */}
       <section className="hero">

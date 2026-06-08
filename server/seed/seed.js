@@ -27,22 +27,19 @@ const products = [
     ]
   },
   {
-    name: 'Beige Chikankari Kurta Set',
-    price: 4500,
-    description: 'Luxurious beige kurta with authentic Lucknowi chikankari embroidery. A timeless piece perfect for festive occasions and special gatherings.',
-    category: 'kurta-set',
-    images: ['https://images.unsplash.com/photo-1614285798449-02a33ee5e02b?w=600'],
-    badge: 'HANDMADE',
-    fabric: 'Pure Cotton',
-    work: 'Chikankari',
-    sizes: ['XS', 'S', 'M', 'L', 'XL'],
+    name: 'Royal Blue Banarasi Silk Saree',
+    price: 8500,
+    originalPrice: 10000,
+    description: 'Resplendent royal blue Banarasi silk saree with intricate gold zari weaving. A collector\'s piece that embodies the grandeur of Indian weaving traditions.',
+    category: 'saree',
+    images: ['https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600'],
+    badge: 'BEST SELLER',
+    fabric: 'Pure Banarasi Silk',
+    work: 'Zari Weaving',
     inStock: true,
     isBestSeller: true,
-    isSpecialPrice: false,
-    tags: ['beige', 'chikankari', 'handmade', 'lucknowi'],
-    reviews: [
-      { name: 'Anjali Verma', rating: 5, comment: 'The chikankari work is exquisite. Worth every penny!', verified: true }
-    ]
+    isSpecialPrice: true,
+    tags: ['saree', 'banarasi', 'silk', 'wedding', 'blue']
   },
   {
     name: 'Black Embroidered Kurta Set',
@@ -58,21 +55,19 @@ const products = [
     tags: ['black', 'mirror work', 'festive', 'party wear']
   },
   {
-    name: 'Purple Applique Work Cotton Dress Material',
-    price: 1950,
-    description: 'Vibrant purple cotton dress material featuring beautiful applique work. Ideal for stitching your personalized outfit. Includes 3.5m fabric + blouse piece.',
-    category: 'dress-material',
-    images: ['https://images.unsplash.com/photo-1558171813-2f5bbbc3cf44?w=600'],
-    badge: 'HANDMADE',
-    fabric: 'Pure Cotton',
-    work: 'Applique',
+    name: 'Royal Blue Banarasi Silk Saree',
+    price: 8500,
+    originalPrice: 10000,
+    description: 'Resplendent royal blue Banarasi silk saree with intricate gold zari weaving. A collector\'s piece that embodies the grandeur of Indian weaving traditions.',
+    category: 'saree',
+    images: ['https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600'],
+    badge: 'BEST SELLER',
+    fabric: 'Pure Banarasi Silk',
+    work: 'Zari Weaving',
     inStock: true,
-    isLittleWonders: true,
-    isBestSeller: false,
-    tags: ['purple', 'cotton', 'applique', 'unstitched'],
-    reviews: [
-      { name: 'Sunita Gupta', rating: 5, comment: 'The applique work is stunning. Got it stitched and it looks amazing!', verified: true }
-    ]
+    isBestSeller: true,
+    isSpecialPrice: true,
+    tags: ['saree', 'banarasi', 'silk', 'wedding', 'blue']
   },
   {
     name: 'Pink Bandhani Kurti Set',
@@ -116,18 +111,19 @@ const products = [
     tags: ['saree', 'banarasi', 'silk', 'wedding', 'blue']
   },
   {
-    name: 'Ivory Chikankari Straight Kurta',
-    price: 3200,
-    description: 'Understated elegance in ivory with delicate chikankari shadow work. This straight-cut kurta pairs beautifully with both cigarette pants and palazzos.',
-    category: 'kurta-set',
-    images: ['https://images.unsplash.com/photo-1614285798449-02a33ee5e02b?w=600'],
-    badge: 'HANDMADE',
-    fabric: 'Georgette',
-    work: 'Chikankari Shadow Work',
-    sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+    name: 'Royal Blue Banarasi Silk Saree',
+    price: 8500,
+    originalPrice: 10000,
+    description: 'Resplendent royal blue Banarasi silk saree with intricate gold zari weaving. A collector\'s piece that embodies the grandeur of Indian weaving traditions.',
+    category: 'saree',
+    images: ['https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600'],
+    badge: 'BEST SELLER',
+    fabric: 'Pure Banarasi Silk',
+    work: 'Zari Weaving',
     inStock: true,
-    isLittleWonders: true,
-    tags: ['ivory', 'chikankari', 'straight', 'elegant']
+    isBestSeller: true,
+    isSpecialPrice: true,
+    tags: ['saree', 'banarasi', 'silk', 'wedding', 'blue']
   },
   {
     name: 'Mustard Phulkari Dupatta Set',
@@ -144,20 +140,19 @@ const products = [
     tags: ['mustard', 'phulkari', 'punjabi', 'dupatta']
   },
   {
-    name: 'Teal Block Print Anarkali',
-    price: 5500,
-    originalPrice: 6500,
-    description: 'Graceful teal anarkali with traditional Rajasthani block print. The flowing silhouette and deep neckline make it a showstopper for festive occasions.',
-    category: 'kurti-set',
-    images: ['https://images.unsplash.com/photo-1558171813-2f5bbbc3cf44?w=600'],
-    badge: 'SALE',
-    fabric: 'Pure Cotton',
-    work: 'Block Print',
-    sizes: ['S', 'M', 'L', 'XL'],
+    name: 'Royal Blue Banarasi Silk Saree',
+    price: 8500,
+    originalPrice: 10000,
+    description: 'Resplendent royal blue Banarasi silk saree with intricate gold zari weaving. A collector\'s piece that embodies the grandeur of Indian weaving traditions.',
+    category: 'saree',
+    images: ['https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600'],
+    badge: 'BEST SELLER',
+    fabric: 'Pure Banarasi Silk',
+    work: 'Zari Weaving',
     inStock: true,
     isBestSeller: true,
     isSpecialPrice: true,
-    tags: ['teal', 'anarkali', 'block print', 'festive']
+    tags: ['saree', 'banarasi', 'silk', 'wedding', 'blue']
   },
   {
     name: 'Wine Velvet Lehenga Choli',

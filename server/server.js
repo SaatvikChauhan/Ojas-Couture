@@ -47,6 +47,9 @@ app.use('/api/newsletter', require('./routes/newsletter'));
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Ojas Couture API running' });
 });
+app.get('/api/debug', (req, res) => {
+  res.send("API HIT");
+});
 
 // --- EXPORT FOR VERCEL ---
 module.exports = serverless(app);

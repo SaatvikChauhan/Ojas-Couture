@@ -8,7 +8,7 @@ const app = express();
 
 // --- MIDDLEWARE ---
 app.use(cors({
-  origin: process.env.CLIENT_URL || '*', // safer for Vercel
+  origin: '*',
   credentials: true
 }));
 app.use(express.json());
@@ -19,7 +19,6 @@ let isConnected = false;
 
 const connectDB = async () => {
   if (isConnected) return;
-
   try {
     await mongoose.connect(process.env.MONGO_URI, {
       bufferCommands: false,
@@ -38,14 +37,13 @@ app.use(async (req, res, next) => {
 });
 
 // --- ROUTES ---
-app.use('/api/products', require('./routes/products'));
-app.use('/api/testimonials', require('./routes/testimonials'));
-app.use('/api/blog', require('./routes/blog'));
-app.use('/api/contact', require('./routes/contact'));
-app.use('/api/reviews', require('./routes/reviews'));
-app.use('/api/faq', require('./routes/faq'));
-app.use('/api/newsletter', require('./routes/newsletter'));
-
+app.use('/api/products', require('../routes/products'));
+// app.use('/api/testimonials', require('../routes/testimonials'));
+// app.use('/api/blog', require('../routes/blog'));
+app.use('/api/contact', require('../routes/contact'));
+app.use('/api/reviews', require('../routes/reviews'));
+// app.use('/api/faq', require('../routes/faq'));
+app.use('/api/newsletter', require('../routes/newsletter'));
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Ojas Couture API running' });
 });

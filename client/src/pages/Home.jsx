@@ -31,11 +31,11 @@ export default function Home() {
     Promise.all([
       productAPI.getAll({ limit: 10 }), // New Arrivals
       productAPI.getAll({ limit: 10, category: 'special-price' }), // Special Price (Adjust filter as per your backend)
-      testimonialAPI.getAll({ featured: 'true' })
+      // testimonialAPI.getAll({ featured: 'true' })
     ]).then(([pRes, sRes, tRes]) => {
       setProducts(pRes.data.products?.length ? pRes.data.products : FALLBACK_PRODUCTS);
       setSpecialProducts(sRes.data.products?.length ? sRes.data.products : FALLBACK_PRODUCTS);
-      setTestimonials(tRes.data?.length ? tRes.data : FALLBACK_TESTIMONIALS);
+      setTestimonials(FALLBACK_TESTIMONIALS);
     }).catch(() => {
       setProducts(FALLBACK_PRODUCTS);
       setSpecialProducts(FALLBACK_PRODUCTS);

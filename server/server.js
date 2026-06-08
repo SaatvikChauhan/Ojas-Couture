@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const serverless = require('serverless-http');
 
 const app = express();
 
@@ -55,4 +54,4 @@ app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/newsletter', require('./routes/newsletter'));
 
 // --- EXPORT FOR VERCEL ---
-module.exports = serverless(app);
+module.exports = app;

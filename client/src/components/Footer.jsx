@@ -22,16 +22,16 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer-top container">
         
-        {/* Left Column: ABOUT US & CONTACT US */}
-        <div className="footer-column brand-contact-col">
-          <div className="footer-section">
+        {/* Column 1: ABOUT US & CONTACT US */}
+        <div className="footer-column">
+          <div className="footer-group">
             <h4>ABOUT US</h4>
-            <p className="footer-tagline">
+            <p>
               Rooted in tradition and led by women for decades, we bring the magic and simple opulence of the past back to life, creating timeless styles for today’s little wonders.
             </p>
           </div>
           
-          <div className="footer-section contact-info-section">
+          <div className="footer-group contact-section">
             <h4>CONTACT US</h4>
             <p className="contact-phone">+91-9650656166</p>
             <p className="contact-email">
@@ -40,8 +40,8 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Second Column: INFORMATION */}
-        <div className="footer-column links-col">
+        {/* Column 2: INFORMATION */}
+        <div className="footer-column">
           <h4>INFORMATION</h4>
           <ul>
             <li><Link to="/about">About us</Link></li>
@@ -52,8 +52,8 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Third Column: LEGAL */}
-        <div className="footer-column links-col">
+        {/* Column 3: LEGAL */}
+        <div className="footer-column">
           <h4>LEGAL</h4>
           <ul>
             <li><Link to="/privacy-terms">Privacy ,Terms & Conditions</Link></li>
@@ -64,8 +64,8 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Right Column: Newsletter Form & Social Icons */}
-        <div className="footer-column newsletter-col">
+        {/* Column 4: NEWSLETTER & SOCIALS */}
+        <div className="footer-column newsletter-column">
           <form onSubmit={handleSubscribe} className="newsletter-form">
             <label htmlFor="newsletter-email" className="newsletter-label">
               Enter your email address
@@ -84,7 +84,6 @@ export default function Footer() {
           </form>
           {msg && <p className="newsletter-msg">{msg}</p>}
 
-          {/* Social Media Links matching the display icons */}
           <div className="footer-socials">
             <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook">
               <i className="fab fa-facebook-f"></i>
@@ -97,12 +96,10 @@ export default function Footer() {
 
       </div>
 
-      {/* Footer Bottom Metadata and Copyright */}
+      {/* Bottom Section */}
       <div className="footer-bottom container">
-        <p className="footer-more-text">ojas couture is a luxury brand........more</p>
-        <p className="footer-copyright">
-          © {new Date().getFullYear()}. Ojas Couture. Powered By Radiant Synergy
-        </p>
+        <p className="footer-brand-text">ojas couture is a luxury brand........more</p>
+        <p className="footer-copyright">© 2026. Ojas Couture. Powered By Radiant Synergy</p>
       </div>
     </footer>
   );

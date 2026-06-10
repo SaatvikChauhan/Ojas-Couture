@@ -22,77 +22,54 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer-top container">
         
-        {/* Brand Section */}
-        <div className="footer-brand">
-          <div className="footer-logo">
-            <span className="footer-logo-brand">OJAS</span>
-            <span className="footer-logo-sub">COUTURE</span>
+        {/* Left Column: ABOUT US & CONTACT US */}
+        <div className="footer-column brand-contact-col">
+          <div className="footer-section">
+            <h4>ABOUT US</h4>
+            <p className="footer-tagline">
+              Rooted in tradition and led by women for decades, we bring the magic and simple opulence of the past back to life, creating timeless styles for today’s little wonders.
+            </p>
           </div>
-          <p className="footer-tagline">
-            Rooted in tradition and led by women for decades, we bring the magic and simple opulence of the past back to life, creating timeless styles for today’s little wonders.
-          </p>
-          <p className="footer-brand-extra-text">
-            ojas couture is a luxury brand........more
-          </p>
+          
+          <div className="footer-section contact-info-section">
+            <h4>CONTACT US</h4>
+            <p className="contact-phone">+91-9650656166</p>
+            <p className="contact-email">
+              <a href="mailto:contact@ojascouture.com">contact@ojascouture.com</a>
+            </p>
+          </div>
         </div>
 
-        {/* Information Section */}
-        <div className="footer-links">
+        {/* Second Column: INFORMATION */}
+        <div className="footer-column links-col">
           <h4>INFORMATION</h4>
           <ul>
             <li><Link to="/about">About us</Link></li>
-            <li><Link to="/shipping-delivery">Shipping and Delivery</Link></li>
             <li><Link to="/appointments">Appointments/Get In Touch</Link></li>
-            <li><Link to="/terms-of-service">Terms of Service</Link></li>
-            <li><Link to="/blog">Blog</Link></li>
-            <li><Link to="/privacy-terms">Privacy ,Terms & Conditions</Link></li>
+            <li><Link to="/shipping-delivery">Shipping and Delivery</Link></li>
             <li><Link to="/faq">F&Q</Link></li>
+            <li><Link to="/blog">Blog</Link></li>
           </ul>
         </div>
 
-        {/* Contact Us Section */}
-        <div className="footer-links">
-          <h4>CONTACT US</h4>
-          <div className="footer-contact-info">
-            <a href="mailto:contact@ojascouture.com">contact@ojascouture.com</a>
-            <a href="tel:+919650656166">+91-9650656166</a>
-          </div>
-          <div className="footer-social-icons">
-            {/* Social media placeholder links as per the site icons */}
-            <a href="#" target="_blank" rel="noreferrer"><i className="fab fa-facebook-f"></i></a>
-            <a href="#" target="_blank" rel="noreferrer"><i className="fab fa-instagram"></i></a>
-          </div>
-        </div>
-
-        {/* Return & Exchange Section */}
-        <div className="footer-links">
-          <h4>ABOUT US</h4>
+        {/* Third Column: LEGAL */}
+        <div className="footer-column links-col">
+          <h4>LEGAL</h4>
           <ul>
+            <li><Link to="/privacy-terms">Privacy ,Terms & Conditions</Link></li>
+            <li><Link to="/terms-of-service">Terms of Service</Link></li>
+            <li><Link to="/cancellation-refund">Cancellation & Refund</Link></li>
             <li><Link to="/return-exchange">Return & Exchange</Link></li>
             <li><Link to="/exchange-return-form">Exchange & Return Form</Link></li>
           </ul>
         </div>
 
-        {/* Legal / Policies Section */}
-        <div className="footer-links">
-          <h4>LEGAL</h4>
-          <ul>
-            <li><Link to="/cancellation-refund">Cancellation & Refund</Link></li>
-            <li><Link to="/faq">F&Q</Link></li>
-            <li><Link to="/shipping-delivery">Shipping and Delivery</Link></li>
-            <li><Link to="/appointments">Appointments/Get In Touch</Link></li>
-            <li><Link to="/privacy-terms">Privacy ,Terms & Conditions</Link></li>
-            <li><Link to="/blog">Blog</Link></li>
-            <li><Link to="/terms-of-service">Terms of Service</Link></li>
-          </ul>
-        </div>
-
-        {/* Join Our Fashion Family (Newsletter Form) */}
-        <div className="footer-newsletter">
-          <h4>Join Our Fashion Family</h4>
-          <p>Stay updated on the latest Indian clothing trends.</p>
+        {/* Right Column: Newsletter Form & Social Icons */}
+        <div className="footer-column newsletter-col">
           <form onSubmit={handleSubscribe} className="newsletter-form">
-            <label htmlFor="newsletter-email">Subscribe form 2 Enter your email address</label>
+            <label htmlFor="newsletter-email" className="newsletter-label">
+              Enter your email address
+            </label>
             <input
               id="newsletter-email"
               type="email"
@@ -101,16 +78,31 @@ export default function Footer() {
               onChange={e => setEmail(e.target.value)}
               required
             />
-            <button type="submit" className="btn-primary">Join us now!</button>
+            <button type="submit" className="btn-submit-query">
+              Submit your query
+            </button>
           </form>
           {msg && <p className="newsletter-msg">{msg}</p>}
+
+          {/* Social Media Links matching the display icons */}
+          <div className="footer-socials">
+            <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook">
+              <i className="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
+              <i className="fab fa-instagram"></i>
+            </a>
+          </div>
         </div>
 
       </div>
 
-      {/* Footer Bottom Copyright Section */}
+      {/* Footer Bottom Metadata and Copyright */}
       <div className="footer-bottom container">
-        <p>© {new Date().getFullYear()}. Ojas Couture. Powered By Radiant Synergy</p>
+        <p className="footer-more-text">ojas couture is a luxury brand........more</p>
+        <p className="footer-copyright">
+          © {new Date().getFullYear()}. Ojas Couture. Powered By Radiant Synergy
+        </p>
       </div>
     </footer>
   );

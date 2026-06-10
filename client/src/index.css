@@ -1992,3 +1992,16 @@ h5 {
     height: 300px !important; /* Slightly shorter height on mobile viewports */
   }
 }
+
+
+.footer-top.container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-column {
+  flex: 1;
+  min-width: 200px;
+}

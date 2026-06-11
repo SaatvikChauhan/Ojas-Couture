@@ -32,5 +32,8 @@ export const faqAPI = {
 export const newsletterAPI = {
   subscribe: (email) => api.post('/newsletter', { email }),
 };
-
+export const authAPI = {
+  signup: (data) => api.post('/auth/signup', data),
+  login: (data) => api.post('/auth/login', data),
+};
 export default api;

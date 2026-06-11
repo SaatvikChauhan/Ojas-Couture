@@ -929,14 +929,14 @@ h5 {
 
 /* Collections */
 .collections-grid {
- display: flex;
-  gap: 24px;          
-  align-items: stretch; 
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
   width: 100%;
 }
 
 .collection-card {
-  flex: 1;           
+  flex: 1;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -949,7 +949,7 @@ h5 {
 }
 
 .collection-card img {
- width: 100%;
+  width: 100%;
   height: 100%;
   object-fit: cover;
 }
@@ -1719,7 +1719,8 @@ h5 {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 9998; /* Right below the panel */
+  z-index: 9998;
+  /* Right below the panel */
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -1740,7 +1741,8 @@ h5 {
   max-width: 100%;
   background-color: #ffffff;
   box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
-  z-index: 9999; /* Forces it above all other content */
+  z-index: 9999;
+  /* Forces it above all other content */
   transform: translateX(100%);
   transition: transform 0.3s ease-in-out;
   display: flex;
@@ -1841,34 +1843,37 @@ h5 {
 }
 
 .header-actions {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .cart-anchor {
-    display: inline-block;
-    width: 22px;
-    height: 22px;
+  display: inline-block;
+  width: 22px;
+  height: 22px;
 }
 
 .cart-svg-icon {
-    width: 100%;
-    height: 100%;
-    fill: #000000;
-    transition: transform 0.2s ease;
+  width: 100%;
+  height: 100%;
+  fill: #000000;
+  transition: transform 0.2s ease;
 }
 
 .cart-anchor:hover .cart-svg-icon {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 
 .hero-content {
   display: flex;
   flex-direction: column;
-  align-items: center;    /* Centers everything horizontally */
-  justify-content: center; /* Centers everything vertically */
-  text-align: center;      /* Ensures the text lines align perfectly center */
+  align-items: center;
+  /* Centers everything horizontally */
+  justify-content: center;
+  /* Centers everything vertically */
+  text-align: center;
+  /* Ensures the text lines align perfectly center */
   width: 100%;
 }
 
@@ -1881,7 +1886,8 @@ h5 {
 .hero-actions {
   display: flex;
   gap: 16px;
-  justify-content: center; /* Ensures buttons remain side-by-side but centered */
+  justify-content: center;
+  /* Ensures buttons remain side-by-side but centered */
 }
 
 /* Container holding row elements and arrows */
@@ -1900,14 +1906,17 @@ h5 {
   scroll-behavior: smooth;
   width: 100%;
   padding: 12px 4px;
-  
+
   /* Hide standard scrollbars across browsers */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
 }
 
 .products-slider-row::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
+  display: none;
+  /* Chrome, Safari and Opera */
 }
 
 /* Math formula forcing exactly 5 cards uniformly layout across row */
@@ -1934,7 +1943,7 @@ h5 {
   align-items: center;
   justify-content: center;
   font-size: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transition: all 0.2s ease-in-out;
 }
 
@@ -1954,18 +1963,22 @@ h5 {
 /* Responsive scaling rules for small layouts */
 @media (max-width: 1200px) {
   .slider-item {
-    flex: 0 0 calc((100% - (16px * 2)) / 3); /* 3 cards on tablets */
+    flex: 0 0 calc((100% - (16px * 2)) / 3);
+    /* 3 cards on tablets */
     min-width: calc((100% - (16px * 2)) / 3);
   }
 }
 
 @media (max-width: 650px) {
   .slider-item {
-    flex: 0 0 78%; /* Peek of next element to signal swipe capability on mobile */
+    flex: 0 0 78%;
+    /* Peek of next element to signal swipe capability on mobile */
     min-width: 78%;
   }
+
   .slider-btn {
-    display: none; /* Rely on natural finger gesture swipes on smaller responsive screen breakpoints */
+    display: none;
+    /* Rely on natural finger gesture swipes on smaller responsive screen breakpoints */
   }
 }
 
@@ -1987,9 +2000,10 @@ h5 {
     flex-direction: column !important;
     gap: 32px !important;
   }
-  
+
   .offering-img-wrapper {
-    height: 300px !important; /* Slightly shorter height on mobile viewports */
+    height: 300px !important;
+    /* Slightly shorter height on mobile viewports */
   }
 }
 
@@ -2004,4 +2018,24 @@ h5 {
 .footer-column {
   flex: 1;
   min-width: 200px;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }

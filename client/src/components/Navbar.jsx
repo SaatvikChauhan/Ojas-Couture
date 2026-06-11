@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FiMenu, FiX, FiShoppingBag } from 'react-icons/fi'; // Imported FiShoppingBag
+import AuthModal from "./AuthModal";
 
 const navLinks = [
   { label: 'Home', path: '/' },
@@ -14,6 +15,7 @@ const navLinks = [
 export default function Navbar({ onCartOpen, cartCount = 0 }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -41,7 +43,7 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
     <>
       <header className={`navbar ${scrolled ? 'scrolled' : ''}`}>
         <div className="navbar-inner container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          
+
           <Link to="/" className="navbar-logo" onClick={() => setMenuOpen(false)}>
             <img src="/logo.avif" alt="Ojas Couture Logo" className="logo-image" />
           </Link>
@@ -61,7 +63,7 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
 
           {/* Actions Container (Cart Icon + Mobile Menu Toggle) */}
           <div className="navbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-            
+
             {/* Shopping Cart Button */}
             <button
               onClick={onCartOpen}
@@ -78,10 +80,10 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
               }}
             >
               <FiShoppingBag size={24} className="text-gray-700 hover:text-black transition-colors" />
-              
+
               {/* Cart Count Badge */}
               {cartCount > 0 && (
-                <span 
+                <span
                   className="cart-badge"
                   style={{
                     position: 'absolute',
@@ -112,6 +114,9 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
             >
               {menuOpen ? <FiX size={22} /> : <FiMenu size={22} />}
             </button>
+            <button onClick={() => setShowAuth(true)} className="btn-outline-gold">
+              Login
+            </button>
           </div>
 
         </div>
@@ -134,6 +139,7 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
           </nav>
         </div>
       )}
+      {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
     </>
   );
 }

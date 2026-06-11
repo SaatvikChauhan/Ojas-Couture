@@ -16,9 +16,14 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
+  const [user, setUser] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
@@ -114,9 +119,25 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
             >
               {menuOpen ? <FiX size={22} /> : <FiMenu size={22} />}
             </button>
-            <button onClick={() => setShowAuth(true)} className="btn-outline-gold">
-              Login
-            </button>
+            {user ? (
+              <div className="user-menu">
+                <span>Hi, {user.name.split(" ")[0]}</span>
+                <button
+                  onClick={() => {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("user");
+                    window.location.reload();
+                  }}
+                  className="logout-btn"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <button onClick={() => setShowAuth(true)} className="btn-outline-gold">
+                Login
+              </button>
+            )}
           </div>
 
         </div>

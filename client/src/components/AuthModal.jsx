@@ -6,18 +6,26 @@ export default function AuthModal({ onClose }) {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
 
   const handleSubmit = async () => {
-    try {
-      const res = isLogin
-        ? await authAPI.login(form)
-        : await authAPI.signup(form);
+  try {
+    const res = isLogin
+      ? await authAPI.login(form)
+      : await authAPI.signup(form);
 
-      localStorage.setItem("token", res.data.token);
-      alert("Success!");
-      onClose();
-    } catch (err) {
-      alert(err.response?.data?.msg || "Error");
-    }
-  };
+    localStorage.setItem("token", res.data.token);
+
+    // ✅ store user also
+    localStorage.setItem("user", JSON.stringify(res.data.user));
+
+    alert("Success!");
+    onClose();
+
+    // OPTIONAL: refresh navbar
+    window.location.reload();
+
+  } catch (err) {
+    alert(err.response?.data?.msg || "Error");
+  }
+};
 
   return (
     <div className="modal-overlay">

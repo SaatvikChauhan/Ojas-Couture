@@ -33,7 +33,7 @@ const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
               <div key={item._id} className="cart-item-row">
                 <div className="cart-item-info">
                   <img 
-                    src={item.image || "https://images.unsplash.com/photo-1558171813-2f5bbbc3cf44?w=600"} 
+                    src={item.image || "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600"} 
                     alt={item.name} 
                     className="cart-item-img" 
                   />

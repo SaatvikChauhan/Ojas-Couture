@@ -49,8 +49,8 @@ export default function Footer() {
             <li><Link to="/shipping-delivery">Shipping and Delivery</Link></li>
             <li><Link to="/faq">F&Q</Link></li>
             <li><Link to="/blog">Blog</Link></li>
-            <Link to="/privacy-terms-condition">Privacy ,Terms & Conditions</Link>
-            <Link to="/appointments">Appointments/Get In Touch</Link>
+            <li><Link to="/privacy-terms-condition">Privacy ,Terms & Conditions</Link></li>
+            <li><Link to="/appointments">Appointments/Get In Touch</Link></li>
           </ul>
         </div>
 

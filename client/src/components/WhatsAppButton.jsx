@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 
 const WHATSAPP_NUMBER = '919650656166';
 
-// A representative list of major world currencies with country codes for flags
 const currencyList = [
   { code: 'INR', name: 'Indian Rupee', flag: 'in' },
   { code: 'USD', name: 'United States Dollar', flag: 'us' },
@@ -12,24 +11,6 @@ const currencyList = [
   { code: 'CAD', name: 'Canadian Dollar', flag: 'ca' },
   { code: 'AUD', name: 'Australian Dollar', flag: 'au' },
   { code: 'SGD', name: 'Singapore Dollar', flag: 'sg' },
-  { code: 'JPY', name: 'Japanese Yen', flag: 'jp' },
-  { code: 'CNY', name: 'Chinese Yuan', flag: 'cn' },
-  { code: 'NZD', name: 'New Zealand Dollar', flag: 'nz' },
-  { code: 'ZAR', name: 'South African Rand', flag: 'za' },
-  { code: 'MYR', name: 'Malaysian Ringgit', flag: 'my' },
-  { code: 'THB', name: 'Thai Baht', flag: 'th' },
-  { code: 'PHP', name: 'Philippine Peso', flag: 'ph' },
-  { code: 'IDR', name: 'Indonesian Rupiah', flag: 'id' },
-  { code: 'SAR', name: 'Saudi Riyal', flag: 'sa' },
-  { code: 'QAR', name: 'Qatari Rial', flag: 'qa' },
-  { code: 'KWD', name: 'Kuwaiti Dinar', flag: 'kw' },
-  { code: 'BHD', name: 'Bahraini Dinar', flag: 'bh' },
-  { code: 'OMR', name: 'Omani Rial', flag: 'om' },
-  { code: 'CHF', name: 'Swiss Franc', flag: 'ch' },
-  { code: 'HKD', name: 'Hong Kong Dollar', flag: 'hk' },
-  { code: 'LKR', name: 'Sri Lankan Rupee', flag: 'lk' },
-  { code: 'NPR', name: 'Nepalese Rupee', flag: 'np' },
-  { code: 'BDT', name: 'Bangladeshi Taka', flag: 'bd' },
 ];
 
 export default function WhatsAppButton({
@@ -37,13 +18,12 @@ export default function WhatsAppButton({
 }) {
   const [showCoupon, setShowCoupon] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(currencyList[0]); // Default to INR
+  const [selected, setSelected] = useState(currencyList[0]);
   const [searchTerm, setSearchTerm] = useState('');
   const dropdownRef = useRef(null);
 
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
-  // Close dropdown if clicked outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -57,7 +37,7 @@ export default function WhatsAppButton({
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: 'Check this out!',
+        title: 'Ojas Couture',
         url: window.location.href,
       });
     } else {
@@ -66,7 +46,6 @@ export default function WhatsAppButton({
     }
   };
 
-  // Filter list based on search input
   const filteredCurrencies = currencyList.filter(
     (item) =>
       item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -75,13 +54,24 @@ export default function WhatsAppButton({
 
   return (
     <>
-      {/* LEFT COMPONENT ACTIONS */}
-      <div className="float-left" style={{ display: 'flex', alignItems: 'center', gap: '12px', position: 'relative' }}>
+      {/* FIXED LEFT SIDE FLOATING WIDGET CONTAINER 
+          This keeps currency and share buttons pinned to the screen side while scrolling.
+      */}
+      <div style={{
+        position: 'fixed',
+        bottom: '100px', // Raised up so it doesn't collide with lower system overlays
+        left: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px',
+        zIndex: 9999, // Floating on top of all banners and footer structures
+        alignItems: 'flex-start'
+      }}>
         
-        {/* Custom Searchable Flag & Currency Dropdown */}
+        {/* Searchable Flag & Currency Dropdown */}
         <div ref={dropdownRef} style={{ position: 'relative' }}>
           
-          {/* Trigger Box */}
+          {/* Trigger Capsule */}
           <div
             onClick={() => { setIsOpen(!isOpen); setSearchTerm(''); }}
             style={{
@@ -89,13 +79,13 @@ export default function WhatsAppButton({
               alignItems: 'center',
               gap: '8px',
               backgroundColor: '#fff',
-              border: '1px solid #e2e8f0',
+              border: '1px solid #dfba6b',
               borderRadius: '25px',
-              padding: '6px 14px',
+              padding: '8px 14px',
               cursor: 'pointer',
               userSelect: 'none',
-              boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
-              height: '34px',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+              height: '38px',
               boxSizing: 'border-box'
             }}
           >
@@ -104,37 +94,35 @@ export default function WhatsAppButton({
               alt={selected.name}
               style={{ width: '18px', height: 'auto', borderRadius: '2px', display: 'block' }}
             />
-            <span style={{ color: '#333', fontSize: '13px', fontWeight: '600', letterSpacing: '0.5px' }}>
+            <span style={{ color: '#111', fontSize: '13px', fontWeight: '600', letterSpacing: '0.5px' }}>
               {selected.code}
             </span>
             <svg width="10" height="10" viewBox="0 0 24 24" style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>
-              <path d="M7 10l5 5 5-5z" fill="#666" />
+              <path d="M7 10l5 5 5-5z" fill="#333" />
             </svg>
           </div>
 
-          {/* Expanded Searchable Panel */}
+          {/* Selection Dropdown List Menu */}
           {isOpen && (
             <div
               style={{
                 position: 'absolute',
-                bottom: '42px', // Opens upwards cleanly above the float bar
+                bottom: '46px', // Opens cleanly upwards so it stays visible above viewport bottom
                 left: '0',
                 backgroundColor: '#fff',
                 border: '1px solid #e2e8f0',
                 borderRadius: '12px',
                 width: '240px',
-                boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
-                zIndex: 9999,
+                boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
                 overflow: 'hidden',
                 display: 'flex',
                 flexDirection: 'column'
               }}
             >
-              {/* Search Field */}
               <div style={{ padding: '8px', borderBottom: '1px solid #f1f5f9' }}>
                 <input
                   type="text"
-                  placeholder="Search country or currency..."
+                  placeholder="Search country..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   style={{
@@ -150,52 +138,61 @@ export default function WhatsAppButton({
                 />
               </div>
 
-              {/* Options List */}
               <div style={{ maxHeight: '200px', overflowY: 'auto', padding: '4px 0' }}>
-                {filteredCurrencies.length > 0 ? (
-                  filteredCurrencies.map((item) => (
-                    <div
-                      key={item.code}
-                      onClick={() => {
-                        setSelected(item);
-                        setIsOpen(false);
-                      }}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px',
-                        padding: '8px 12px',
-                        cursor: 'pointer',
-                        transition: 'background-color 0.2s',
-                        backgroundColor: selected.code === item.code ? '#f8fafc' : 'transparent'
-                      }}
-                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f1f5f9')}
-                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = selected.code === item.code ? '#f8fafc' : 'transparent')}
-                    >
-                      <img
-                        src={`https://flagcdn.com/w20/${item.flag}.png`}
-                        alt={item.name}
-                        style={{ width: '18px', height: 'auto', borderRadius: '2px' }}
-                      />
-                      <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
-                        <span style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b' }}>{item.code}</span>
-                        <span style={{ fontSize: '10px', color: '#64748b' }}>{item.name}</span>
-                      </div>
+                {filteredCurrencies.map((item) => (
+                  <div
+                    key={item.code}
+                    onClick={() => {
+                      setSelected(item);
+                      setIsOpen(false);
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      padding: '8px 12px',
+                      cursor: 'pointer',
+                      backgroundColor: selected.code === item.code ? '#f8fafc' : 'transparent'
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f1f5f9')}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = selected.code === item.code ? '#f8fafc' : 'transparent')}
+                  >
+                    <img
+                      src={`https://flagcdn.com/w20/${item.flag}.png`}
+                      alt={item.name}
+                      style={{ width: '18px', height: 'auto', borderRadius: '2px' }}
+                    />
+                    <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+                      <span style={{ fontSize: '13px', fontWeight: '600', color: '#1e293b' }}>{item.code}</span>
+                      <span style={{ fontSize: '10px', color: '#64748b' }}>{item.name}</span>
                     </div>
-                  ))
-                ) : (
-                  <div style={{ padding: '12px', fontSize: '12px', color: '#94a3b8', textAlign: 'center' }}>
-                    No results found
                   </div>
-                )}
+                ))}
               </div>
             </div>
           )}
         </div>
 
-        {/* Share Button */}
-        <button className="icon-btn gold" onClick={handleShare}>
-          <svg viewBox="0 0 24 24">
+        {/* Fixed Share Circular Action Trigger */}
+        <button 
+          onClick={handleShare}
+          style={{
+            width: '42px',
+            height: '42px',
+            borderRadius: '50%',
+            backgroundColor: '#dfba6b', // Gold theme color
+            border: 'none',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+            transition: 'transform 0.2s'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.08)'}
+          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20">
             <path
               fill="white"
               d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a2.5 2.5 0 000-1.39l7-4.11A2.5 2.5 0 0018 7.91a2.5 2.5 0 10-2.5-2.5c0 .23.03.45.08.66l-7 4.11a2.5 2.5 0 100 3.64l7.12 4.18c-.05.2-.08.41-.08.62a2.5 2.5 0 102.5-2.5z"
@@ -204,11 +201,25 @@ export default function WhatsAppButton({
         </button>
       </div>
 
-      {/* RIGHT COMPONENT ACTIONS */}
-      <div className="float-right">
-        {/* Gift Button */}
-        <button className="icon-btn gold" onClick={() => setShowCoupon(true)}>
-          <svg viewBox="0 0 24 24">
+      {/* RIGHT FIXED COMPONENT ACTIONS (Gift Box Coupon & WhatsApp Chat) */}
+      <div style={{ position: 'fixed', bottom: '30px', right: '20px', display: 'flex', flexDirection: 'column', gap: '12px', zIndex: 9999, alignItems: 'flex-end' }}>
+        {/* Gift Trigger Button */}
+        <button 
+          onClick={() => setShowCoupon(true)}
+          style={{
+            width: '42px',
+            height: '42px',
+            borderRadius: '50%',
+            backgroundColor: '#dfba6b',
+            border: 'none',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+          }}
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20">
             <path
               fill="white"
               d="M20 12v8a2 2 0 01-2 2H6a2 2 0 01-2-2v-8h16zm0-2H4a2 2 0 01-2-2V7a2 2 0 012-2h3.17A3 3 0 0112 3a3 3 0 014.83 2H20a2 2 0 012 2v1a2 2 0 01-2 2zM12 5a1 1 0 00-1 1v1h2V6a1 1 0 00-1-1z"
@@ -225,7 +236,7 @@ export default function WhatsAppButton({
         </a>
       </div>
 
-      {/* Coupon Modal */}
+      {/* Coupon Modal Display */}
       {showCoupon && (
         <div className="coupon-modal" onClick={() => setShowCoupon(false)}>
           <div className="coupon-box" onClick={(e) => e.stopPropagation()}>

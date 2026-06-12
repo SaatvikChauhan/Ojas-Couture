@@ -60,7 +60,9 @@ export default function Footer() {
           <h4>LEGAL</h4>
           <ul>
            <li><Link to="/privacy-terms-condition">Privacy ,Terms & Conditions</Link></li>
-            <li><Link to="/terms-of-service">Terms of Service</Link></li>
+            <Link to="/terms-of-service" style={{ color: 'inherit', textDecoration: 'none' }}>
+  Terms of Service
+</Link>
             <li><Link to="/cancellation-refund">Cancellation & Refund</Link></li>
             <li><Link to="/return-exchange">Return & Exchange</Link></li>
             <li><Link to="/exchange-return-form">Exchange & Return Form</Link></li>

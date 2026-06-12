@@ -16,6 +16,7 @@ import ProductDetail from './pages/ProductDetail';
 import LittleWonders from './pages/LittleWonders';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import TermsOfService from './components/TermsOfService';
 // import FAQ from './pages/FAQ';
 // import Blog from './pages/Blog';
 // import BlogPost from './pages/BlogPost';
@@ -59,6 +60,7 @@ export default function App() {
         <Route path="/privacy-terms-condition" element={<PrivacyTerms />} />
         <Route path="/appointments" element={<AppointmentsPage />} />
         <Route path="/shipping-and-delivery" element={<ShippingDelivery />} />
+        <Route path="/terms-of-service" element={<TermsOfService />} />
         {/*<Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/testimonials" element={<Testimonials />} />

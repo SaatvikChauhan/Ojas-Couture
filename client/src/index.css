@@ -2255,3 +2255,11 @@ h5 {
   width: 22px;
   height: 22px;
 }
+
+.contact-section {
+  margin-top: 25px; /* Adjust this number to get the exact spacing you like */
+}
+
+.footer-bottom {
+  border-top: none !important;
+}

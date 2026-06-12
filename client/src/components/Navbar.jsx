@@ -52,7 +52,7 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
       {/* Using static positioning instead of absolute fixes the overlapping. 
         This forces the browser to read rows sequentially: Top Row -> Bottom Row -> Main Content.
       */}
-      <header style={{ width: '100%', backgroundColor: '#fff', borderBottom: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 1000 }}>
+      <header style={{ width: '100%', backgroundColor: '#fff', borderBottom: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', position: 'sticky',top: 0, zIndex: 1000 ,boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)'}}>
         
         {/* ROW 1: BRANDING, SEARCH & USER UTILITIES */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px 40px', boxSizing: 'border-box', width: '100%' }}>

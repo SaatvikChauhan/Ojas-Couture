@@ -53,10 +53,10 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
 
   return (
     <>
-      <header className={`navbar ${scrolled ? 'scrolled' : ''}`} style={{ backgroundColor: '#fff', borderBottom: '1px solid #f0f0f0', position: 'sticky', top: 0, zIndex: 1000 }}>
+      <header className={`navbar ${scrolled ? 'scrolled' : ''}`} style={{ backgroundColor: '#fff', borderBottom: '1px solid #e2e8f0', position: 'sticky', top: 0, zIndex: 1000, width: '100%' }}>
         
         {/* TOP ROW: BRANDING, SEARCH & USER UTILITIES */}
-        <div className="navbar-top container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px 0', borderBottom: '1px solid #f5f5f5' }}>
+        <div className="navbar-top container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px 40px', boxSizing: 'border-box' }}>
           
           {/* LEFT: LOGO */}
           <Link to="/" className="navbar-logo" onClick={() => setMenuOpen(false)}>
@@ -77,7 +77,8 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
                 border: '1px solid #e2e8f0',
                 borderRadius: '4px',
                 outline: 'none',
-                color: '#333'
+                color: '#333',
+                backgroundColor: '#fff'
               }}
             />
             <button type="submit" style={{ position: 'absolute', right: '12px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', color: '#718096' }}>
@@ -108,7 +109,7 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
                     position: 'absolute',
                     top: '-2px',
                     right: '-2px',
-                    backgroundColor: '#dfba6b', // Matches Ojas branding accents
+                    backgroundColor: '#dfba6b', 
                     color: 'white',
                     fontSize: '10px',
                     fontWeight: 'bold',
@@ -159,7 +160,7 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
               className="menu-toggle"
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label="Toggle menu"
-              style={{ display: 'none', background: 'none', border: 'none', cursor: 'pointer' }} // Controlled via CSS media queries for desktop vs mobile layout
+              style={{ display: 'none', background: 'none', border: 'none', cursor: 'pointer' }}
             >
               {menuOpen ? <FiX size={22} /> : <FiMenu size={22} />}
             </button>
@@ -167,8 +168,8 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
 
         </div>
 
-        {/* BOTTOM ROW: NAVIGATION TABS */}
-        <div className="navbar-bottom container navbar-nav-desktop" style={{ display: 'flex', justifyContent: 'center', padding: '12px 0' }}>
+        {/* BOTTOM ROW: NAVIGATION TABS WITH SOLID BACKGROUND (NO IMAGE SHOWTHROUGH) */}
+        <div className="navbar-bottom" style={{ width: '100%', backgroundColor: '#fafaf8', borderTop: '1px solid #f0f0f0', display: 'flex', justifyContent: 'center', padding: '12px 0' }}>
           <nav style={{ display: 'flex', gap: '40px' }}>
             {navLinks.map(link => (
               <Link

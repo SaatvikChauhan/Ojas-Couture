@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { FiMenu, FiX, FiShoppingBag } from 'react-icons/fi'; // Imported FiShoppingBag
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { FiMenu, FiX, FiShoppingBag, FiSearch, FiHeart, FiUser } from 'react-icons/fi';
 import AuthModal from "./AuthModal";
 
 const navLinks = [
@@ -11,13 +11,14 @@ const navLinks = [
   { label: 'Little Wonders', path: '/little-wonders' },
 ];
 
-// Added 'onCartOpen' and 'cartCount' as props
 export default function Navbar({ onCartOpen, cartCount = 0 }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [user, setUser] = useState(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -33,7 +34,6 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
     setMenuOpen(false);
   }, [location]);
 
-  // Prevent body scroll when menu is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
@@ -44,49 +44,63 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
     return location.pathname.startsWith(path.split('?')[0]);
   };
 
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/shop?search=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
   return (
     <>
-      <header className={`navbar ${scrolled ? 'scrolled' : ''}`}>
-        <div className="navbar-inner container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-
+      <header className={`navbar ${scrolled ? 'scrolled' : ''}`} style={{ backgroundColor: '#fff', borderBottom: '1px solid #f0f0f0', position: 'sticky', top: 0, zIndex: 1000 }}>
+        
+        {/* TOP ROW: BRANDING, SEARCH & USER UTILITIES */}
+        <div className="navbar-top container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px 0', borderBottom: '1px solid #f5f5f5' }}>
+          
+          {/* LEFT: LOGO */}
           <Link to="/" className="navbar-logo" onClick={() => setMenuOpen(false)}>
-            <img src="/logo.avif" alt="Ojas Couture Logo" className="logo-image" />
+            <img src="/logo.avif" alt="Ojas Couture Logo" className="logo-image" style={{ height: '45px', display: 'block' }} />
           </Link>
 
-          {/* Desktop nav */}
-          <nav className="navbar-nav-desktop">
-            {navLinks.map(link => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`nav-link ${isActive(link.path) ? 'active' : ''}`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+          {/* MIDDLE: SEARCH BAR */}
+          <form onSubmit={handleSearchSubmit} style={{ position: 'relative', display: 'flex', alignItems: 'center', width: '35%', maxWidth: '500px' }}>
+            <input
+              type="text"
+              placeholder="Search collections..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '8px 40px 8px 15px',
+                fontSize: '0.9rem',
+                border: '1px solid #e2e8f0',
+                borderRadius: '4px',
+                outline: 'none',
+                color: '#333'
+              }}
+            />
+            <button type="submit" style={{ position: 'absolute', right: '12px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', color: '#718096' }}>
+              <FiSearch size={18} />
+            </button>
+          </form>
 
-          {/* Actions Container (Cart Icon + Mobile Menu Toggle) */}
-          <div className="navbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          {/* RIGHT: ICON ACTIONS CONTAINER */}
+          <div className="navbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+            
+            {/* WISHLIST BUTTON */}
+            <Link to="/wishlist" title="Wishlist" style={{ color: '#4a5568', display: 'flex', alignItems: 'center', transition: 'color 0.2s' }} className="hover:text-black">
+              <FiHeart size={22} />
+            </Link>
 
-            {/* Shopping Cart Button */}
+            {/* SHOPPING CART BUTTON */}
             <button
               onClick={onCartOpen}
               className="cart-toggle-btn"
               aria-label="Open Cart"
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                position: 'relative',
-                display: 'flex',
-                alignItems: 'center',
-                padding: '5px'
-              }}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', position: 'relative', display: 'flex', alignItems: 'center', padding: '5px', color: '#4a5568' }}
             >
-              <FiShoppingBag size={24} className="text-gray-700 hover:text-black transition-colors" />
-
-              {/* Cart Count Badge */}
+              <FiShoppingBag size={22} className="hover:text-black transition-colors" />
               {cartCount > 0 && (
                 <span
                   className="cart-badge"
@@ -94,7 +108,7 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
                     position: 'absolute',
                     top: '-2px',
                     right: '-2px',
-                    backgroundColor: '#ef4444', // Red badge
+                    backgroundColor: '#dfba6b', // Matches Ojas branding accents
                     color: 'white',
                     fontSize: '10px',
                     fontWeight: 'bold',
@@ -111,17 +125,13 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
               )}
             </button>
 
-            {/* Hamburger Mobile Menu Toggle */}
-            <button
-              className="menu-toggle"
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label="Toggle menu"
-            >
-              {menuOpen ? <FiX size={22} /> : <FiMenu size={22} />}
-            </button>
+            {/* AUTH / PROFILE ACCOUNT HOOK */}
             {user ? (
-              <div className="user-menu">
-                <span>Hi, {user.name.split(" ")[0]}</span>
+              <div className="user-menu" style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem' }}>
+                <Link to="/account" style={{ display: 'flex', alignItems: 'center', color: '#4a5568', gap: '4px', textDecoration: 'none' }}>
+                  <FiUser size={22} />
+                  <span style={{ fontWeight: '500' }}>{user.name.split(" ")[0]}</span>
+                </Link>
                 <button
                   onClick={() => {
                     localStorage.removeItem("token");
@@ -129,21 +139,60 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
                     window.location.reload();
                   }}
                   className="logout-btn"
+                  style={{ background: 'none', border: 'none', color: '#999', cursor: 'pointer', fontSize: '0.8rem', textDecoration: 'underline' }}
                 >
                   Logout
                 </button>
               </div>
             ) : (
-              <button onClick={() => setShowAuth(true)} className="btn-outline-gold">
-                Login
+              <button 
+                onClick={() => setShowAuth(true)} 
+                style={{ background: 'none', border: 'none', color: '#4a5568', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                title="Login / Register"
+              >
+                <FiUser size={22} className="hover:text-black transition-colors" />
               </button>
             )}
+
+            {/* HAMBURGER MOBILE MENU TOGGLE */}
+            <button
+              className="menu-toggle"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle menu"
+              style={{ display: 'none', background: 'none', border: 'none', cursor: 'pointer' }} // Controlled via CSS media queries for desktop vs mobile layout
+            >
+              {menuOpen ? <FiX size={22} /> : <FiMenu size={22} />}
+            </button>
           </div>
 
         </div>
+
+        {/* BOTTOM ROW: NAVIGATION TABS */}
+        <div className="navbar-bottom container navbar-nav-desktop" style={{ display: 'flex', justifyContent: 'center', padding: '12px 0' }}>
+          <nav style={{ display: 'flex', gap: '40px' }}>
+            {navLinks.map(link => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`nav-link ${isActive(link.path) ? 'active' : ''}`}
+                style={{
+                  textDecoration: 'none',
+                  color: isActive(link.path) ? '#dfba6b' : '#111',
+                  fontWeight: '500',
+                  textTransform: 'uppercase',
+                  fontSize: '0.85rem',
+                  letterSpacing: '1.5px',
+                  transition: 'color 0.2s ease'
+                }}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
       </header>
 
-      {/* Mobile menu — rendered outside header, as a true fullscreen overlay */}
+      {/* MOBILE SCREEN FULLSCREEN OVERLAY */}
       {menuOpen && (
         <div className="mobile-menu-overlay" onClick={() => setMenuOpen(false)}>
           <nav className="mobile-menu-nav" onClick={e => e.stopPropagation()}>

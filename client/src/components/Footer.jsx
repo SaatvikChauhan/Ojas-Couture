@@ -46,7 +46,9 @@ export default function Footer() {
           <ul>
             <li><Link to="/about">About us</Link></li>
             <li><Link to="/appointments">Appointments/Get In Touch</Link></li>
-            <li><Link to="/shipping-delivery">Shipping and Delivery</Link></li>
+            <li><Link to="/shipping-and-delivery" style={{ color: 'inherit', textDecoration: 'none' }}>
+  Shipping and Delivery
+</Link></li>
             <li><Link to="/faq">F&Q</Link></li>
             <li><Link to="/blog">Blog</Link></li>
             

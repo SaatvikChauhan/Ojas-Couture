@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
 import CartSidebar from './components/CartSidebar'; // 2. Imported CartSidebar
+import FAQ from './components/FAQ';
 
 import Home from './pages/Home';
 import Shop from './pages/Shop';
@@ -51,8 +52,8 @@ export default function App() {
         <Route path="/little-wonders" element={<LittleWonders />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        {/* <Route path="/faq" element={<FAQ />} />
-        <Route path="/blog" element={<Blog />} />
+        { <Route path="/faq" element={<FAQ />} />
+        /*<Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/testimonials" element={<Testimonials />} />
         <Route path="/join-family" element={<JoinFamily />} />

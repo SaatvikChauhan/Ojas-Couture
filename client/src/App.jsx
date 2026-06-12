@@ -9,6 +9,8 @@ import FAQ from './components/FAQ';
 import PrivacyTerms from './components/PrivacyTerms';
 import AppointmentsPage from './components/AppointmentsPage';
 import ShippingDelivery from './components/ShippingDelivery';
+import ReturnExchange from './components/ReturnExchange'; 
+
 
 import Home from './pages/Home';
 import Shop from './pages/Shop';
@@ -61,6 +63,7 @@ export default function App() {
         <Route path="/appointments" element={<AppointmentsPage />} />
         <Route path="/shipping-and-delivery" element={<ShippingDelivery />} />
         <Route path="/terms-of-service" element={<TermsOfService />} />
+        <Route path="/return-exchange" element={<ReturnExchange />} />
         {/*<Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/testimonials" element={<Testimonials />} />

@@ -64,7 +64,9 @@ export default function Footer() {
   Terms of Service
 </Link></li>
             <li><Link to="/cancellation-refund">Cancellation & Refund</Link></li>
-            <li><Link to="/return-exchange">Return & Exchange</Link></li>
+            <li><Link to="/return-exchange" style={{ color: 'inherit', textDecoration: 'none' }}>
+  Return & Exchange
+</Link></li>
             <li><Link to="/exchange-return-form">Exchange & Return Form</Link></li>
           </ul>
         </div>

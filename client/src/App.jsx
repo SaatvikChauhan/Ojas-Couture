@@ -7,6 +7,7 @@ import WhatsAppButton from './components/WhatsAppButton';
 import CartSidebar from './components/CartSidebar'; // 2. Imported CartSidebar
 import FAQ from './components/FAQ';
 import PrivacyTerms from './components/PrivacyTerms';
+import AppointmentsPage from './components/AppointmentsPage';
 
 import Home from './pages/Home';
 import Shop from './pages/Shop';
@@ -55,6 +56,7 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
        <Route path="/faq" element={<FAQ />} />
         <Route path="/privacy-terms-condition" element={<PrivacyTerms />} />
+        <Route path="/appointments" element={<AppointmentsPage />} />
         {/*<Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/testimonials" element={<Testimonials />} />

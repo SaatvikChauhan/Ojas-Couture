@@ -57,13 +57,11 @@ export default function Footer() {
         <div className="footer-column">
           <h4>LEGAL</h4>
           <ul>
-            <li><Link to="/privacy-terms">Privacy ,Terms & Conditions</Link></li>
+           <li><Link to="/privacy-terms-condition">Privacy ,Terms & Conditions</Link></li>
             <li><Link to="/terms-of-service">Terms of Service</Link></li>
             <li><Link to="/cancellation-refund">Cancellation & Refund</Link></li>
             <li><Link to="/return-exchange">Return & Exchange</Link></li>
             <li><Link to="/exchange-return-form">Exchange & Return Form</Link></li>
-            <li><Link to="/privacy-terms-condition">Privacy ,Terms & Conditions</Link></li>
-            <li><Link to="/appointments">Appointments/Get In Touch</Link></li>
           </ul>
         </div>
 

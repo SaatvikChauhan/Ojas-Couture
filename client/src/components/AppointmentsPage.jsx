@@ -7,64 +7,111 @@ const AppointmentsPage = () => {
     setOpenIndex(openIndex === index ? -1 : index);
   };
 
-  const appointmentSections = [
+  const sections = [
     {
-      title: "Live Video Shopping Experience",
+      title: "BOOK YOUR APPOINTMENT FOR LIVE VIDEO SHOPPING",
       content: (
-        <>
-          <p style={{ margin: '0 0 10px 0' }}>
-            Discover our most-loved handcrafted ensembles with the guidance of a personal stylist, from the comfort of your home. Whether you're shopping for a bridal event, festive celebration, or a wardrobe heirloom — we're here to help you find the perfect piece.
+        <div style={{ padding: '10px 0 20px 0' }}>
+          <p style={{ textAlign: 'center', color: '#555', fontSize: '1.05rem', lineHeight: '1.6', maxWidth: '750px', margin: '0 auto 40px auto' }}>
+            Discover our most-loved handcrafted ensembles with the guidance of a personal stylist, from the comfort of your home. 
+            Whether you're shopping for a bridal event, festive celebration, or a wardrobe heirloom — we're here to help you find the perfect piece.
           </p>
-          <p style={{ margin: '0 0 5px 0', fontWeight: '600' }}>What you will experience:</p>
-          <ul style={{ margin: '0 0 10px 0', paddingLeft: '20px' }}>
-            <li style={{ marginBottom: '5px' }}>Get one-on-one styling advice from our expert team.</li>
-            <li style={{ marginBottom: '5px' }}>Discuss delivery timelines, alterations, or styling recommendations.</li>
-            <li style={{ marginBottom: '5px' }}>Receive support for custom sizing, color options, or coordinating sets.</li>
-            <li>Browse real-time video previews of fabrics, embroidery, and fits.</li>
-          </ul>
-        </>
+          
+          {/* 2x2 Clean Grid matching your desktop screenshot format */}
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'window' in global && window.innerWidth < 768 ? '1fr' : '1fr 1fr', 
+            gap: '30px 40px',
+            maxWidth: '900px',
+            margin: '0 auto'
+          }}>
+            {/* Feature 1 */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '15px' }}>
+              <div style={{ fontSize: '2rem', lineHeight: '1' }}>👥</div>
+              <p style={{ margin: 0, color: '#333', fontSize: '0.95rem', lineHeight: '1.5' }}>
+                Get one-on-one styling advice from our expert team.
+              </p>
+            </div>
+
+            {/* Feature 2 */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '15px' }}>
+              <div style={{ fontSize: '2rem', lineHeight: '1' }}>🎨</div>
+              <p style={{ margin: 0, color: '#333', fontSize: '0.95rem', lineHeight: '1.5' }}>
+                Receive support for custom sizing, color options, or coordinating sets.
+              </p>
+            </div>
+
+            {/* Feature 3 */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '15px' }}>
+              <div style={{ fontSize: '2rem', lineHeight: '1' }}>👗</div>
+              <p style={{ margin: 0, color: '#333', fontSize: '0.95rem', lineHeight: '1.5' }}>
+                Browse real-time video previews of fabrics, embroidery, and fits.
+              </p>
+            </div>
+
+            {/* Feature 4 */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '15px' }}>
+              <div style={{ fontSize: '2rem', lineHeight: '1' }}>📐</div>
+              <p style={{ margin: 0, color: '#333', fontSize: '0.95rem', lineHeight: '1.5' }}>
+                Discuss delivery timelines, alterations, or styling recommendations.
+              </p>
+            </div>
+          </div>
+        </div>
       )
     },
     {
-      title: "Availability & Timings",
+      title: "AVAILABILITY",
       content: (
-        <>
-          <p style={{ margin: '0 0 10px 0' }}>
-            Appointments are completely personalized and available globally for both bridal and non-bridal clients.
+        <div style={{ textAlign: 'center', padding: '10px 0 20px 0' }}>
+          <p style={{ margin: '0 0 15px 0', color: '#333', fontSize: '1rem', lineHeight: '1.6' }}>
+            Appointments available via WhatsApp Video or Zoom, Mon–Sun IST: 11.30 AM to 7.30PM
           </p>
-          <p style={{ margin: 0, padding: '12px', background: '#faf6f0', borderLeft: '3px solid #b58e58' }}>
-            <strong>Available Slots:</strong> Monday to Sunday, 11:30 AM to 7:30 PM (IST).<br />
-            Conducted seamlessly via <strong>WhatsApp Video</strong> or <strong>Zoom</strong>.
+          <p style={{ margin: 0, color: '#777', fontSize: '0.95rem', fontStyle: 'italic' }}>
+            Available for bridal and non-bridal clients globally.
           </p>
-        </>
+        </div>
       )
     },
     {
-      title: "Exclusive Bridal Trousseau Styling",
+      title: "BOOK YOUR EXCLUSIVE BRIDAL APPOINTMENT",
       content: (
-        <>
-          <p style={{ margin: '0 0 10px 0' }}>
+        <div style={{ textAlign: 'center', padding: '10px 0 20px 0', maxWidth: '700px', margin: '0 auto' }}>
+          <p style={{ margin: '0 0 25px 0', color: '#555', fontSize: '1rem', lineHeight: '1.6' }}>
             Discover cutting-edge trends and curate your dream trousseau thoughtfully styled to complement your unique colour palette, body shape, and lifestyle. Let our expert stylists bring your bridal vision to life.
           </p>
-        </>
+          <a 
+            href="https://wa.me/919650656166" 
+            target="_blank" 
+            rel="noreferrer"
+            style={{ 
+              display: 'inline-block', 
+              border: '1px solid #000', 
+              color: '#000', 
+              padding: '10px 40px', 
+              textDecoration: 'none', 
+              fontSize: '0.85rem', 
+              letterSpacing: '2px', 
+              fontWeight: '500',
+              textTransform: 'uppercase',
+              transition: 'all 0.3s'
+            }}
+          >
+            Book Now
+          </a>
+        </div>
       )
     }
   ];
 
   return (
-    <div style={{ maxWidth: '800px', margin: '40px auto', padding: '0 20px', fontFamily: 'serif' }}>
-      <h2 style={{ textAlign: 'center', fontSize: '1.8rem', marginBottom: '10px', letterSpacing: '1px', textTransform: 'uppercase' }}>
-        Book An Appointment
-      </h2>
-      <p style={{ textAlign: 'center', color: '#666', marginBottom: '40px', fontStyle: 'italic' }}>
-        Get In Touch With Our Studio
-      </p>
-
-      <div style={{ borderTop: '1px solid #eee' }}>
-        {appointmentSections.map((item, index) => {
+    <div style={{ maxWidth: '1000px', margin: '60px auto', padding: '0 20px', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+      <div style={{ borderTop: '1px solid #eaeaea' }}>
+        {sections.map((item, index) => {
           const isOpen = openIndex === index;
           return (
-            <div key={index} style={{ borderBottom: '1px solid #eee' }}>
+            <div key={index} style={{ borderBottom: '1px solid #eaeaea' }}>
+              {/* Collapsible Header bar matching the uppercase aesthetic */}
               <button
                 onClick={() => toggleAccordion(index)}
                 style={{
@@ -74,35 +121,35 @@ const AppointmentsPage = () => {
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  padding: '20px 0',
+                  padding: '25px 0',
                   cursor: 'pointer',
                   textAlign: 'left',
                   fontFamily: 'inherit',
-                  fontSize: '1.1rem',
+                  fontSize: '1.15rem',
                   fontWeight: '500',
-                  color: '#222',
+                  color: '#000',
+                  letterSpacing: '1.5px',
                   outline: 'none'
                 }}
               >
-                <span>{item.title}</span>
+                <span style={{ textTransform: 'uppercase' }}>{item.title}</span>
                 <span style={{ 
-                  fontSize: '1.4rem', 
+                  fontSize: '1.3rem', 
                   fontWeight: '300', 
                   transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)',
-                  transition: 'transform 0.2s ease'
+                  transition: 'transform 0.25s ease',
+                  paddingLeft: '15px'
                 }}>
                   ＋
                 </span>
               </button>
 
+              {/* Collapsible Body Wrapper */}
               <div style={{
-                maxHeight: isOpen ? '500px' : '0',
+                maxHeight: isOpen ? '800px' : '0',
                 overflow: 'hidden',
-                transition: 'max-height 0.4s ease-in-out, padding 0.3s ease',
-                paddingBottom: isOpen ? '20px' : '0',
-                color: '#555',
-                fontSize: '0.95rem',
-                lineHeight: '1.6'
+                transition: 'max-height 0.4s cubic-bezier(0, 1, 0, 1), padding 0.3s ease',
+                paddingBottom: isOpen ? '30px' : '0'
               }}>
                 {item.content}
               </div>
@@ -111,31 +158,14 @@ const AppointmentsPage = () => {
         })}
       </div>
 
-      {/* Immediate Styling Direct Call-to-Action */}
-      <div style={{ marginTop: '50px', padding: '30px', backgroundColor: '#faf6f0', textAlign: 'center', borderRadius: '2px' }}>
-        <h3 style={{ marginTop: 0, marginBottom: '10px', fontSize: '1.3rem', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-          For Immediate Styling Inquiries
-        </h3>
-        <p style={{ margin: '0 0 15px 0', color: '#444' }}>
-          Speak directly to our in-house stylist on WhatsApp or call us to reserve a live viewing.
-        </p>
-        <a 
-          href="https://wa.me/919650656166" 
-          target="_blank" 
-          rel="noreferrer" 
-          style={{ 
-            display: 'inline-block', 
-            background: '#000', 
-            color: '#fff', 
-            padding: '12px 30px', 
-            textDecoration: 'none', 
-            fontWeight: '600',
-            fontSize: '0.9rem',
-            letterSpacing: '1px',
-            textTransform: 'uppercase'
-          }}
-        >
-          Book via WhatsApp: +91-9650656166
+      {/* Persistent Direct Stylist Support Bar at bottom */}
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', marginTop: '50px', padding: '20px 0' }}>
+        <span style={{ fontSize: '1.2rem' }}>📞</span>
+        <span style={{ fontSize: '0.9rem', letterSpacing: '1px', fontWeight: '500', textTransform: 'uppercase' }}>
+          FOR IMMEDIATE STYLING INQUIRIES: 
+        </span>
+        <a href="tel:+919650656166" style={{ fontSize: '0.95rem', fontWeight: '600', color: '#000', textDecoration: 'none', letterSpacing: '0.5px' }}>
+          +91-9650656166
         </a>
       </div>
     </div>

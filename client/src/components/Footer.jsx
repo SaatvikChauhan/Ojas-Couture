@@ -49,8 +49,7 @@ export default function Footer() {
             <li><Link to="/shipping-delivery">Shipping and Delivery</Link></li>
             <li><Link to="/faq">F&Q</Link></li>
             <li><Link to="/blog">Blog</Link></li>
-            <li><Link to="/privacy-terms-condition">Privacy ,Terms & Conditions</Link></li>
-            <li><Link to="/appointments">Appointments/Get In Touch</Link></li>
+            
           </ul>
         </div>
 
@@ -63,6 +62,8 @@ export default function Footer() {
             <li><Link to="/cancellation-refund">Cancellation & Refund</Link></li>
             <li><Link to="/return-exchange">Return & Exchange</Link></li>
             <li><Link to="/exchange-return-form">Exchange & Return Form</Link></li>
+            <li><Link to="/privacy-terms-condition">Privacy ,Terms & Conditions</Link></li>
+            <li><Link to="/appointments">Appointments/Get In Touch</Link></li>
           </ul>
         </div>
 

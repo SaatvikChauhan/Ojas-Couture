@@ -69,7 +69,6 @@ const products = [
     inStock: true,
     isBestSeller: true,
     isSpecialPrice: true,
-    isLittleWonders: true,
     tags: ['saree', 'banarasi', 'silk', 'wedding', 'blue']
   },
   {
@@ -113,7 +112,6 @@ const products = [
     inStock: true,
     isBestSeller: true,
     isSpecialPrice: true,
-    isLittleWonders: true,
     tags: ['saree', 'banarasi', 'silk', 'wedding', 'blue']
   },
   {
@@ -129,7 +127,6 @@ const products = [
     inStock: true,
     isBestSeller: true,
     isSpecialPrice: true,
-    isLittleWonders: true,
     tags: ['saree', 'banarasi', 'silk', 'wedding', 'blue']
   },
   {

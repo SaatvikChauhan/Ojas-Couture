@@ -1,15 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { productAPI } from '../utils/api';
-import WhatsAppButton from '../components/WhatsAppButton';
 
 const FALLBACK = {
-  _id: '1', name: 'Black Embroidered Kurti Set', price: 1699,
+  _id: '1', name: 'Black Embroidered Kurti Set', price: 1699, originalPrice: 1999,
   description: 'Elegantly crafted black kurti with intricate gold embroidery.',
-  fabric: 'Georgette', work: 'Embroidery', sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-  badge: 'NEW', inStock: true,
-  images: ['https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800'],
+  fabric: 'Georgette', work: 'Embroidery', sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+  colors: ['#1a1a1a', '#c9a84c', '#7f1d1d', '#2d4a2d'],
+  badge: 'NEW', inStock: true, brand: 'Ojas Signature',
+  images: [
+    'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800',
+    'https://images.unsplash.com/photo-1614285798449-02a33ee5e02b?w=800',
+    'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800'
+  ],
   reviews: [{ name: 'Priya', rating: 5, comment: 'Stunning quality!', date: new Date() }]
+};
+
+const SIZE_CHART = {
+  XXS: { bust: '30 / 76.2', waist: '24 / 61', hip: '34 / 86.4' },
+  XS:  { bust: '32 / 81.3', waist: '26 / 66', hip: '36 / 91.4' },
+  S:   { bust: '34 / 86.4', waist: '28 / 71.1', hip: '38 / 96.5' },
+  M:   { bust: '36 / 91.4', waist: '30 / 76.2', hip: '40 / 102' },
+  L:   { bust: '38 / 96.5', waist: '32 / 81.3', hip: '42 / 106.7' },
+  XL:  { bust: '40 / 101.6', waist: '34 / 86.4', hip: '44 / 111.8' },
 };
 
 export default function ProductDetail() {
@@ -18,9 +31,13 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const [activeImg, setActiveImg] = useState(0);
   const [selectedSize, setSelectedSize] = useState('');
+  const [selectedColor, setSelectedColor] = useState(0);
   const [reviewForm, setReviewForm] = useState({ name: '', rating: 5, comment: '' });
   const [reviewMsg, setReviewMsg] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [showSizeChart, setShowSizeChart] = useState(false);
+  const [activeAccordion, setActiveAccordion] = useState('description');
+  const [sizeChartTab, setSizeChartTab] = useState('india');
 
   useEffect(() => {
     productAPI.getById(id)
@@ -52,6 +69,10 @@ export default function ProductDetail() {
 
   if (loading) return <div className="spinner" style={{paddingTop: 120}}><div className="spinner-ring" /></div>;
 
+  const discountPct = product.originalPrice && product.originalPrice > product.price
+    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
+    : null;
+
   return (
     <div className="product-detail" style={{ paddingTop: 72 }}>
       <div className="container">
@@ -69,6 +90,11 @@ export default function ProductDetail() {
                 onError={e => { e.target.src = FALLBACK.images[0]; }}
               />
               {product.badge && <span className="badge detail-badge">{product.badge}</span>}
+              <button className="wishlist-btn" aria-label="Add to wishlist">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" width="20" height="20">
+                  <path d="M12 21s-7.5-4.6-10-9.3C0.3 8.6 2 5 5.5 5 8 5 10 6.7 12 9c2-2.3 4-4 6.5-4C22 5 23.7 8.6 22 11.7 19.5 16.4 12 21 12 21z"/>
+                </svg>
+              </button>
             </div>
             {product.images?.length > 1 && (
               <div className="thumb-list">
@@ -88,12 +114,18 @@ export default function ProductDetail() {
           {/* Info */}
           <div className="detail-info">
             <h1 className="detail-name">{product.name}</h1>
+            {product.brand && <p className="detail-brand">{product.brand}</p>}
+
             <div className="detail-price">
-              <span>₹{product.price?.toLocaleString('en-IN')}</span>
+              <span className={discountPct ? 'price-sale' : ''}>₹{product.price?.toLocaleString('en-IN')}</span>
               {product.originalPrice && product.originalPrice > product.price && (
-                <span className="original-price">₹{product.originalPrice?.toLocaleString('en-IN')}</span>
+                <>
+                  <span className="original-price">₹{product.originalPrice?.toLocaleString('en-IN')}</span>
+                  <span className="discount-tag">{discountPct}% OFF</span>
+                </>
               )}
             </div>
+            {discountPct && <p className="tax-note">Tax included.</p>}
 
             {product.reviews?.length > 0 && (
               <div className="detail-rating">
@@ -102,7 +134,23 @@ export default function ProductDetail() {
               </div>
             )}
 
-            <p className="detail-desc">{product.description}</p>
+            {/* More Colors */}
+            {product.colors?.length > 0 && (
+              <div className="color-section">
+                <p className="size-label">More Colors</p>
+                <div className="color-swatches">
+                  {product.colors.map((c, i) => (
+                    <button
+                      key={i}
+                      className={`color-swatch ${selectedColor === i ? 'active' : ''}`}
+                      style={{ background: c }}
+                      onClick={() => setSelectedColor(i)}
+                      aria-label={`Color option ${i + 1}`}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
 
             {product.fabric && (
               <div className="detail-meta">
@@ -119,7 +167,10 @@ export default function ProductDetail() {
 
             {product.sizes?.length > 0 && (
               <div className="size-selector">
-                <p className="size-label">Select Size</p>
+                <div className="size-label-row">
+                  <p className="size-label" style={{ marginBottom: 0 }}>Select Size</p>
+                  <button className="size-chart-link" onClick={() => setShowSizeChart(true)}>Size chart</button>
+                </div>
                 <div className="size-options">
                   {product.sizes.map(s => (
                     <button
@@ -130,6 +181,7 @@ export default function ProductDetail() {
                       {s}
                     </button>
                   ))}
+                  <button className="size-btn size-custom">Custom</button>
                 </div>
               </div>
             )}
@@ -141,7 +193,7 @@ export default function ProductDetail() {
                 rel="noreferrer"
                 className="btn-primary whatsapp-order"
               >
-                📱 Order on WhatsApp
+                Order on WhatsApp
               </a>
               <a
                 href={`https://wa.me/919876543210?text=${encodeURIComponent(`I want to know more about "${product.name}"`)}`}
@@ -151,6 +203,88 @@ export default function ProductDetail() {
               >
                 Enquire Now
               </a>
+            </div>
+
+            {/* Need urgent delivery / chat bar */}
+            <a
+              href={`https://wa.me/919876543210?text=${encodeURIComponent(`Hi! I need urgent delivery info for "${product.name}".`)}`}
+              target="_blank"
+              rel="noreferrer"
+              className="urgent-chat-bar"
+            >
+              <span className="urgent-chat-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                </svg>
+              </span>
+              <span className="urgent-chat-text">Need urgent delivery? Chat with us</span>
+              <span className="online-dot">Online</span>
+            </a>
+
+            <p className="reward-note">✦ Earn loyalty points on this purchase</p>
+
+            <div className="giftbox-banner">
+              <span>All products arrive in a complimentary Ojas Couture gift box.</span>
+            </div>
+
+            {/* Accordion: Description / Customization / Shipping */}
+            <div className="detail-tabs">
+              {['description', 'customization', 'shipping'].map(tab => (
+                <button
+                  key={tab}
+                  className={`detail-tab ${activeAccordion === tab ? 'active' : ''}`}
+                  onClick={() => setActiveAccordion(tab)}
+                >
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </button>
+              ))}
+            </div>
+            <div className="detail-tab-content">
+              {activeAccordion === 'description' && (
+                <div>
+                  <p className="detail-desc">{product.description}</p>
+                  {product.fabric && <p className="meta-line"><strong>Material/Fabric:</strong> {product.fabric}</p>}
+                  <p className="meta-line"><strong>COD Available</strong> | Shipping Worldwide</p>
+                  <p className="meta-line"><strong>Wash Care:</strong> Dry Clean Only</p>
+                  <p className="meta-line"><strong>Delivery Timeline:</strong> 7–10 Days</p>
+                  <p className="meta-line color-vary"><strong>Color may vary slightly.</strong></p>
+                </div>
+              )}
+              {activeAccordion === 'customization' && (
+                <div className="customization-grid">
+                  <div className="custom-item">
+                    <strong>Video Call</strong>
+                    <p>Discover the piece you love closely with our on-call stylists.</p>
+                  </div>
+                  <div className="custom-item">
+                    <strong>Need it sooner?</strong>
+                    <p>Skip the queue — let us know when you have an event!</p>
+                  </div>
+                  <div className="custom-item">
+                    <strong>Customise</strong>
+                    <p>Change the color, neckline, or design as per your liking.</p>
+                  </div>
+                  <div className="custom-item">
+                    <strong>Add or remove from set</strong>
+                    <p>Need a matching dupatta? It's all possible!</p>
+                  </div>
+                  <a
+                    href="https://wa.me/919876543210?text=Hi! I'd like to discuss customization options."
+                    target="_blank"
+                    rel="noreferrer"
+                    className="custom-chat-link"
+                  >
+                    Chat with us, and we can help you with all of the above! Connect on <strong>+91 98765 43210</strong>
+                  </a>
+                </div>
+              )}
+              {activeAccordion === 'shipping' && (
+                <div>
+                  <p className="meta-line">Standard shipping: 5–7 business days within India.</p>
+                  <p className="meta-line">International shipping available — duties may apply.</p>
+                  <p className="meta-line">Easy exchanges within 7 days of delivery for size issues.</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -221,6 +355,87 @@ export default function ProductDetail() {
           </div>
         </section>
       </div>
+
+      {/* Sticky mobile bar */}
+      <div className="sticky-buy-bar">
+        <div className="sticky-info">
+          <span className="sticky-name">{product.name}</span>
+          <span className="sticky-price">
+            ₹{product.price?.toLocaleString('en-IN')}
+            {product.originalPrice && product.originalPrice > product.price && (
+              <span className="sticky-original">₹{product.originalPrice?.toLocaleString('en-IN')}</span>
+            )}
+          </span>
+        </div>
+        <a
+          href={`https://wa.me/919876543210?text=${encodeURIComponent(whatsappMsg)}`}
+          target="_blank"
+          rel="noreferrer"
+          className="btn-primary sticky-cta"
+        >
+          Order Now
+        </a>
+      </div>
+
+      {/* Size Chart Modal */}
+      {showSizeChart && (
+        <div className="modal-overlay" onClick={() => setShowSizeChart(false)}>
+          <div className="size-chart-modal" onClick={e => e.stopPropagation()}>
+            <div className="size-chart-header">
+              <h3>Size Chart</h3>
+              <button className="modal-close" onClick={() => setShowSizeChart(false)} aria-label="Close">✕</button>
+            </div>
+
+            <div className="size-chart-tabs">
+              <button
+                className={`sc-tab ${sizeChartTab === 'india' ? 'active' : ''}`}
+                onClick={() => setSizeChartTab('india')}
+              >
+                India
+              </button>
+              <button
+                className={`sc-tab ${sizeChartTab === 'intl' ? 'active' : ''}`}
+                onClick={() => setSizeChartTab('intl')}
+              >
+                International
+              </button>
+            </div>
+
+            <div className="size-chart-table-wrap">
+              <table className="size-chart-table">
+                <thead>
+                  <tr>
+                    <th>US Size</th>
+                    {Object.keys(SIZE_CHART).map(s => <th key={s}>{s}</th>)}
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Bust (in/cm)</td>
+                    {Object.values(SIZE_CHART).map((v, i) => <td key={i}>{v.bust}</td>)}
+                  </tr>
+                  <tr>
+                    <td>Waist (in/cm)</td>
+                    {Object.values(SIZE_CHART).map((v, i) => <td key={i}>{v.waist}</td>)}
+                  </tr>
+                  <tr>
+                    <td>Hip (in/cm)</td>
+                    {Object.values(SIZE_CHART).map((v, i) => <td key={i}>{v.hip}</td>)}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p className="size-chart-note">Outfits come with an approximate 2-inch ease built in for comfort, styling, and ideal fit.</p>
+            <p className="size-chart-note">Your perfect fit matters — easy size exchanges within 7 days.</p>
+            <p className="size-chart-note"><strong>Note:</strong> The sizes mentioned are body measurements.</p>
+            <p className="size-chart-note">
+              Connect with us on a live video call for guided measurement support. Contact us on{' '}
+              <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="size-chart-link-inline">+91 98765 43210</a>
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

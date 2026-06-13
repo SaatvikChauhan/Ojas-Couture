@@ -39,7 +39,7 @@ export default function Shop() {
     if (filterParam === 'specialPrice') query.specialPrice = 'true';
 
     setLoading(true);
-    productAPI.getAll(query)
+    productAPI.getAll({littleWonders: false, limit: 20})
       .then(res => {
         let prods = res.data.products || [];
         if (!prods.length) prods = FALLBACK;

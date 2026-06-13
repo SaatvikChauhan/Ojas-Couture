@@ -13,7 +13,7 @@ export default function LittleWonders() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    productAPI.getAll()
+    productAPI.getAll({ littleWonders: 'true' })
       .then(res => {
         const p = res.data.products;
         setProducts(p?.length ? p : FALLBACK);

@@ -2569,24 +2569,28 @@ h5 {
   letter-spacing: 0.5px;
 }
 
-.reward-note {
-  font-size: 12px;
-  color: var(--gold-dark);
-  margin-bottom: 16px;
-  letter-spacing: 0.5px;
-}
-
-.giftbox-banner {
-  background: linear-gradient(120deg, var(--ivory), #f0e6d2);
-  border: 1px solid var(--border);
+.info-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #fdf3d8;
+  border: 1px solid #f0dca6;
   border-radius: var(--radius);
   padding: 14px 18px;
-  font-size: 12px;
-  color: var(--charcoal-mid);
+  font-size: 13px;
+  color: #6b5419;
   margin-bottom: 28px;
-  text-align: center;
-  letter-spacing: 0.3px;
+  line-height: 1.6;
 }
+
+.info-banner-icon {
+  color: var(--gold-dark);
+  flex-shrink: 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.info-banner strong { color: #4a3a0f; }
 
 /* Tabs / accordion */
 .detail-tabs {
@@ -2666,6 +2670,69 @@ h5 {
 .custom-chat-link:hover { background: rgba(201,168,76,0.08); }
 .custom-chat-link strong { color: var(--gold-dark); }
 
+/* Info accordions (FAQs, Price Match, Returns) */
+.info-accordions {
+  margin-top: 32px;
+  border-top: 1px solid var(--border);
+}
+
+.info-accordion-item {
+  border-bottom: 1px solid var(--border);
+}
+
+.info-accordion-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  padding: 18px 0;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  text-align: left;
+}
+
+.info-accordion-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.info-accordion-icon {
+  font-size: 15px;
+  color: var(--gold-dark);
+  flex-shrink: 0;
+}
+
+.info-accordion-toggle {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--gray-warm);
+  flex-shrink: 0;
+}
+
+.info-accordion-body {
+  padding: 0 0 20px 27px;
+  font-size: 13px;
+  color: var(--charcoal-mid);
+}
+
+.info-accordion-body .meta-line {
+  font-size: 13px;
+}
+
+/* Discover More Styles */
+.discover-more {
+  padding: 72px 0;
+  background: var(--ivory);
+  margin-top: 40px;
+}
+
 /* Reviews */
 .reviews-section { margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--border); }
 
@@ -2739,10 +2806,70 @@ h5 {
   color: var(--forest);
 }
 
-/* Sticky buy bar (mobile) */
+/* Sticky buy bar - title left, price + actions right */
 .sticky-buy-bar {
-  display: none;
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--warm-white);
+  border-top: 1px solid var(--border);
+  padding: 14px 24px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  z-index: 90;
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
 }
+
+.sticky-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.sticky-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--charcoal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 320px;
+}
+
+.sticky-price {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--forest);
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.sticky-original {
+  font-size: 12px;
+  color: var(--gray-warm);
+  text-decoration: line-through;
+  font-weight: 400;
+}
+
+.sticky-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.sticky-cta, .sticky-cta-secondary {
+  padding: 11px 24px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* Add bottom padding so sticky bar doesn't overlap content */
+.product-detail { padding-bottom: 90px; }
 
 /* Size Chart Modal */
 .modal-overlay {
@@ -2868,61 +2995,26 @@ h5 {
   .customization-grid { grid-template-columns: 1fr; }
   .size-chart-modal { padding: 20px; }
 
-  /* Sticky bottom buy bar on mobile */
   .sticky-buy-bar {
-    display: flex;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--warm-white);
-    border-top: 1px solid var(--border);
     padding: 10px 16px;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    z-index: 90;
-    box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
-  }
-
-  .sticky-info {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    overflow: hidden;
   }
 
   .sticky-name {
     font-size: 11px;
     color: var(--gray-warm);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 140px;
+    max-width: 120px;
   }
 
   .sticky-price {
     font-size: 14px;
-    font-weight: 600;
-    color: var(--forest);
-    display: flex;
-    gap: 6px;
-    align-items: baseline;
   }
 
-  .sticky-original {
+  .sticky-cta, .sticky-cta-secondary {
+    padding: 9px 14px;
     font-size: 11px;
-    color: var(--gray-warm);
-    text-decoration: line-through;
-    font-weight: 400;
   }
 
-  .sticky-cta {
-    flex-shrink: 0;
-    padding: 10px 20px;
-    font-size: 12px;
+  .sticky-cta-secondary {
+    display: none;
   }
-
-  /* Add bottom padding so content isn't hidden behind sticky bar */
-  .product-detail { padding-bottom: 80px; }
 }

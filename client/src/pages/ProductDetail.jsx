@@ -25,6 +25,13 @@ const SIZE_CHART = {
   XL:  { bust: '40 / 101.6', waist: '34 / 86.4', hip: '44 / 111.8' },
 };
 
+const FALLBACK_RELATED = [
+  { _id: '2', name: 'Beige Chikankari Kurta Set', price: 4500, badge: 'HANDMADE', images: ['https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600'] },
+  { _id: '3', name: 'Royal Blue Banarasi Silk Saree', price: 8500, badge: 'BEST SELLER', images: ['https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600'] },
+  { _id: '5', name: 'Pink Bandhani Kurti Set', price: 2200, badge: 'HANDMADE', images: ['https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600'] },
+  { _id: '6', name: 'Orange Embroidered Kurti', price: 1850, badge: 'NEW ARRIVAL', images: ['https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600'] },
+];
+
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -37,6 +44,7 @@ export default function ProductDetail() {
   const [submitting, setSubmitting] = useState(false);
   const [showSizeChart, setShowSizeChart] = useState(false);
   const [activeAccordion, setActiveAccordion] = useState('description');
+  const [activeInfoAccordion, setActiveInfoAccordion] = useState(null);
   const [sizeChartTab, setSizeChartTab] = useState('india');
 
   useEffect(() => {
@@ -72,6 +80,12 @@ export default function ProductDetail() {
   const discountPct = product.originalPrice && product.originalPrice > product.price
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : null;
+
+  // Fallbacks so design elements always render even if backend data lacks these fields
+  const brandLabel = product.brand || 'Ojas Couture · Little Wonders by Pratibha Rajput';
+  const colorOptions = product.colors?.length > 0
+    ? product.colors
+    : ['#1a1a1a', '#c9a84c', '#7f1d1d', '#2d4a2d', '#6b4226', '#8b4789'];
 
   return (
     <div className="product-detail" style={{ paddingTop: 72 }}>
@@ -114,7 +128,7 @@ export default function ProductDetail() {
           {/* Info */}
           <div className="detail-info">
             <h1 className="detail-name">{product.name}</h1>
-            {product.brand && <p className="detail-brand">{product.brand}</p>}
+            <p className="detail-brand">{brandLabel}</p>
 
             <div className="detail-price">
               <span className={discountPct ? 'price-sale' : ''}>₹{product.price?.toLocaleString('en-IN')}</span>
@@ -135,22 +149,20 @@ export default function ProductDetail() {
             )}
 
             {/* More Colors */}
-            {product.colors?.length > 0 && (
-              <div className="color-section">
-                <p className="size-label">More Colors</p>
-                <div className="color-swatches">
-                  {product.colors.map((c, i) => (
-                    <button
-                      key={i}
-                      className={`color-swatch ${selectedColor === i ? 'active' : ''}`}
-                      style={{ background: c }}
-                      onClick={() => setSelectedColor(i)}
-                      aria-label={`Color option ${i + 1}`}
-                    />
-                  ))}
-                </div>
+            <div className="color-section">
+              <p className="size-label">More Colors</p>
+              <div className="color-swatches">
+                {colorOptions.map((c, i) => (
+                  <button
+                    key={i}
+                    className={`color-swatch ${selectedColor === i ? 'active' : ''}`}
+                    style={{ background: c }}
+                    onClick={() => setSelectedColor(i)}
+                    aria-label={`Color option ${i + 1}`}
+                  />
+                ))}
               </div>
-            )}
+            </div>
 
             {product.fabric && (
               <div className="detail-meta">
@@ -221,10 +233,9 @@ export default function ProductDetail() {
               <span className="online-dot">Online</span>
             </a>
 
-            <p className="reward-note">✦ Earn loyalty points on this purchase</p>
-
-            <div className="giftbox-banner">
-              <span>All products arrive in a complimentary Ojas Couture gift box.</span>
+            <div className="info-banner">
+              <span className="info-banner-icon">★</span>
+              <span>All products arrive in a complimentary <strong>Ojas Couture</strong> gift box — beautifully packaged and ready to gift.</span>
             </div>
 
             {/* Accordion: Description / Customization / Shipping */}
@@ -285,6 +296,60 @@ export default function ProductDetail() {
                   <p className="meta-line">Easy exchanges within 7 days of delivery for size issues.</p>
                 </div>
               )}
+            </div>
+
+            {/* FAQ-style dropdowns */}
+            <div className="info-accordions">
+              {[
+                {
+                  key: 'faqs',
+                  title: 'FAQs',
+                  icon: 'ⓘ',
+                  content: (
+                    <div>
+                      <p className="meta-line"><strong>How long will my order take?</strong><br />Most orders are dispatched within 7–10 days. Custom stitched pieces may take longer.</p>
+                      <p className="meta-line"><strong>Can I customise this piece?</strong><br />Yes! Color, fabric, and fit changes are available — chat with us on WhatsApp.</p>
+                      <p className="meta-line"><strong>Do you ship internationally?</strong><br />Yes, we ship worldwide. Duties and taxes may apply at your destination.</p>
+                    </div>
+                  )
+                },
+                {
+                  key: 'price-match',
+                  title: 'Price Match Promise',
+                  icon: '🏷',
+                  content: (
+                    <p className="meta-line">If you find this exact piece available elsewhere at a lower price, share the details with us on WhatsApp within 24 hours of purchase and we'll match it — subject to verification.</p>
+                  )
+                },
+                {
+                  key: 'returns',
+                  title: 'Returns & Exchange Policy',
+                  icon: '♻',
+                  content: (
+                    <div>
+                      <p className="meta-line">We accept exchanges within 7 days of delivery for size issues or manufacturing defects.</p>
+                      <p className="meta-line">Items must be unworn, unwashed, and in original packaging with tags intact.</p>
+                      <p className="meta-line color-vary"><strong>Custom-stitched pieces are not eligible for return or exchange.</strong></p>
+                    </div>
+                  )
+                },
+              ].map(item => (
+                <div className="info-accordion-item" key={item.key}>
+                  <button
+                    className="info-accordion-header"
+                    onClick={() => setActiveInfoAccordion(activeInfoAccordion === item.key ? null : item.key)}
+                  >
+                    <span className="info-accordion-title">
+                      <span className="info-accordion-icon">{item.icon}</span>
+                      {item.title}
+                    </span>
+                    <span className="info-accordion-toggle">{activeInfoAccordion === item.key ? '−' : '+'}</span>
+                  </button>
+                  {activeInfoAccordion === item.key && (
+                    <div className="info-accordion-body">{item.content}</div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -356,6 +421,34 @@ export default function ProductDetail() {
         </section>
       </div>
 
+      {/* Discover More Styles */}
+      <section className="discover-more">
+        <div className="container">
+          <h2 className="section-title">Discover More Styles</h2>
+          <div className="divider-gold" />
+          <p className="section-subtitle">You might also love these</p>
+
+          <div className="products-grid">
+            {(product.relatedProducts?.length ? product.relatedProducts : FALLBACK_RELATED).map(p => (
+              <Link to={`/product/${p._id}`} className="product-card" key={p._id} style={{ display: 'block' }}>
+                <div className="product-card-img-wrap">
+                  {p.badge && <div className="product-card-badge"><span className="badge">{p.badge}</span></div>}
+                  <img className="product-img" src={p.images?.[0]} alt={p.name} loading="lazy" />
+                </div>
+                <div className="product-card-info">
+                  <h3 className="product-card-name">{p.name}</h3>
+                  <span className="product-card-price">₹{p.price?.toLocaleString('en-IN')}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <div style={{ textAlign: 'center', marginTop: 40 }}>
+            <Link to="/shop" className="btn-secondary">View All Products</Link>
+          </div>
+        </div>
+      </section>
+
       {/* Sticky mobile bar */}
       <div className="sticky-buy-bar">
         <div className="sticky-info">
@@ -367,14 +460,24 @@ export default function ProductDetail() {
             )}
           </span>
         </div>
-        <a
-          href={`https://wa.me/919876543210?text=${encodeURIComponent(whatsappMsg)}`}
-          target="_blank"
-          rel="noreferrer"
-          className="btn-primary sticky-cta"
-        >
-          Order Now
-        </a>
+        <div className="sticky-actions">
+          <a
+            href={`https://wa.me/919876543210?text=${encodeURIComponent(`I want to know more about "${product.name}"`)}`}
+            target="_blank"
+            rel="noreferrer"
+            className="btn-secondary sticky-cta-secondary"
+          >
+            Enquire
+          </a>
+          <a
+            href={`https://wa.me/919876543210?text=${encodeURIComponent(whatsappMsg)}`}
+            target="_blank"
+            rel="noreferrer"
+            className="btn-primary sticky-cta"
+          >
+            Order Now
+          </a>
+        </div>
       </div>
 
       {/* Size Chart Modal */}

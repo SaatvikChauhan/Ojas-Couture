@@ -203,9 +203,9 @@ export default function ProductDetail() {
                 href={`https://wa.me/919876543210?text=${encodeURIComponent(whatsappMsg)}`}
                 target="_blank"
                 rel="noreferrer"
-                className="btn-primary whatsapp-order"
+                className="btn-primary"
               >
-                Order on WhatsApp
+                Add to Cart
               </a>
               <a
                 href={`https://wa.me/919876543210?text=${encodeURIComponent(`I want to know more about "${product.name}"`)}`}

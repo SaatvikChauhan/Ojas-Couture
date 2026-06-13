@@ -33,22 +33,30 @@ export default function Shop() {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    const query = { limit: 20 };
-    if (activeCategory) query.category = activeCategory;
-    if (filterParam === 'bestSeller') query.bestSeller = 'true';
-    if (filterParam === 'specialPrice') query.specialPrice = 'true';
+  const query = { limit: 20 };
+  if (activeCategory) query.category = activeCategory;
+  if (filterParam === 'bestSeller') query.bestSeller = 'true';
+  if (filterParam === 'specialPrice') query.specialPrice = 'true';
 
-    setLoading(true);
-    productAPI.getAll({littleWonders: 'false', limit: 20})
-      .then(res => {
-        let prods = res.data.products || [];
-        if (!prods.length) prods = FALLBACK;
-        setProducts(prods);
-        setTotal(res.data.total || prods.length);
-      })
-      .catch(() => { setProducts(FALLBACK); setTotal(FALLBACK.length); })
-      .finally(() => setLoading(false));
-  }, [activeCategory, filterParam]);
+  setLoading(true);
+  productAPI.getAll(query)
+    .then(res => {
+      let prods = res.data.products || [];
+
+      // ❌ Remove Little Wonders products
+      prods = prods.filter(p => !p.isLittleWonders);
+
+      if (!prods.length) prods = FALLBACK;
+      setProducts(prods);
+      setTotal(prods.length);
+    })
+    .catch(() => {
+      const filteredFallback = FALLBACK.filter(p => !p.isLittleWonders);
+      setProducts(filteredFallback);
+      setTotal(filteredFallback.length);
+    })
+    .finally(() => setLoading(false));
+}, [activeCategory, filterParam]);
 
   const sorted = [...products].sort((a, b) => {
     if (sortBy === 'price-asc') return a.price - b.price;

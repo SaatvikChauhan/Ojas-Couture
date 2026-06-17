@@ -10,9 +10,9 @@ const Homepage = require('../models/Homepage');
 
 // ── optional models ──────────────────────────
 let Testimonial, Blog, FAQ;
-try { Testimonial = require('../models/Testimonial'); } catch {}
-try { Blog = require('../models/Blog'); } catch {}
-try { const Misc = require('../models/Misc'); FAQ = Misc.FAQ; } catch {}
+try { Testimonial = require('../models/Testimonial'); } catch { }
+try { Blog = require('../models/Blog'); } catch { }
+try { const Misc = require('../models/Misc'); FAQ = Misc.FAQ; } catch { }
 
 const MONGO_URI = process.env.MONGO_URI;
 
@@ -30,15 +30,15 @@ const adminUser = {
 // CATEGORIES
 // ─────────────────────────────────────────────────────────────────────────────
 const categories = [
-  { name: 'Kurta',                   slug: 'kurta',                   description: 'Elegant kurtas for every occasion' },
-  { name: 'Bottoms',                 slug: 'bottoms',                 description: 'Palazzos, salwars, and more' },
-  { name: 'Unstitched Dress Material', slug: 'dress-material',        description: 'Premium fabric sets to stitch your way' },
-  { name: 'Lehenga',                 slug: 'lehenga',                 description: 'Bridal and festive lehengas' },
-  { name: 'Saree',                   slug: 'saree',                   description: 'From Banarasi silk to lightweight georgette' },
-  { name: 'Anarkali',               slug: 'anarkali',                description: 'Floor-length anarkali suits' },
-  { name: 'Co-ord Sets',            slug: 'co-ord-sets',             description: 'Matching sets for an effortless look' },
-  { name: 'Dupatta',                slug: 'dupatta',                  description: 'Handcrafted dupattas in every style' },
-  { name: 'Potlis',                 slug: 'potlis',                   description: 'Handmade potli bags for every outfit' },
+  { name: 'Kurta', slug: 'kurta', description: 'Elegant kurtas for every occasion' },
+  { name: 'Bottoms', slug: 'bottoms', description: 'Palazzos, salwars, and more' },
+  { name: 'Unstitched Dress Material', slug: 'dress-material', description: 'Premium fabric sets to stitch your way' },
+  { name: 'Lehenga', slug: 'lehenga', description: 'Bridal and festive lehengas' },
+  { name: 'Saree', slug: 'saree', description: 'From Banarasi silk to lightweight georgette' },
+  { name: 'Anarkali', slug: 'anarkali', description: 'Floor-length anarkali suits' },
+  { name: 'Co-ord Sets', slug: 'co-ord-sets', description: 'Matching sets for an effortless look' },
+  { name: 'Dupatta', slug: 'dupatta', description: 'Handcrafted dupattas in every style' },
+  { name: 'Potlis', slug: 'potlis', description: 'Handmade potli bags for every outfit' },
 ];
 
 const products = [
@@ -57,8 +57,8 @@ const products = [
     isLittleWonders: true,
     tags: ['black', 'embroidery', 'kurti', 'festive'],
     reviews: [
-      { name: 'Priya Sharma',  rating: 5, comment: 'Absolutely stunning! The embroidery is so detailed.', verified: true },
-      { name: 'Meena Patel',   rating: 4, comment: 'Beautiful fabric, fits perfectly.',                  verified: true },
+      { name: 'Priya Sharma', rating: 5, comment: 'Absolutely stunning! The embroidery is so detailed.', verified: true },
+      { name: 'Meena Patel', rating: 4, comment: 'Beautiful fabric, fits perfectly.', verified: true },
     ],
   },
   {
@@ -162,18 +162,69 @@ const products = [
     isSpecialPrice: true,
     tags: ['green', 'chanderi', 'lightweight', 'summer wedding'],
   },
+  {
+    name: 'Black Embroidered Kurti Set (Alt)',
+    price: 1699,
+    description: 'Elegantly crafted black kurti with intricate gold embroidery.',
+    category: 'kurti-set',
+    images: ['https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600'],
+    fabric: 'Georgette',
+    work: 'Embroidery',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    inStock: true,
+    isBestSeller: true,
+    isLittleWonders: false,
+  },
+
+  {
+    name: 'Pink Bandhani Kurti Set (Alt)',
+    price: 2200,
+    description: 'Cheerful pink kurti with traditional bandhani print.',
+    category: 'kurti-set',
+    images: ['https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600'],
+    fabric: 'Mul Cotton',
+    work: 'Bandhani',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    inStock: true,
+    isLittleWonders: false,
+  },
+
+  {
+    name: 'Mustard Phulkari Dupatta Set (Alt)',
+    price: 2800,
+    description: 'Mustard suit set with phulkari dupatta.',
+    category: 'kurta-set',
+    images: ['https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600'],
+    fabric: 'Cotton Silk',
+    work: 'Phulkari',
+    sizes: ['S', 'M', 'L', 'XL'],
+    inStock: true,
+    isSpecialPrice: true,
+    isLittleWonders: false,
+  },
+
+  {
+    name: 'Wine Velvet Lehenga Choli (Alt)',
+    price: 12000,
+    description: 'Wine velvet lehenga with zardosi work.',
+    category: 'little-wonders',
+    images: ['https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600'],
+    fabric: 'Velvet',
+    work: 'Zardosi',
+    sizes: ['S', 'M', 'L', 'XL'],
+    inStock: true,
+    isBestSeller: true,
+    isLittleWonders: false,
+  }
 ];
 
-// ─────────────────────────────────────────────────────────────────────────────
-// TESTIMONIALS  (unchanged)
-// ─────────────────────────────────────────────────────────────────────────────
 const testimonials = [
-  { name: 'Aarti Mehta',      location: 'Mumbai',    message: 'I ordered the Beige Chikankari set and it was beyond my expectations! The fabric quality is exceptional and the embroidery is museum-worthy.',                                          rating: 5, approved: true, featured: true  },
-  { name: 'Ritu Bajaj',       location: 'Delhi',     message: 'The Black Embroidered Kurti arrived beautifully packaged. The stitching quality and attention to detail is remarkable. Received so many compliments!',                               rating: 5, approved: true, featured: true  },
-  { name: 'Shalini Krishnan', location: 'Bangalore', message: 'Found Ojas Couture through Instagram and so glad I did. The Purple applique dress material is gorgeous — the handwork is clearly done with love.',                                    rating: 5, approved: true, featured: true  },
-  { name: 'Prerna Singh',     location: 'Jaipur',    message: 'The Little Wonders collection is absolute perfection. My lehenga was custom-stitched perfectly and arrived on time. Superb service!',                                               rating: 5, approved: true, featured: true  },
-  { name: 'Divya Agarwal',    location: 'Kolkata',   message: 'Outstanding quality and beautiful designs. The clothes feel luxurious yet are priced very reasonably. Customer service is also top-notch.',                                          rating: 5, approved: true, featured: true  },
-  { name: 'Pooja Nair',       location: 'Chennai',   message: 'Ordered for my sister\'s wedding and the whole family loved the outfits. The packaging was so thoughtful and the outfit was even more beautiful in person!',                         rating: 5, approved: true, featured: false },
+  { name: 'Aarti Mehta', location: 'Mumbai', message: 'I ordered the Beige Chikankari set and it was beyond my expectations! The fabric quality is exceptional and the embroidery is museum-worthy.', rating: 5, approved: true, featured: true },
+  { name: 'Ritu Bajaj', location: 'Delhi', message: 'The Black Embroidered Kurti arrived beautifully packaged. The stitching quality and attention to detail is remarkable. Received so many compliments!', rating: 5, approved: true, featured: true },
+  { name: 'Shalini Krishnan', location: 'Bangalore', message: 'Found Ojas Couture through Instagram and so glad I did. The Purple applique dress material is gorgeous — the handwork is clearly done with love.', rating: 5, approved: true, featured: true },
+  { name: 'Prerna Singh', location: 'Jaipur', message: 'The Little Wonders collection is absolute perfection. My lehenga was custom-stitched perfectly and arrived on time. Superb service!', rating: 5, approved: true, featured: true },
+  { name: 'Divya Agarwal', location: 'Kolkata', message: 'Outstanding quality and beautiful designs. The clothes feel luxurious yet are priced very reasonably. Customer service is also top-notch.', rating: 5, approved: true, featured: true },
+  { name: 'Pooja Nair', location: 'Chennai', message: 'Ordered for my sister\'s wedding and the whole family loved the outfits. The packaging was so thoughtful and the outfit was even more beautiful in person!', rating: 5, approved: true, featured: false },
 ];
 
 const blogs = [
@@ -202,12 +253,12 @@ const blogs = [
 ];
 
 const faqs = [
-  { question: 'What sizes do you offer?',             answer: 'We offer sizes XS to XXL (32–48 inches). Custom sizing is available for Little Wonders collection pieces.',                                                   category: 'sizing',        order: 1 },
-  { question: 'How long does delivery take?',         answer: 'Standard delivery takes 5–7 business days across India. Express delivery (2–3 days) is available for select locations.',                                     category: 'shipping',      order: 2 },
-  { question: 'Do you accept returns or exchanges?',  answer: 'We accept exchange requests within 7 days of delivery for manufacturing defects or size issues. Custom-stitched pieces cannot be returned.',                 category: 'returns',       order: 3 },
-  { question: 'Are your products genuinely handmade?', answer: 'Yes! All items marked "HANDMADE" are crafted by skilled artisans. We work directly with artisan communities across India.',                                 category: 'fabric',        order: 4 },
-  { question: 'Can I get a custom-stitched outfit?',  answer: 'Absolutely! Contact us via WhatsApp with your measurements and design preferences for a personalised consultation.',                                        category: 'customization', order: 5 },
-  { question: 'Do you offer Cash on Delivery?',       answer: 'Yes, COD is available for orders up to ₹5,000 within India. For higher value orders, prepaid payment via UPI or card is recommended.',                     category: 'ordering',      order: 6 },
+  { question: 'What sizes do you offer?', answer: 'We offer sizes XS to XXL (32–48 inches). Custom sizing is available for Little Wonders collection pieces.', category: 'sizing', order: 1 },
+  { question: 'How long does delivery take?', answer: 'Standard delivery takes 5–7 business days across India. Express delivery (2–3 days) is available for select locations.', category: 'shipping', order: 2 },
+  { question: 'Do you accept returns or exchanges?', answer: 'We accept exchange requests within 7 days of delivery for manufacturing defects or size issues. Custom-stitched pieces cannot be returned.', category: 'returns', order: 3 },
+  { question: 'Are your products genuinely handmade?', answer: 'Yes! All items marked "HANDMADE" are crafted by skilled artisans. We work directly with artisan communities across India.', category: 'fabric', order: 4 },
+  { question: 'Can I get a custom-stitched outfit?', answer: 'Absolutely! Contact us via WhatsApp with your measurements and design preferences for a personalised consultation.', category: 'customization', order: 5 },
+  { question: 'Do you offer Cash on Delivery?', answer: 'Yes, COD is available for orders up to ₹5,000 within India. For higher value orders, prepaid payment via UPI or card is recommended.', category: 'ordering', order: 6 },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -309,11 +360,6 @@ async function seed() {
     }
 
     console.log('\n🌸 Database seeded successfully!');
-    console.log('──────────────────────────────────────');
-    console.log('Admin login →  /admin');
-    console.log('Email      → ', adminUser.email);
-    console.log('Password   → ', existing ? '(existing password unchanged)' : adminUser.password);
-    console.log('──────────────────────────────────────\n');
     process.exit(0);
   } catch (err) {
     console.error('❌ Seed error:', err.message);

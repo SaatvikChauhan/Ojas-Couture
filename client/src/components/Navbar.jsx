@@ -16,28 +16,22 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
   const [showAuth, setShowAuth] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [user, setUser] = useState(null);
-  
-  // State to handle opening/closing the floating user profile dropdown menu
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-  
+
   const location = useLocation();
   const navigate = useNavigate();
   const profileMenuRef = useRef(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
+    if (storedUser) setUser(JSON.parse(storedUser));
   }, []);
 
-  // Close dropdowns when changing pages
   useEffect(() => {
     setMenuOpen(false);
     setProfileDropdownOpen(false);
   }, [location]);
 
-  // Click outside listener to safely close the user menu card
   useEffect(() => {
     function handleClickOutside(event) {
       if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
@@ -60,9 +54,7 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/shop?search=${encodeURIComponent(searchQuery)}`);
-    }
+    if (searchQuery.trim()) navigate(`/shop?search=${encodeURIComponent(searchQuery)}`);
   };
 
   const handleLogout = () => {
@@ -73,21 +65,21 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
 
   return (
     <>
-      <header style={{ 
-        width: '100%', 
-        backgroundColor: '#fff', 
-        borderBottom: '1px solid #e2e8f0', 
-        display: 'flex', 
-        flexDirection: 'column', 
-        position: 'sticky', 
-        top: 0, 
+      <header style={{
+        width: '100%',
+        backgroundColor: '#fff',
+        borderBottom: '1px solid #e2e8f0',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'sticky',
+        top: 0,
         zIndex: 1000,
-        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)'
+        boxShadow: '0 2px 10px rgba(0,0,0,0.05)'
       }}>
-        
+
         {/* ROW 1: BRANDING, SEARCH & USER UTILITIES */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px 40px', boxSizing: 'border-box', width: '100%' }}>
-          
+
           {/* LEFT: LOGO */}
           <Link to="/" onClick={() => setMenuOpen(false)}>
             <img src="/logo.avif" alt="Ojas Couture Logo" style={{ height: '45px', display: 'block' }} />
@@ -116,15 +108,15 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
             </button>
           </form>
 
-          {/* RIGHT: ICON ACTIONS CONTAINER */}
+          {/* RIGHT: ICON ACTIONS */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            
+
             {/* WISHLIST */}
             <Link to="/wishlist" title="Wishlist" style={{ color: '#4a5568', display: 'flex', alignItems: 'center' }}>
               <FiHeart size={22} />
             </Link>
 
-            {/* SHOPPING CART */}
+            {/* CART */}
             <button
               onClick={onCartOpen}
               style={{ background: 'none', border: 'none', cursor: 'pointer', position: 'relative', display: 'flex', alignItems: 'center', padding: '5px', color: '#4a5568' }}
@@ -132,41 +124,26 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
               <FiShoppingBag size={22} />
               {cartCount > 0 && (
                 <span style={{
-                  position: 'absolute',
-                  top: '-2px',
-                  right: '-2px',
-                  backgroundColor: '#dfba6b', 
-                  color: 'white',
-                  fontSize: '10px',
-                  fontWeight: 'bold',
-                  borderRadius: '50%',
-                  width: '16px',
-                  height: '16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
+                  position: 'absolute', top: '-2px', right: '-2px',
+                  backgroundColor: '#dfba6b', color: 'white',
+                  fontSize: '10px', fontWeight: 'bold', borderRadius: '50%',
+                  width: '16px', height: '16px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center'
                 }}>
                   {cartCount}
                 </span>
               )}
             </button>
 
-            {/* ACCOUNT LINK SECTION WITH LOGGED IN INTERACTIVE POPUP DRIVEN DROPDOWN */}
+            {/* ACCOUNT */}
             {user ? (
               <div ref={profileMenuRef} style={{ position: 'relative' }}>
                 <button
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                  style={{ 
-                    background: 'none', 
-                    border: 'none', 
-                    color: '#4a5568', 
-                    cursor: 'pointer', 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: '6px',
-                    fontSize: '0.9rem',
-                    fontWeight: '500',
-                    padding: '5px'
+                  style={{
+                    background: 'none', border: 'none', color: '#4a5568', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    fontSize: '0.9rem', fontWeight: '500', padding: '5px'
                   }}
                 >
                   <FiUser size={22} />
@@ -174,81 +151,72 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
                   <FiChevronDown size={14} style={{ transform: profileDropdownOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
                 </button>
 
-                {/* E-Commerce Floating Profile Dropdown Menu */}
                 {profileDropdownOpen && (
                   <div style={{
-                    position: 'absolute',
-                    top: '40px',
-                    right: '0',
-                    backgroundColor: '#fff',
-                    border: '1px solid #e2e8f0',
-                    borderRadius: '8px',
-                    width: '230px',
+                    position: 'absolute', top: '40px', right: '0',
+                    backgroundColor: '#fff', border: '1px solid #e2e8f0',
+                    borderRadius: '8px', width: '230px',
                     boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-                    zIndex: 1100,
-                    overflow: 'hidden',
-                    padding: '12px 0'
+                    zIndex: 1100, overflow: 'hidden', padding: '12px 0'
                   }}>
-                    {/* User Mini Profile Banner Summary Area */}
+                    {/* User summary */}
                     <div style={{ padding: '4px 18px 12px 18px', borderBottom: '1px solid #f1f5f9', textAlign: 'left' }}>
-                      <p style={{ margin: '0', fontWeight: 'bold', color: '#111', fontSize: '0.95rem' }}>{user.name}</p>
-                      <p style={{ margin: '2px 0 0 0', color: '#718096', fontSize: '0.8rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.email}</p>
+                      <p style={{ margin: 0, fontWeight: 'bold', color: '#111', fontSize: '0.95rem' }}>{user.name}</p>
+                      <p style={{ margin: '2px 0 0', color: '#718096', fontSize: '0.8rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.email}</p>
                     </div>
 
-                    {/* Standard E-Commerce Options Panel Links */}
+                    {/* Standard links */}
                     <div style={{ display: 'flex', flexDirection: 'column', padding: '6px 0' }}>
                       <Link to="/account" style={dropdownLinkStyle}>
-                        <FiUser size={16} style={{ color: '#dfba6b' }} />
-                        My Profile
+                        <FiUser size={16} style={{ color: '#dfba6b' }} /> My Profile
                       </Link>
                       <Link to="/account/orders" style={dropdownLinkStyle}>
-                        <FiPackage size={16} style={{ color: '#dfba6b' }} />
-                        Orders History
+                        <FiPackage size={16} style={{ color: '#dfba6b' }} /> Orders History
                       </Link>
                       <Link to="/wishlist" style={dropdownLinkStyle}>
-                        <FiHeart size={16} style={{ color: '#dfba6b' }} />
-                        My Wishlist
+                        <FiHeart size={16} style={{ color: '#dfba6b' }} /> My Wishlist
                       </Link>
                     </div>
 
-                    {/* Highly Polished Logout Interaction Section Row */}
+                    {/* ── Admin link — only shows if user is admin ── */}
+                    {user.isAdmin && (
+                      <div style={{ borderTop: '1px solid #f1f5f9', padding: '6px 0' }}>
+                        <Link to="/admin" style={{ ...dropdownLinkStyle, color: '#1a1a1a' }}>
+                          <FiSettings size={16} style={{ color: '#1a1a1a' }} />
+                          Admin Dashboard
+                        </Link>
+                      </div>
+                    )}
+
+                    {/* Logout */}
                     <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '6px' }}>
                       <button
                         onClick={handleLogout}
                         style={{
-                          width: '100%',
-                          background: 'none',
-                          border: 'none',
-                          padding: '10px 18px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '10px',
-                          color: '#e53e3e',
-                          cursor: 'pointer',
-                          fontSize: '0.85rem',
-                          fontWeight: '500',
-                          textAlign: 'left'
+                          width: '100%', background: 'none', border: 'none',
+                          padding: '10px 18px', display: 'flex', alignItems: 'center',
+                          gap: '10px', color: '#e53e3e', cursor: 'pointer',
+                          fontSize: '0.85rem', fontWeight: '500', textAlign: 'left'
                         }}
-                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fff5f5'}
-                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#fff5f5'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
                       >
-                        <FiLogOut size={16} />
-                        Logout
+                        <FiLogOut size={16} /> Logout
                       </button>
                     </div>
                   </div>
                 )}
               </div>
             ) : (
-              <button 
-                onClick={() => setShowAuth(true)} 
+              <button
+                onClick={() => setShowAuth(true)}
                 style={{ background: 'none', border: 'none', color: '#4a5568', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
               >
                 <FiUser size={22} />
               </button>
             )}
 
-            {/* HAMBURGER TOGGLE (FOR MOBILE BREAKPOINTS) */}
+            {/* HAMBURGER (MOBILE) */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               className="menu-toggle"
@@ -257,10 +225,9 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
               {menuOpen ? <FiX size={22} /> : <FiMenu size={22} />}
             </button>
           </div>
-
         </div>
 
-        {/* ROW 2: TABS LINK MENUBAR */}
+        {/* ROW 2: NAV LINKS */}
         <div style={{ width: '100%', backgroundColor: '#fafaf8', borderTop: '1px solid #f0f0f0', display: 'flex', justifyContent: 'center', padding: '12px 0' }}>
           <nav style={{ display: 'flex', gap: '40px' }}>
             {navLinks.map(link => (
@@ -283,7 +250,7 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
         </div>
       </header>
 
-      {/* MOBILE OVERLAY DRAWER LINKS */}
+      {/* MOBILE DRAWER */}
       {menuOpen && (
         <div className="mobile-menu-overlay" onClick={() => setMenuOpen(false)}>
           <nav className="mobile-menu-nav" onClick={e => e.stopPropagation()}>
@@ -300,21 +267,16 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
           </nav>
         </div>
       )}
+
       {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
     </>
   );
 }
 
-// Inline styling schema to keep dropdown item UI uniform and beautiful
 const dropdownLinkStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '12px',
-  padding: '10px 18px',
-  color: '#334155',
-  textDecoration: 'none',
-  fontSize: '0.85rem',
-  fontWeight: '500',
-  textAlign: 'left',
-  transition: 'background-color 0.15s'
+  display: 'flex', alignItems: 'center', gap: '12px',
+  padding: '10px 18px', color: '#334155',
+  textDecoration: 'none', fontSize: '0.85rem',
+  fontWeight: '500', textAlign: 'left',
+  transition: 'background-color 0.15s',
 };

@@ -1,7 +1,7 @@
 // src/pages/admin/api.js
 // All admin API calls — token is read from localStorage
 
-const BASE = 'https://ojas-couture-api.vercel.app/api/';
+const BASE = 'https://ojas-couture-api.vercel.app';
 
 const token = () => localStorage.getItem('ojasAdminToken');
 

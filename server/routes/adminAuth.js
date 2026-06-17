@@ -21,27 +21,4 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Utility: seed first admin (run once, disable in production)
-// POST /api/admin/auth/seed  { name, email, password, secret }
-router.post('/seed', async (req, res) => {
-  try {
-    const { name, email, password, secret } = req.body;
-    if (secret !== process.env.ADMIN_SEED_SECRET) return res.status(403).json({ msg: 'Forbidden' });
-
-    const existing = await User.findOne({ email });
-    if (existing) {
-      existing.isAdmin = true;
-      await existing.save();
-      return res.json({ msg: 'User promoted to admin' });
-    }
-
-    const hashed = await bcrypt.hash(password, 10);
-    const user = new User({ name, email, password: hashed, isAdmin: true });
-    await user.save();
-    res.json({ msg: 'Admin created' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
 module.exports = router;

@@ -163,7 +163,7 @@ const products = [
     tags: ['green', 'chanderi', 'lightweight', 'summer wedding'],
   },
   {
-    name: 'Black Embroidered Kurti Set (Alt)',
+    name: 'Black Embroidered Kurti Set',
     price: 1699,
     description: 'Elegantly crafted black kurti with intricate gold embroidery.',
     category: 'kurti-set',
@@ -173,11 +173,10 @@ const products = [
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
     inStock: true,
     isBestSeller: true,
-    isLittleWonders: false,
   },
 
   {
-    name: 'Pink Bandhani Kurti Set (Alt)',
+    name: 'Pink Bandhani Kurti Set',
     price: 2200,
     description: 'Cheerful pink kurti with traditional bandhani print.',
     category: 'kurti-set',
@@ -186,11 +185,10 @@ const products = [
     work: 'Bandhani',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
     inStock: true,
-    isLittleWonders: false,
   },
 
   {
-    name: 'Mustard Phulkari Dupatta Set (Alt)',
+    name: 'Mustard Phulkari Dupatta Set',
     price: 2800,
     description: 'Mustard suit set with phulkari dupatta.',
     category: 'kurta-set',
@@ -200,11 +198,10 @@ const products = [
     sizes: ['S', 'M', 'L', 'XL'],
     inStock: true,
     isSpecialPrice: true,
-    isLittleWonders: false,
   },
 
   {
-    name: 'Wine Velvet Lehenga Choli (Alt)',
+    name: 'Wine Velvet Lehenga Choli',
     price: 12000,
     description: 'Wine velvet lehenga with zardosi work.',
     category: 'little-wonders',
@@ -214,7 +211,6 @@ const products = [
     sizes: ['S', 'M', 'L', 'XL'],
     inStock: true,
     isBestSeller: true,
-    isLittleWonders: false,
   }
 ];
 

@@ -204,7 +204,7 @@ const products = [
     name: 'Wine Velvet Lehenga Choli',
     price: 12000,
     description: 'Wine velvet lehenga with zardosi work.',
-    category: 'little-wonders',
+    category: 'kurta-set',
     images: ['https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600'],
     fabric: 'Velvet',
     work: 'Zardosi',

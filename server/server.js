@@ -46,6 +46,11 @@ app.use(async (req, res, next) => {
 
 // --- ROUTES ---
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/admin/auth', require('./routes/adminAuth'));
+app.use('/api/admin/products', require('./routes/adminProducts'));
+app.use('/api/admin/categories', require('./routes/adminCategories'));
+app.use('/api/admin/collections', require('./routes/adminCollections'));
+app.use('/api/admin/homepage', require('./routes/adminHomepage'));
 app.use('/api/products', require('./routes/products'));
 app.use('/api/testimonials', require('./routes/testimonials'));
 // app.use('/api/blog', require('./routes/blog'));

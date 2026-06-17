@@ -1,7 +1,7 @@
 // src/pages/admin/api.js
 // All admin API calls — token is read from localStorage
 
-const BASE = import.meta.env.VITE_API_URL || '';
+const BASE = '';
 
 const token = () => localStorage.getItem('ojasAdminToken');
 

@@ -28,7 +28,7 @@ router.post('/upload', adminAuth, upload.single('image'), async (req, res) => {
 });
 
 // GET homepage settings (always returns single doc)
-router.get('/', adminAuth, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     let homepage = await Homepage.findOne().populate('featuredCollection', 'name slug');
     if (!homepage) homepage = await Homepage.create({});

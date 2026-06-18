@@ -36,7 +36,7 @@ const productSchema = new mongoose.Schema({
 });
 
 productSchema.virtual('avgRating').get(function () {
-  if (!this.reviews.length) return 0;
+  if (!this.reviews || !this.reviews.length) return 0;
   return (this.reviews.reduce((sum, r) => sum + r.rating, 0) / this.reviews.length).toFixed(1);
 });
 

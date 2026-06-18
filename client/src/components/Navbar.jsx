@@ -170,7 +170,8 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
                       <Link to="/account" style={dropdownLinkStyle}>
                         <FiUser size={16} style={{ color: '#dfba6b' }} /> My Profile
                       </Link>
-                      <Link to="/account/orders" style={dropdownLinkStyle}>
+                      {/* ── 📍 UPDATED TO ROUTE TO ORDERS VIA URL QUERY STRING STATE ── */}
+                      <Link to="/account?tab=orders" style={dropdownLinkStyle}>
                         <FiPackage size={16} style={{ color: '#dfba6b' }} /> Orders History
                       </Link>
                       <Link to="/wishlist" style={dropdownLinkStyle}>

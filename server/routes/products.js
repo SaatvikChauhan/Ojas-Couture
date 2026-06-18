@@ -98,35 +98,8 @@ router.post('/upload', adminAuth, upload.array('images', 10), async (req, res) =
   }
 });
 
-// GET /api/products/admin/all — admin product listing with search + pagination
-router.get('/admin/all', adminAuth, async (req, res) => {
-  try {
-    const page     = parseInt(req.query.page)     || 1;
-    const limit    = parseInt(req.query.limit)    || 20;
-    const search   = req.query.search   || '';
-    const category = req.query.category || '';
-    const status   = req.query.status   || '';
-
-    const query = {};
-    if (search)   query.name     = { $regex: search, $options: 'i' };
-    if (category) query.category = category;
-    if (status)   query.status   = status;
-
-    const total    = await Product.countDocuments(query);
-    const products = await Product.find(query)
-      .sort({ createdAt: -1 })
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .select('name category price status inStock images mainImage badge createdAt');
-
-    res.json({ products, total, page, pages: Math.ceil(total / limit) });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
 // POST /api/products/admin/create — create product (admin)
-router.post('/admin/create', adminAuth, async (req, res) => {
+router.post('/create', adminAuth, async (req, res) => {
   try {
     const data = { ...req.body };
 
@@ -149,7 +122,7 @@ router.post('/admin/create', adminAuth, async (req, res) => {
 });
 
 // PUT /api/products/admin/:id — update product (admin)
-router.put('/admin/:id', adminAuth, async (req, res) => {
+router.put('/:id', adminAuth, async (req, res) => {
   try {
     const data = { ...req.body };
 
@@ -174,7 +147,7 @@ router.put('/admin/:id', adminAuth, async (req, res) => {
 });
 
 // DELETE /api/products/admin/:id — delete product (admin)
-router.delete('/admin/:id', adminAuth, async (req, res) => {
+router.delete('/:id', adminAuth, async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) return res.status(404).json({ msg: 'Not found' });

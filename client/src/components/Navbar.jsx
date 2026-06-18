@@ -170,7 +170,6 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
                       <Link to="/account" style={dropdownLinkStyle}>
                         <FiUser size={16} style={{ color: '#dfba6b' }} /> My Profile
                       </Link>
-                      {/* ── 📍 UPDATED TO ROUTE TO ORDERS VIA URL QUERY STRING STATE ── */}
                       <Link to="/account?tab=orders" style={dropdownLinkStyle}>
                         <FiPackage size={16} style={{ color: '#dfba6b' }} /> Orders History
                       </Link>
@@ -179,12 +178,11 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
                       </Link>
                     </div>
 
-                    {/* ── Admin link — only shows if user is admin ── */}
-                    {user.isAdmin && (
+                    {/* ── Admin Link Section (Only displays if logged-in user is an admin) ── */}
+                    {user && user.isAdmin && (
                       <div style={{ borderTop: '1px solid #f1f5f9', padding: '6px 0' }}>
                         <Link to="/admin" style={{ ...dropdownLinkStyle, color: '#1a1a1a' }}>
-                          <FiSettings size={16} style={{ color: '#1a1a1a' }} />
-                          Admin Dashboard
+                          <FiSettings size={16} style={{ color: '#dfba6b' }} /> Admin Dashboard
                         </Link>
                       </div>
                     )}

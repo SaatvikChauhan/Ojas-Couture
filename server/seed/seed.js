@@ -41,6 +41,56 @@ const categories = [
   { name: 'Potlis', slug: 'potlis', description: 'Handmade potli bags for every outfit' },
 ];
 
+const collections = [
+  {
+    name: 'Best Sellers',
+    slug: 'best-sellers',
+    description: 'Our most loved styles, chosen by customers',
+    banner: 'https://images.unsplash.com/photo-1593032465175-481ac7f401a0?w=1200',
+    products: [], // fill with product _ids where isBestSeller = true
+    isActive: true,
+  },
+  {
+    name: 'Special Price',
+    slug: 'special-price',
+    description: 'Exclusive deals and limited-time offers',
+    banner: 'https://images.unsplash.com/photo-1607082349566-187342175e2f?w=1200',
+    products: [], // products with isSpecialPrice = true
+    isActive: true,
+  },
+  {
+    name: 'Little Wonders',
+    slug: 'little-wonders',
+    description: 'Handpicked artisanal pieces crafted with love',
+    banner: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=1200',
+    products: [], // products with isLittleWonders = true
+    isActive: true,
+  },
+  {
+    name: 'Wedding Collection',
+    slug: 'wedding-collection',
+    description: 'Perfect outfits for weddings and grand occasions',
+    banner: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=1200',
+    products: [], // lehenga, banarasi saree, velvet etc
+    isActive: true,
+  },
+  {
+    name: 'Festive Wear',
+    slug: 'festive-wear',
+    description: 'Celebrate every festival in style',
+    banner: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=1200',
+    products: [], // embroidery, mirror work, bandhani etc
+    isActive: true,
+  },
+  {
+    name: 'Everyday Elegance',
+    slug: 'everyday-elegance',
+    description: 'Comfortable yet stylish daily wear',
+    banner: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=1200',
+    products: [], // cotton, rayon, casual
+    isActive: true,
+  },
+];
 const products = [
   {
     name: 'Black Embroidered Kurti Set',
@@ -292,32 +342,6 @@ async function seed() {
     await Collection.deleteMany({});
 
     const byName = (name) => insertedProducts.find(p => p.name === name)?._id;
-
-    const collections = [
-      {
-        name: 'Festive Edit',
-        slug: 'festive-edit',
-        description: 'Curated pieces for every celebration — from Diwali to weddings.',
-        products: [
-          byName('Black Embroidered Kurti Set'),
-          byName('Royal Blue Banarasi Silk Saree'),
-          byName('Wine Velvet Lehenga Choli'),
-          byName('Mustard Phulkari Dupatta Set'),
-        ].filter(Boolean),
-        isActive: true,
-      },
-      {
-        name: 'Everyday Elegance',
-        slug: 'everyday-elegance',
-        description: 'Effortlessly stylish pieces for daily wear.',
-        products: [
-          byName('Pink Bandhani Kurti Set'),
-          byName('Orange Embroidered Kurti'),
-          byName('Green Chanderi Suit Set'),
-        ].filter(Boolean),
-        isActive: true,
-      },
-    ];
 
     await Collection.insertMany(collections);
     console.log(`✅ ${collections.length} collections seeded`);

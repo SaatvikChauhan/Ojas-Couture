@@ -114,26 +114,39 @@ export default function Home() {
           <p className="section-subtitle">Crafted for every occasion</p>
 
           <div className="collections-grid">
+
+            {/* 1. Initial/Fixed Collection: Little Wonders */}
             <Link to="/little-wonders" className="collection-card large">
               <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800" alt="Little Wonders" />
               <div className="collection-overlay">
                 <p className="collection-eyebrow">Little Wonders · by Rajput</p>
-                <h3>
-                  {/* Safely display featured collection name if populated by db, else fallback */}
-                  {homeData?.featuredCollection?.name || 'Exclusive Collection'}
-                </h3>
+                <h3>Exclusive Collection</h3>
                 <p>Discover beautifully Customized stitched Indian Suits for every occasion.</p>
                 <span className="btn-outline-gold" style={{ display: 'inline-block', marginTop: 16 }}>View Collection</span>
               </div>
             </Link>
-            <Link to="/shop?filter=dresseMaterial" className="collection-card">
-              <img src="https://images.unsplash.com/photo-1622467827417-bbe2237067a9?w=1600&auto=format&fit=crop" alt="Dress Material" />
+
+            {/* 2. Custom Collection from Database */}
+            <Link
+              to={homeData?.featuredCollection ? `/shop?collection=${homeData.featuredCollection._id}` : "/shop?filter=dresseMaterial"}
+              className="collection-card"
+            >
+              <img
+                src={homeData?.featuredCollection?.banner || "https://images.unsplash.com/photo-1622467827417-bbe2237067a9?w=1600&auto=format&fit=crop"}
+                alt={homeData?.featuredCollection?.name || "Dress Material"}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
               <div className="collection-overlay">
-                <h3>Unstitched Dress Material</h3>
-                <p>Choose from a variety of unstitched sarees and fabrics.</p>
+                <h3>
+                  {homeData?.featuredCollection?.name || 'Unstitched Dress Material'}
+                </h3>
+                <p>
+                  {homeData?.featuredCollection?.description || 'Choose from a variety of unstitched sarees and fabrics.'}
+                </p>
                 <span className="btn-primary" style={{ display: 'inline-block', marginTop: 16 }}>Browse Styles</span>
               </div>
             </Link>
+
           </div>
         </div>
       </section>

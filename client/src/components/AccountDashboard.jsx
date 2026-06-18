@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom'; // 👈 Needed to watch URL parameters
 
 export default function AccountDashboard() {
   const location = useLocation();
+  
+  // Parse the URL search query parameter (e.g., ?tab=orders)
   const queryParams = new URLSearchParams(location.search);
   const initialTab = queryParams.get('tab') || 'profile';
 
   const [activeTab, setActiveTab] = useState(initialTab);
 
+  // Sync the active tab whenever the URL parameter changes
   useEffect(() => {
     const tab = queryParams.get('tab');
     if (tab) {
       setActiveTab(tab);
     } else {
-      setActiveTab('profile');
+      setActiveTab('profile'); // Default back to profile tab if no ?tab query exists
     }
   }, [location.search]);
 
@@ -203,7 +206,7 @@ export default function AccountDashboard() {
 // Global Reusable Layout Styles
 const sidebarButtonStyle = {
   textAlign: 'left', padding: '12px 16px', borderRadius: '4px', border: 'none',
-  backgroundColor: 'transparent', color: '#4a5568', cursor: 'pointer', transition: '0.2s', fontSize: '0.9rem'
+  backgroundColor: 'transparent', color: '#4a5568', cursor: 'pointer', transition: '0.2s', fontSize: '0.9rem', width: '100%'
 };
 
 const activeButtonStyle = {

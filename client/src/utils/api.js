@@ -21,6 +21,10 @@ export const blogAPI = {
   getBySlug: (slug) => api.get(`/blog/${slug}`),
 };
 
+export const homepageAPI = {
+  get: () => api.get('/homepage'),
+};
+
 export const contactAPI = {
   send: (data) => api.post('/contact', data),
 };

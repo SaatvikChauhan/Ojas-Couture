@@ -1,12 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { newsletterAPI } from '../utils/api';
+import { newsletterAPI, homepageAPI } from '../utils/api';
 
 export default function Footer() {
   const [email, setEmail] = useState('');
   const [msg, setMsg] = useState('');
-  // State to manage the "more" toggle for SEO content
   const [isExpanded, setIsExpanded] = useState(false);
+  
+  // State to hold dynamic data from the database
+  const [homeData, setHomeData] = useState(null);
+
+  // Fetch footer data on mount
+  useEffect(() => {
+    if (homepageAPI) {
+      homepageAPI.get()
+        .then(res => {
+          if (res.data) setHomeData(res.data);
+        })
+        .catch(err => console.error("Failed to load footer data", err));
+    }
+  }, []);
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
@@ -20,6 +33,9 @@ export default function Footer() {
     }
   };
 
+  // Clean up the instagram handle to create a valid URL
+  const instaHandle = homeData?.instagramHandle?.replace('@', '') || '';
+
   return (
     <footer className="footer" style={{ borderTop: 'none' }}>
       <div className="footer-top container">
@@ -29,16 +45,20 @@ export default function Footer() {
           <div className="footer-group">
             <h4>ABOUT US</h4>
             <p>
-              Rooted in tradition and led by women for decades, we bring the magic and simple opulence of the past back to life, creating timeless styles for today’s little wonders.
+              {/* Fallback to original text if db text is missing. You can also truncate db text if it's too long */}
+              {homeData?.aboutText 
+                ? `${homeData.aboutText.substring(0, 160)}...` 
+                : "Rooted in tradition and led by women for decades, we bring the magic and simple opulence of the past back to life, creating timeless styles for today’s little wonders."}
             </p>
           </div>
           
-          {/* Added margin-top here to create a gap before CONTACT US */}
           <div className="footer-group contact-section" style={{ marginTop: '30px' }}>
             <h4>CONTACT US</h4>
-            <p className="contact-phone">+91-9650656166</p>
+            <p className="contact-phone">{homeData?.contactPhone || '+91-9650656166'}</p>
             <p className="contact-email">
-              <a href="mailto:contact@ojascouture.com">contact@ojascouture.com</a>
+              <a href={`mailto:${homeData?.contactEmail || 'contact@ojascouture.com'}`}>
+                {homeData?.contactEmail || 'contact@ojascouture.com'}
+              </a>
             </p>
           </div>
         </div>
@@ -49,9 +69,7 @@ export default function Footer() {
           <ul>
             <li><Link to="/about">About us</Link></li>
             <li><Link to="/appointments">Appointments/Get In Touch</Link></li>
-            <li><Link to="/shipping-and-delivery" style={{ color: 'inherit', textDecoration: 'none' }}>
-              Shipping and Delivery
-            </Link></li>
+            <li><Link to="/shipping-and-delivery" style={{ color: 'inherit', textDecoration: 'none' }}>Shipping and Delivery</Link></li>
             <li><Link to="/faq">F&Q</Link></li>
             <li><Link to="/blog">Blog</Link></li>
           </ul>
@@ -62,13 +80,9 @@ export default function Footer() {
           <h4>LEGAL</h4>
           <ul>
             <li><Link to="/privacy-terms-condition">Privacy ,Terms & Conditions</Link></li>
-            <li><Link to="/terms-of-service" style={{ color: 'inherit', textDecoration: 'none' }}>
-              Terms of Service
-            </Link></li>
+            <li><Link to="/terms-of-service" style={{ color: 'inherit', textDecoration: 'none' }}>Terms of Service</Link></li>
             <li><Link to="/cancellation-refund">Cancellation & Refund</Link></li>
-            <li><Link to="/return-exchange" style={{ color: 'inherit', textDecoration: 'none' }}>
-              Return & Exchange
-            </Link></li>
+            <li><Link to="/return-exchange" style={{ color: 'inherit', textDecoration: 'none' }}>Return & Exchange</Link></li>
             <li><Link to="/exchange-return-form">Exchange & Return Form</Link></li>
           </ul>
         </div>
@@ -97,15 +111,32 @@ export default function Footer() {
             <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook">
               <i className="fab fa-facebook-f"></i>
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
+            {/* Dynamically link to Instagram based on the handle in the database */}
+            <a 
+              href={instaHandle ? `https://instagram.com/${instaHandle}` : "https://instagram.com"} 
+              target="_blank" 
+              rel="noreferrer" 
+              aria-label="Instagram"
+            >
               <i className="fab fa-instagram"></i>
             </a>
+            {/* Optionally add WhatsApp if provided in admin */}
+            {homeData?.whatsappNumber && (
+              <a 
+                href={`https://wa.me/${homeData.whatsappNumber.replace(/[^0-9]/g, '')}`} 
+                target="_blank" 
+                rel="noreferrer" 
+                aria-label="WhatsApp"
+              >
+                <i className="fab fa-whatsapp"></i>
+              </a>
+            )}
           </div>
         </div>
 
       </div>
 
-      {/* Bottom Section (Line removed via inline style override if handled by CSS) */}
+      {/* Bottom Section */}
       <div className="footer-bottom container" style={{ borderTop: 'none', paddingTop: '10px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}>
         <div className="footer-brand-container" style={{ width: '100%' }}>
           <p className="footer-brand-text" style={{ margin: '0' }}>
@@ -176,9 +207,8 @@ export default function Footer() {
           )}
         </div>
         
-        {/* Copyright rearranged underneath the brand text on the left side */}
         <p className="footer-copyright" style={{ marginTop: '15px', marginOuter: '0', fontSize: '12px', color: '#666' }}>
-          © 2026. Ojas Couture. Powered By Radiant Synergy
+          © {new Date().getFullYear()}. Ojas Couture. Powered By Radiant Synergy
         </p>
       </div>
     </footer>

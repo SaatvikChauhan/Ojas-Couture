@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { productAPI, testimonialAPI } from '../utils/api';
+import { productAPI, testimonialAPI, homepageAPI } from '../utils/api';
 import ProductCard from '../components/ProductCard';
 
 // Fallback data for when API is unavailable
@@ -19,23 +19,33 @@ const FALLBACK_TESTIMONIALS = [
 
 export default function Home() {
   const [products, setProducts] = useState([]);
-  const [specialProducts, setSpecialProducts] = useState([]); // State for Special Price section
+  const [specialProducts, setSpecialProducts] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
+
+  // State for Admin Homepage Data (Banners & Collections)
+  const [homeData, setHomeData] = useState(null);
+  const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
+
   const [loading, setLoading] = useState(true);
 
-  // Separate references for both sliders
   const newArrivalsSliderRef = useRef(null);
   const specialPriceSliderRef = useRef(null);
 
   useEffect(() => {
     Promise.all([
-      productAPI.getAll({ limit: 10 }), // New Arrivals
-      productAPI.getAll({ limit: 10, category: 'special-price' }), // Special Price (Adjust filter as per your backend)
-      testimonialAPI.getAll({ featured: 'true' })
-    ]).then(([pRes, sRes, tRes]) => {
+      productAPI.getAll({ limit: 10 }),
+      productAPI.getAll({ limit: 10, category: 'special-price' }),
+      testimonialAPI.getAll({ featured: 'true' }),
+      // Fetch dynamic homepage settings for Banners & Collections
+      homepageAPI ? homepageAPI.get().catch(() => ({ data: null })) : Promise.resolve({ data: null })
+    ]).then(([pRes, sRes, tRes, hRes]) => {
       setProducts(pRes.data.products?.length ? pRes.data.products : FALLBACK_PRODUCTS);
       setSpecialProducts(sRes.data.products?.length ? sRes.data.products : FALLBACK_PRODUCTS);
       setTestimonials(tRes.data.products?.length ? tRes.data.products : FALLBACK_TESTIMONIALS);
+
+      if (hRes && hRes.data) {
+        setHomeData(hRes.data);
+      }
     }).catch(() => {
       setProducts(FALLBACK_PRODUCTS);
       setSpecialProducts(FALLBACK_PRODUCTS);
@@ -43,7 +53,16 @@ export default function Home() {
     }).finally(() => setLoading(false));
   }, []);
 
-  // Generic Scroll Function
+  // Automatic slideshow for Hero Banners
+  useEffect(() => {
+    if (homeData?.heroBanners?.length > 1) {
+      const interval = setInterval(() => {
+        setCurrentHeroIndex((prev) => (prev + 1) % homeData.heroBanners.length);
+      }, 5000); // Change image every 5 seconds
+      return () => clearInterval(interval);
+    }
+  }, [homeData?.heroBanners]);
+
   const scroll = (ref, direction) => {
     if (ref.current) {
       const { scrollLeft, clientWidth } = ref.current;
@@ -55,16 +74,21 @@ export default function Home() {
     }
   };
 
+  // Determine which hero image to show (fallback to original Unsplash image)
+  const currentHeroImg = homeData?.heroBanners?.length > 0
+    ? homeData.heroBanners[currentHeroIndex]
+    : "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=1600";
+
   return (
-    
     <div className="home">
-      {/* 1. Hero Section */}
+      {/* 1. Hero Section (Dynamic Banners) */}
       <section className="hero">
         <div className="hero-bg">
           <img
-            src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=1600"
+            src={currentHeroImg}
             alt="Ojas Couture Hero"
             className="hero-img"
+            style={{ transition: 'opacity 1s ease-in-out' }}
           />
           <div className="hero-overlay" />
         </div>
@@ -82,7 +106,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 2. Collections Banner */}
+      {/* 2. Collections Banner (Dynamic Featured Collection) */}
       <section className="collections-banner section-pad">
         <div className="container">
           <h2 className="section-title">Our Collections</h2>
@@ -94,9 +118,12 @@ export default function Home() {
               <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800" alt="Little Wonders" />
               <div className="collection-overlay">
                 <p className="collection-eyebrow">Little Wonders · by Rajput</p>
-                <h3>Exclusive Collection</h3>
+                <h3>
+                  {/* Safely display featured collection name if populated by db, else fallback */}
+                  {homeData?.featuredCollection?.name || 'Exclusive Collection'}
+                </h3>
                 <p>Discover beautifully Customized stitched Indian Suits for every occasion.</p>
-                <span className="btn-outline-gold" style={{display:'inline-block', marginTop: 16}}>View Collection</span>
+                <span className="btn-outline-gold" style={{ display: 'inline-block', marginTop: 16 }}>View Collection</span>
               </div>
             </Link>
             <Link to="/shop?filter=dresseMaterial" className="collection-card">
@@ -104,7 +131,7 @@ export default function Home() {
               <div className="collection-overlay">
                 <h3>Unstitched Dress Material</h3>
                 <p>Choose from a variety of unstitched sarees and fabrics.</p>
-                <span className="btn-primary" style={{display:'inline-block', marginTop: 16}}>Browse Styles</span>
+                <span className="btn-primary" style={{ display: 'inline-block', marginTop: 16 }}>Browse Styles</span>
               </div>
             </Link>
           </div>
@@ -140,7 +167,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/*  Special Price Section */}
+      {/* 4. Special Price Section */}
       <section className="special-price-products section-pad" style={{ background: '#fff' }}>
         <div className="container" style={{ position: 'relative' }}>
           <h2 className="section-title">Special Price</h2>
@@ -169,6 +196,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 5. Categories Showcase */}
       <section className="categories-showcase section-pad" style={{ background: '#ffffff', paddingTop: 0 }}>
         <div className="container">
           <div className="collections-grid elements-three">
@@ -197,20 +225,20 @@ export default function Home() {
         </div>
       </section>
 
-{/* 5. Our Offering Section */}
+      {/* 6. Our Offering Section */}
       <section className="our-offering" style={{ background: '#c4c3c2', padding: '60px 0', width: '100%' }}>
         <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
           <h2 className="section-title" style={{ textAlign: 'center', fontSize: '24px', letterSpacing: '2px', textTransform: 'uppercase', color: '#1a1a1a', marginBottom: '48px' }}>
             OUR OFFERING
           </h2>
-          
+
           <div className="offering-grid" style={{ display: 'flex', gap: '80px', justifyContent: 'center' }}>
             {/* Card 1: Video Consultations */}
             <div className="offering-card" style={{ flex: '1', maxWidth: '480px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
               <div className="offering-img-wrapper" style={{ width: '100%', height: '380px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}>
-                <img 
-                  src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600" 
-                  alt="Video Consultation" 
+                <img
+                  src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=600"
+                  alt="Video Consultation"
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
               </div>
@@ -226,14 +254,14 @@ export default function Home() {
             {/* Card 2: Custom Fittings */}
             <div className="offering-card" style={{ flex: '1', maxWidth: '480px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
               <div className="offering-img-wrapper" style={{ width: '100%', height: '380px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}>
-                <img 
-                  src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600" 
-                  alt="Custom Fittings" 
+                <img
+                  src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600"
+                  alt="Custom Fittings"
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
               </div>
               <h3 className="offering-card-title" style={{ fontSize: '16px', letterSpacing: '1px', marginTop: '24px', marginBottom: '12px', textTransform: 'uppercase', fontWeight: '600', color: '#1a1a1a' }}>
-                CUSTOME FITTINGS
+                CUSTOM FITTINGS
               </h3>
               <div style={{ width: '40px', height: '1px', background: '#1a1a1a', marginBottom: '16px' }}></div>
               <p className="offering-card-desc" style={{ color: '#444', lineHeight: '1.6', fontSize: '14px', textAlign: 'left' }}>
@@ -244,7 +272,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. The Ojas Promise */}
+      {/* 7. The Ojas Promise */}
       <section className="why-ojas section-pad">
         <div className="container">
           <h2 className="section-title">The Ojas Promise</h2>
@@ -268,7 +296,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. Testimonials */}
+      {/* 8. Testimonials */}
       <section className="home-testimonials section-pad" style={{ background: 'var(--charcoal)' }}>
         <div className="container">
           <h2 className="section-title" style={{ color: 'var(--warm-white)' }}>Our Happy Family</h2>
@@ -293,7 +321,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 7. Newsletter Banner */}
+      {/* 9. Newsletter Banner */}
       <section className="home-newsletter section-pad" style={{ background: 'var(--forest)', color: 'white', textAlign: 'center' }}>
         <div className="container">
           <h2 className="section-title" style={{ color: 'var(--warm-white)' }}>Join the Ojas Family</h2>

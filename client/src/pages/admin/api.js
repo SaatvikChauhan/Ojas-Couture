@@ -1,4 +1,3 @@
-// src/pages/admin/api.js
 // All admin API calls — token is read from localStorage
 
 const BASE = 'https://ojas-couture-api.vercel.app';
@@ -34,41 +33,41 @@ export const api = {
 
   // ── Products ──────────────────────────────────────────
   getProducts: (params = {}) =>
-    req('GET', `/admin/products?${new URLSearchParams(params)}`),
-  getProduct: (id) => req('GET', `/admin/products/${id}`),
-  createProduct: (data) => req('POST', '/admin/products', data),
-  updateProduct: (id, data) => req('PUT', `/admin/products/${id}`, data),
-  deleteProduct: (id) => req('DELETE', `/admin/products/${id}`),
+    req('GET', `/products?${new URLSearchParams(params)}`),
+  getProduct: (id) => req('GET', `/products/${id}`),
+  createProduct: (data) => req('POST', '/products', data),
+  updateProduct: (id, data) => req('PUT', `/products/${id}`, data),
+  deleteProduct: (id) => req('DELETE', `/products/${id}`),
   uploadImages: (files) => {
     const fd = new FormData();
     files.forEach(f => fd.append('images', f));
-    return req('POST', '/admin/products/upload', fd, true);
+    return req('POST', '/products/upload', fd, true);
   },
 
   // ── Categories ────────────────────────────────────────
-  getCategories: () => req('GET', '/admin/categories'),
-  createCategory: (data) => req('POST', '/admin/categories', data),
-  updateCategory: (id, data) => req('PUT', `/admin/categories/${id}`, data),
-  deleteCategory: (id) => req('DELETE', `/admin/categories/${id}`),
+  getCategories: () => req('GET', '/categories'),
+  createCategory: (data) => req('POST', '/categories', data),
+  updateCategory: (id, data) => req('PUT', `/categories/${id}`, data),
+  deleteCategory: (id) => req('DELETE', `/categories/${id}`),
 
   // ── Collections ───────────────────────────────────────
-  getCollections: () => req('GET', '/admin/collections'),
-  getCollection: (id) => req('GET', `/admin/collections/${id}`),
-  createCollection: (data) => req('POST', '/admin/collections', data),
-  updateCollection: (id, data) => req('PUT', `/admin/collections/${id}`, data),
-  deleteCollection: (id) => req('DELETE', `/admin/collections/${id}`),
+  getCollections: () => req('GET', '/collections'),
+  getCollection: (id) => req('GET', `/collections/${id}`),
+  createCollection: (data) => req('POST', '/collections', data),
+  updateCollection: (id, data) => req('PUT', `/collections/${id}`, data),
+  deleteCollection: (id) => req('DELETE', `/collections/${id}`),
   uploadCollectionBanner: (file) => {
     const fd = new FormData();
     fd.append('banner', file);
-    return req('POST', '/admin/collections/upload-banner', fd, true);
+    return req('POST', '/collections/upload-banner', fd, true);
   },
 
   // ── Homepage ──────────────────────────────────────────
-  getHomepage: () => req('GET', '/admin/homepage'),
-  updateHomepage: (data) => req('PUT', '/admin/homepage', data),
+  getHomepage: () => req('GET', '/homepage'),
+  updateHomepage: (data) => req('PUT', '/homepage', data),
   uploadHomepageImage: (file) => {
     const fd = new FormData();
     fd.append('image', file);
-    return req('POST', '/admin/homepage/upload', fd, true);
+    return req('POST', '/homepage/upload', fd, true);
   },
 };

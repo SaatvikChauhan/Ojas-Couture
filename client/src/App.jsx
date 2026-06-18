@@ -10,7 +10,7 @@ import PrivacyTerms from './components/PrivacyTerms';
 import AppointmentsPage from './components/AppointmentsPage';
 import ShippingDelivery from './components/ShippingDelivery';
 import ReturnExchange from './components/ReturnExchange';
-import adminapp from './components/admin/adminapp';
+import adminapp from './components/adminapp';
 
 import Home from './pages/Home';
 import Shop from './pages/Shop';

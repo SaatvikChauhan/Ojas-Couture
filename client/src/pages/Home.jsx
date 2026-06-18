@@ -120,7 +120,7 @@ export default function Home() {
               <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800" alt="Little Wonders" />
               <div className="collection-overlay">
                 <p className="collection-eyebrow">Little Wonders · by Rajput</p>
-                <h3>Exclusive Collection</h3>
+                <h3>Little Wonders</h3>
                 <p>Discover beautifully Customized stitched Indian Suits for every occasion.</p>
                 <span className="btn-outline-gold" style={{ display: 'inline-block', marginTop: 16 }}>View Collection</span>
               </div>

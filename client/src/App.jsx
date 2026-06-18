@@ -18,7 +18,7 @@ import LittleWonders from './pages/LittleWonders';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import TermsOfService from './components/TermsOfService';
-import AccountDashboard from './pages/AccountDashboard';
+import AccountDashboard from './components/AccountDashboard';
 
 // Admin
 import AdminApp from './pages/admin/AdminApp';
@@ -58,9 +58,9 @@ export default function App() {
               <Route path="/shipping-and-delivery" element={<ShippingDelivery />} />
               <Route path="/terms-of-service" element={<TermsOfService />} />
               <Route path="/return-exchange" element={<ReturnExchange />} />
-              
-              {/* ── 📍 UPDATED ACCOUNT ROUTE WITH WILDCARD FOR PERFECT ROUTING ── */}
-              <Route path="/account/*" element={<AccountDashboard />} />
+             
+<Route path="/account" element={<AccountDashboard />} />
+<Route path="/account/orders" element={<AccountDashboard />} />
             </Routes>
 
             <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} cartItems={cartItems} />

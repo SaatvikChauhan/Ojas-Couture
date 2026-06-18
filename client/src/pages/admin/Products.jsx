@@ -3,30 +3,17 @@ import { useState, useEffect, useCallback } from 'react';
 import { api } from './api';
 import { Modal, Field, Confirm, ImageUploader, Toast, s } from './ui';
 
-const CATEGORIES = [
-  { value: 'kurti-set', label: 'Kurti Set' },
-  { value: 'kurta-set', label: 'Kurta Set' },
-  { value: 'bottoms', label: 'Bottoms' },
-  { value: 'dress-material', label: 'Unstitched Dress Material' },
-  { value: 'lehenga', label: 'Lehenga' },
-  { value: 'saree', label: 'Saree' },
-  { value: 'anarkali', label: 'Anarkali' },
-  { value: 'co-ord-sets', label: 'Co-ord Sets' },
-  { value: 'dupatta', label: 'Dupatta' },
-  { value: 'potlis', label: 'Potlis' },
-  { value: 'little-wonders', label: 'Little Wonders' },
-  { value: 'special-price', label: 'Special Price' },
-];
 const BADGES = ['', 'NEW', 'HANDMADE', 'NEW ARRIVAL', 'SALE', 'BEST SELLER'];
 
 const blank = {
-  name: '', category: 'kurti-set', description: '', price: '', originalPrice: '',
+  name: '', category: '', description: '', price: '', originalPrice: '',
   images: [], fabric: '', work: '', sizes: '', colors: '', badge: '',
   inStock: true, isBestSeller: false, isSpecialPrice: false, tags: '',
 };
 
 export default function Products() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]); // 👈 Added categories state
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
@@ -40,6 +27,13 @@ export default function Products() {
   const [toast, setToast] = useState(null);
 
   const notify = (msg, type = 'success') => { setToast({ msg, type }); setTimeout(() => setToast(null), 3500); };
+
+  // 👈 Fetch dynamic categories on mount
+  useEffect(() => {
+    api.getCategories()
+      .then(data => setCategories(data))
+      .catch(e => console.error('Failed to load categories:', e));
+  }, []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -55,7 +49,7 @@ export default function Products() {
 
   const f = (k, v) => setForm(p => ({ ...p, [k]: v }));
 
-  const openAdd = () => { setForm(blank); setEditId(null); setModal(true); };
+  const openAdd = () => { setForm({ ...blank, category: categories[0]?.slug || '' }); setEditId(null); setModal(true); };
 
   const openEdit = async (id) => {
     try {
@@ -67,7 +61,7 @@ export default function Products() {
   };
 
   const save = async () => {
-    if (!form.name || !form.price) return notify('Name and price are required', 'error');
+    if (!form.name || !form.price || !form.category) return notify('Name, category, and price are required', 'error');
     setSaving(true);
     try {
       const payload = {
@@ -114,7 +108,8 @@ export default function Products() {
           onChange={e => { setSearch(e.target.value); setPage(1); }} />
         <select style={{ ...s.select, width: 220 }} value={catFilter} onChange={e => { setCatFilter(e.target.value); setPage(1); }}>
           <option value="">All categories</option>
-          {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+          {/* 👈 Map dynamic categories for filter */}
+          {categories.map(c => <option key={c._id || c.slug} value={c.slug}>{c.name}</option>)}
         </select>
       </div>
 
@@ -145,7 +140,8 @@ export default function Products() {
                       {p.badge && <span style={{ fontSize: 11, color: '#6b7280', background: '#f3f4f6', padding: '2px 6px', borderRadius: 4 }}>{p.badge}</span>}
                     </td>
                     <td style={{ padding: '8px 14px', color: '#6b7280', fontSize: 13 }}>
-                      {CATEGORIES.find(c => c.value === p.category)?.label || p.category}
+                      {/* 👈 Dynamic category lookup for table display */}
+                      {categories.find(c => c.slug === p.category)?.name || p.category}
                     </td>
                     <td style={{ padding: '8px 14px' }}>₹{p.price?.toLocaleString()}</td>
                     <td style={{ padding: '8px 14px' }}>
@@ -196,7 +192,9 @@ export default function Products() {
             </div>
             <Field label="Category" required>
               <select style={s.select} value={form.category} onChange={e => f('category', e.target.value)}>
-                {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+                <option value="" disabled>Select a Category</option>
+                {/* 👈 Map dynamic categories for the modal form */}
+                {categories.map(c => <option key={c._id || c.slug} value={c.slug}>{c.name}</option>)}
               </select>
             </Field>
             <Field label="Badge">

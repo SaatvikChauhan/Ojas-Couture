@@ -15,7 +15,6 @@ const productSchema = new mongoose.Schema({
   description: { type: String, required: true },
   category: {
     type: String,
-    enum: ['kurti-set', 'kurta-set', 'dress-material', 'saree', 'little-wonders', 'special-price'],
     required: true
   },
   subcategory: { type: String },

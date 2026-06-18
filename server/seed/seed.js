@@ -91,6 +91,7 @@ const collections = [
     isActive: true,
   },
 ];
+
 const products = [
   {
     name: 'Black Embroidered Kurti Set',

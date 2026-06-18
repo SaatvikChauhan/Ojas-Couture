@@ -11,7 +11,7 @@ router.get('/', adminAuth, async (req, res) => {
     const categories = await Category.find().sort({ name: 1 });
     res.json(categories);
   } catch (err) {
-    res.status(500).json({ error: err.message, stack: err.stack });
+    res.status(500).json({ error: err.message });
   }
 });
 

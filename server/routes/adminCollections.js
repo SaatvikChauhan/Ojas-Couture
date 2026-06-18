@@ -35,7 +35,7 @@ router.get('/', adminAuth, async (req, res) => {
     const collections = await Collection.find().populate('products', 'name images price').sort({ createdAt: -1 });
     res.json(collections);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message, stack: err.stack });
   }
 });
 

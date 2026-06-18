@@ -21,7 +21,7 @@ const req = async (method, path, body = null, isFormData = false) => {
   }
   if (!res.ok) {
     const err = await res.json().catch(() => ({ msg: 'Request failed' }));
-    throw new Error(err.msg || 'Request failed');
+    throw new Error(err.error || err.msg || 'Request failed');
   }
   return res.json();
 };

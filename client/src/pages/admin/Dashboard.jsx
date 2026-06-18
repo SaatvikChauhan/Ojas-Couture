@@ -60,6 +60,7 @@ export default function Dashboard() {
           { label: '+ Add Category', to: '/admin/categories' },
           { label: '+ Add Collection', to: '/admin/collections' },
           { label: 'Edit Homepage', to: '/admin/homepage' },
+          { label: 'Go to Website', to: '/' }
         ].map(({ label, to }) => (
           <Link key={to} to={to} style={{
             padding: '10px 18px', background: '#fff', border: '1px solid #e5e7eb',

@@ -85,6 +85,11 @@ export default function AdminApp() {
           <button onClick={() => { setActiveView('customers'); setSelectedOrder(null); }} style={activeView === 'customers' ? activeNavStyle : navStyle}>👤 Customer Registry</button>
           <button onClick={() => { setActiveView('payments'); setSelectedOrder(null); }} style={activeView === 'payments' ? activeNavStyle : navStyle}>💳 Payments Log</button>
           <button onClick={() => { setActiveView('returns'); setSelectedOrder(null); }} style={activeView === 'returns' ? activeNavStyle : navStyle}>🔄 Returns & Refunds</button>
+
+          <button onClick={() => { setActiveView('products'); setSelectedOrder(null); }} style={activeView === 'products' ? activeNavStyle : navStyle}>👗 Product Inventory</button>
+          <button onClick={() => { setActiveView('categories'); setSelectedOrder(null); }} style={activeView === 'categories' ? activeNavStyle : navStyle}>🏷️ Categories</button>
+          <button onClick={() => { setActiveView('collections'); setSelectedOrder(null); }} style={activeView === 'collections' ? activeNavStyle : navStyle}>✨ Collections</button>
+          <button onClick={() => { setActiveView('homepage'); setSelectedOrder(null); }} style={activeView === 'homepage' ? activeNavStyle : navStyle}>🏠 Home Management</button>
         </nav>
       </aside>
 

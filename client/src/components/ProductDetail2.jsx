@@ -253,11 +253,11 @@ export default function ProductDetail2({ initialProduct }) {
 
                                 rel="noreferrer"
 
-                                className="btn-primary whatsapp-order"
+                                className="btn-primary"
 
                             >
 
-                                📱 Order on WhatsApp
+                                Order Now
 
                             </a>
 

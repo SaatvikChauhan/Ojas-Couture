@@ -20,7 +20,7 @@ import LittleWonders from './pages/LittleWonders';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import TermsOfService from './components/TermsOfService';
-import AccountDashboard from './components/AccountDashboard';
+// import AccountDashboard from './components/AccountDashboard';
 
 // Admin
 import AdminApp from './pages/admin/AdminApp';

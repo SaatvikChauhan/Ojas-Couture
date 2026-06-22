@@ -11,6 +11,7 @@ import AppointmentsPage from './components/AppointmentsPage';
 import ShippingDelivery from './components/ShippingDelivery';
 import ReturnExchange from './components/ReturnExchange';
 import adminapp from './components/adminapp';
+import AdminDashboard from './components/AdminDashboard';
 
 import Home from './pages/Home';
 import Shop from './pages/Shop';
@@ -63,6 +64,7 @@ export default function App() {
 <Route path="/account" element={<AccountDashboard />} />
 <Route path="/account/orders" element={<AccountDashboard />} />
 <Route path="/admin/*" element={<AdminApp />} />
+<Route path="/admin/dashboard" element={<AdminDashboard />} />
             </Routes>
 
             <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} cartItems={cartItems} />

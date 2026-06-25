@@ -70,4 +70,15 @@ export const api = {
     fd.append('image', file);
     return req('POST', '/homepage/upload', fd, true);
   },
+
+  // Order Mgmt
+  getOrders: () => api.get('/admin/orders', { headers: { Authorization: `Bearer ${localStorage.getItem('ojasAdminToken')}` } }),
+  updateStatus: (id, status) => api.put(`/admin/orders/${id}/status`, { status }, { headers: { Authorization: `Bearer ${localStorage.getItem('ojasAdminToken')}` } }),
+  getCustomers: () => api.get('/admin/orders/customers', { headers: { Authorization: `Bearer ${localStorage.getItem('ojasAdminToken')}` } }),
+  // Download requires handling the raw blob
+  downloadInvoice: (id) => api.get(`/admin/orders/${id}/invoice/download`, { 
+    responseType: 'blob', 
+    headers: { Authorization: `Bearer ${localStorage.getItem('ojasAdminToken')}` } 
+  }),
+  emailInvoice: (id) => api.post(`/admin/orders/${id}/invoice/email`, {}, { headers: { Authorization: `Bearer ${localStorage.getItem('ojasAdminToken')}` } }),
 };

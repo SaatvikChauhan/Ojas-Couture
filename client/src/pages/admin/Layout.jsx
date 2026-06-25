@@ -3,9 +3,13 @@ import { NavLink } from 'react-router-dom';
 
 const NAV = [
   { to: '/admin', label: 'Dashboard', icon: '⊞', end: true },
+  // NEW: Added Orders link
+  { to: '/admin/orders', label: 'Orders', icon: '📦' },
   { to: '/admin/products', label: 'Products', icon: '👗' },
   { to: '/admin/categories', label: 'Categories', icon: '🏷️' },
   { to: '/admin/collections', label: 'Collections', icon: '✨' },
+  // NEW: Added Customers link
+  { to: '/admin/customers', label: 'Customers', icon: '👥' },
   { to: '/admin/homepage', label: 'Homepage', icon: '🏠' },
 ];
 

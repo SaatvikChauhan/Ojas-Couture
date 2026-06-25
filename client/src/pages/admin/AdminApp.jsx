@@ -11,6 +11,9 @@ import Products from './Products';
 import Categories from './Categories';
 import Collections from './Collections';
 import Homepage from './Homepage';
+// NEW: Import the Order and Customer components
+import Orders from './Orders';
+import Customers from './Customers';
 
 export default function AdminApp() {
   const [user, setUser] = useState(() => {
@@ -42,6 +45,10 @@ export default function AdminApp() {
     <Layout user={user} onLogout={handleLogout}>
       <Routes>
         <Route index element={<Dashboard />} />
+        {/* NEW: Add the routing paths for Orders and Customers */}
+        <Route path="orders" element={<Orders />} />
+        <Route path="customers" element={<Customers />} />
+        
         <Route path="products" element={<Products />} />
         <Route path="categories" element={<Categories />} />
         <Route path="collections" element={<Collections />} />

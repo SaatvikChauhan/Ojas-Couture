@@ -78,6 +78,20 @@ export default function Login({ onLogin }) {
           </form>
         </div>
       </div>
+      <div>
+        <Link to="/" style={{
+          display: 'inline-block',
+          padding: '10px 18px',
+          background: '#1a1a1a',
+          borderRadius: 8,
+          textDecoration: 'none',
+          color: '#fff',
+          fontSize: 14,
+          fontWeight: 500,
+        }}>
+          Go to Website
+        </Link>
+      </div>
     </div>
   );
 }

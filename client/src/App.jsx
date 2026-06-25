@@ -17,7 +17,7 @@ import ProductDetail from './pages/ProductDetail';
 import LittleWonders from './pages/LittleWonders';
 import About from './pages/About';
 import Contact from './pages/Contact';
-import Blogs from './pages/Blogs';
+import Blog from './pages/Blogs';
 import Reports from './pages/Reports';
 import TermsOfService from './components/TermsOfService';
 

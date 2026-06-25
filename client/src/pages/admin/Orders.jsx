@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { api } from './api';
+import { api as adminOrderAPI } from './api';
 
 const STATUSES = ['Pending', 'Confirmed', 'Processing', 'Shipped', 'Delivered', 'Cancelled', 'Returned'];
 
@@ -13,8 +13,9 @@ export default function Orders() {
 
   const loadOrders = async () => {
     try {
-      const res = await api.getOrders();
-      setOrders(res.data);
+      const res = await adminOrderAPI.getOrders();
+      // FIXED: Custom fetch wrapper returns data directly, no .data needed
+      setOrders(res || []);
     } catch (err) {
       alert('Failed to load orders');
     } finally {
@@ -24,7 +25,7 @@ export default function Orders() {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      await api.updateStatus(id, newStatus);
+      await adminOrderAPI.updateStatus(id, newStatus);
       setOrders(orders.map(o => o._id === id ? { ...o, status: newStatus } : o));
     } catch (err) {
       alert('Failed to update status');
@@ -33,8 +34,9 @@ export default function Orders() {
 
   const handleDownload = async (id, orderId) => {
     try {
-      const res = await api.downloadInvoice(id);
-      const url = window.URL.createObjectURL(new Blob([res.data]));
+      // FIXED: custom wrapper now returns the Blob directly
+      const blob = await adminOrderAPI.downloadInvoice(id);
+      const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute('download', `Invoice-${orderId}.pdf`);
@@ -48,7 +50,7 @@ export default function Orders() {
 
   const handleEmail = async (id) => {
     try {
-      await api.emailInvoice(id);
+      await adminOrderAPI.emailInvoice(id);
       alert('Invoice emailed to customer!');
     } catch (err) {
       alert('Failed to email invoice');
@@ -76,11 +78,11 @@ export default function Orders() {
             <tr key={order._id} style={{ borderBottom: '1px solid #e5e7eb' }}>
               <td style={{ padding: 12, fontWeight: 'bold' }}>{order.orderId}</td>
               <td>
-                {order.customer.name}<br/>
-                <small style={{ color: '#6b7280' }}>{order.customer.email}</small>
+                {order.customer?.name}<br/>
+                <small style={{ color: '#6b7280' }}>{order.customer?.email}</small>
               </td>
               <td>
-                {order.products.map((p, i) => (
+                {order.products?.map((p, i) => (
                   <div key={i} style={{ fontSize: 13 }}>{p.quantity}x {p.name}</div>
                 ))}
               </td>
@@ -100,6 +102,9 @@ export default function Orders() {
               </td>
             </tr>
           ))}
+          {orders.length === 0 && (
+            <tr><td colSpan="6" style={{ padding: 20, textAlign: 'center' }}>No orders found.</td></tr>
+          )}
         </tbody>
       </table>
     </div>

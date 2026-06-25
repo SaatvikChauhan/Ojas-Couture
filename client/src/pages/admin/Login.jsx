@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { api } from './api';
 import { s } from './ui';
+import { Link } from 'react-router-dom';
 
 export default function Login({ onLogin }) {
   const [email, setEmail] = useState('');

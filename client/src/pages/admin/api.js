@@ -71,14 +71,28 @@ export const api = {
     return req('POST', '/homepage/upload', fd, true);
   },
 
-  // Order Mgmt
-  getOrders: () => api.get('/admin/orders', { headers: { Authorization: `Bearer ${localStorage.getItem('ojasAdminToken')}` } }),
-  updateStatus: (id, status) => api.put(`/admin/orders/${id}/status`, { status }, { headers: { Authorization: `Bearer ${localStorage.getItem('ojasAdminToken')}` } }),
-  getCustomers: () => api.get('/admin/orders/customers', { headers: { Authorization: `Bearer ${localStorage.getItem('ojasAdminToken')}` } }),
-  // Download requires handling the raw blob
-  downloadInvoice: (id) => api.get(`/admin/orders/${id}/invoice/download`, { 
-    responseType: 'blob', 
-    headers: { Authorization: `Bearer ${localStorage.getItem('ojasAdminToken')}` } 
-  }),
-  emailInvoice: (id) => api.post(`/admin/orders/${id}/invoice/email`, {}, { headers: { Authorization: `Bearer ${localStorage.getItem('ojasAdminToken')}` } }),
+  // ── Orders & Customers ────────────────────────────────
+  getOrders: () => req('GET', '/admin/orders'),
+  updateStatus: (id, status) => req('PUT', `/admin/orders/${id}/status`, { status }),
+  getCustomers: () => req('GET', '/admin/orders/customers'),
+  emailInvoice: (id) => req('POST', `/admin/orders/${id}/invoice/email`),
+  
+  // Download requires handling the raw blob, so we bypass the standard 'req' which forces res.json()
+  downloadInvoice: async (id) => {
+    const res = await fetch(`${BASE}/api/admin/orders/${id}/invoice/download`, {
+      method: 'GET',
+      headers: headers()
+    });
+    
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem('ojasAdminToken');
+      window.location.href = '/admin/login';
+      return;
+    }
+    
+    if (!res.ok) throw new Error('Failed to download invoice');
+    
+    // Return the raw blob instead of trying to parse it as JSON
+    return res.blob();
+  }
 };

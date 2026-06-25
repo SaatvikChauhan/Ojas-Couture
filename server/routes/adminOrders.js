@@ -115,7 +115,7 @@ router.post('/:id/invoice/email', adminAuth, async (req, res) => {
     
     const msg = {
       to: order.customer.email,
-      from: 'alerts@ojascouture.com', // MUST match your SendGrid verified sender
+      from: 'saatvikchauhan03@gmail.com', // MUST match your SendGrid verified sender
       subject: `Your Invoice for Order ${order.orderId} - Ojas Couture`,
       text: `Hi ${order.customer.name},\n\nThank you for your order! Please find your invoice attached.\n\nBest,\nOjas Couture`,
       attachments: [

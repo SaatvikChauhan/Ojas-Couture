@@ -37,7 +37,7 @@ export default function Dashboard() {
           categories: cats.length,
           collections: cols.length,
         });
-      } catch {}
+      } catch { }
     };
     load();
   }, []);
@@ -54,20 +54,67 @@ export default function Dashboard() {
       </div>
 
       <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 14 }}>Quick Actions</h2>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+
+      {/* Creation Section */}
+      <p style={{ fontSize: 13, color: '#6b7280', margin: '10px 0 6px' }}>Creation</p>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 16 }}>
         {[
           { label: '+ Add Product', to: '/admin/products' },
           { label: '+ Add Category', to: '/admin/categories' },
           { label: '+ Add Collection', to: '/admin/collections' },
-          { label: 'Edit Homepage', to: '/admin/homepage' },
-          { label: 'Go to Website', to: '/' }
         ].map(({ label, to }) => (
           <Link key={to} to={to} style={{
-            padding: '10px 18px', background: '#fff', border: '1px solid #e5e7eb',
-            borderRadius: 8, textDecoration: 'none', color: '#1a1a1a', fontSize: 14,
+            padding: '10px 18px',
+            background: '#fff',
+            border: '1px solid #e5e7eb',
+            borderRadius: 8,
+            textDecoration: 'none',
+            color: '#1a1a1a',
+            fontSize: 14,
             fontWeight: 500,
-          }}>{label}</Link>
+          }}>
+            {label}
+          </Link>
         ))}
+      </div>
+
+      {/* Administration Section */}
+      <p style={{ fontSize: 13, color: '#6b7280', margin: '10px 0 6px' }}>Administration</p>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 20 }}>
+        {[
+          { label: 'Edit Homepage', to: '/admin/homepage' },
+          { label: 'Manage Orders', to: '/admin/orders' },
+          { label: 'Manage Customers', to: '/admin/customers' },
+        ].map(({ label, to }) => (
+          <Link key={to} to={to} style={{
+            padding: '10px 18px',
+            background: '#fff',
+            border: '1px solid #e5e7eb',
+            borderRadius: 8,
+            textDecoration: 'none',
+            color: '#1a1a1a',
+            fontSize: 14,
+            fontWeight: 500,
+          }}>
+            {label}
+          </Link>
+        ))}
+      </div>
+
+      {/* Separate Website Button */}
+      <div>
+        <Link to="/" style={{
+          display: 'inline-block',
+          padding: '10px 18px',
+          background: '#1a1a1a',
+          borderRadius: 8,
+          textDecoration: 'none',
+          color: '#fff',
+          fontSize: 14,
+          fontWeight: 500,
+        }}>
+          Go to Website
+        </Link>
       </div>
     </div>
   );

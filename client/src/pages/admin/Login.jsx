@@ -27,8 +27,8 @@ export default function Login({ onLogin }) {
 
   return (
     <div style={{
-      minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-      background: '#f9fafb', padding: 16,
+      minHeight: '100vh', display: 'flex', direction:'column', alignItems: 'center', justifyContent: 'center',
+      background: '#f9fafb', padding: 16, gap: '1rem',
     }}>
       <div style={{ width: '100%', maxWidth: 380 }}>
         {/* Logo */}

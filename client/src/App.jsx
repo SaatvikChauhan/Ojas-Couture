@@ -17,6 +17,8 @@ import ProductDetail from './pages/ProductDetail';
 import LittleWonders from './pages/LittleWonders';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import About from './pages/Blogs';
+import Contact from './pages/Reports';
 import TermsOfService from './components/TermsOfService';
 
 // Admin
@@ -57,6 +59,8 @@ export default function App() {
               <Route path="/shipping-and-delivery" element={<ShippingDelivery />} />
               <Route path="/terms-of-service" element={<TermsOfService />} />
               <Route path="/return-exchange" element={<ReturnExchange />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/reports" element={<Reports />} />
             </Routes>
 
             <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} cartItems={cartItems} />

@@ -10,8 +10,6 @@ import PrivacyTerms from './components/PrivacyTerms';
 import AppointmentsPage from './components/AppointmentsPage';
 import ShippingDelivery from './components/ShippingDelivery';
 import ReturnExchange from './components/ReturnExchange';
-import adminapp from './components/adminapp';
-import AdminDashboard from './components/AdminDashboard';
 
 import Home from './pages/Home';
 import Shop from './pages/Shop';
@@ -59,11 +57,6 @@ export default function App() {
               <Route path="/shipping-and-delivery" element={<ShippingDelivery />} />
               <Route path="/terms-of-service" element={<TermsOfService />} />
               <Route path="/return-exchange" element={<ReturnExchange />} />
-             
-<Route path="/account" element={<AdminDashboard />} />
-<Route path="/account/orders" element={<AdminDashboard />} />
-<Route path="/admin/*" element={<AdminApp />} />
-<Route path="/admin/dashboard" element={<AdminDashboard />} />
             </Routes>
 
             <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} cartItems={cartItems} />

@@ -10,11 +10,10 @@ import PrivacyTerms from './components/PrivacyTerms';
 import AppointmentsPage from './components/AppointmentsPage';
 import ShippingDelivery from './components/ShippingDelivery';
 import ReturnExchange from './components/ReturnExchange';
-import ProductDetail1 from './components/ProductDetail1';
+import ProductDetail1 from './components/ProductDetail1'; // This is your updated UI file!
 
 import Home from './pages/Home';
 import Shop from './pages/Shop';
-import ProductDetail from './pages/ProductDetail';
 import LittleWonders from './pages/LittleWonders';
 import About from './pages/About';
 import Contact from './pages/Contact';
@@ -50,7 +49,8 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/shop" element={<Shop />} />
               <Route path="/shop/:category" element={<Shop />} />
-              <Route path="/product/:id" element={<ProductDetail />} />
+              {/* FIXED: Pointing directly to your updated layout file */}
+              <Route path="/product/:id" element={<ProductDetail1 />} />
               <Route path="/little-wonders" element={<LittleWonders />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
@@ -63,7 +63,7 @@ export default function App() {
               <Route path="/blog" element={<Blog />} />
               <Route path="/reports" element={<Reports />} />
             </Routes>
-<Route path="/product/:id" element={<ProductDetail1 />} />
+
             <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} cartItems={cartItems} />
             <Footer />
             <WhatsAppButton />

@@ -3018,3 +3018,73 @@ h5 {
     display: none;
   }
 }
+
+/* Container holding all the main action buttons */
+.product-actions-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Uniform spacing between rows */
+  margin-top: 20px;
+  width: 100%;
+  max-width: 500px; /* Aligns with your current container width */
+}
+
+/* Row wrapper for Add to Cart + Icons */
+.cart-and-icons-row {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Spacing between the button and icons */
+  width: 100%;
+}
+
+/* Base button rules to make them identical in height and typography */
+.add-to-cart-btn,
+.order-now-btn {
+  height: 50px; /* Forces identical height */
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Add to Cart: takes up all remaining space next to the icons */
+.add-to-cart-btn {
+  flex: 1; 
+  background-color: #ffffff;
+  color: #bfa15f; /* Your site's signature gold color */
+  border: 2px solid #bfa15f;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #faf6ee;
+}
+
+/* Order Now: takes up the full width right below it */
+.order-now-btn {
+  width: 100%;
+  background-color: #bfa15f; /* Gold background */
+  color: #ffffff;
+}
+
+/* Icon Buttons (Wishlist & Share) */
+.action-icon-btn {
+  height: 50px; /* Matches the exact height of your buttons */
+  width: 50px;  /* Perfectly square */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dcdcdc;
+  background-color: #ffffff;
+  cursor: pointer;
+  border-radius: 2px;
+  color: #333333;
+  transition: all 0.2s;
+}
+
+.action-icon-btn:hover {
+  border-color: #bfa15f;
+  color: #bfa15f;
+}

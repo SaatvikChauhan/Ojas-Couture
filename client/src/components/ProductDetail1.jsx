@@ -141,6 +141,52 @@ export default function ProductDetail1({ initialProduct }) {
         : ['#1a1a1a', '#c9a84c', '#7f1d1d', '#2d4a2d', '#6b4226', '#8b4789'];
 
 
+const handleAddToCart = async () => {
+  try {
+    const response = await fetch('/api/cart/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // If your app requires a login token, pass it here:
+        'Authorization': `Bearer ${localStorage.getItem('token')}` 
+      },
+      body: JSON.stringify({
+        productId: product._id, // Assumes product data is available via state/props
+        size: selectedSize,     // The size chosen by the user (e.g., 'M')
+        quantity: 1            // Default increment quantity
+      })
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      alert('Product added to cart successfully!');
+      // Optional: Update your global Cart state / Redux store here
+    } else {
+      alert(data.error || 'Failed to add item to cart');
+    }
+  } catch (err) {
+    console.error('Error adding to cart:', err);
+  }
+};
+
+
+const handleAddToWishlist = () => {
+    alert('Added to wishlist!');
+    // Your wishlist logic goes here
+};
+
+const handleShare = () => {
+    if (navigator.share) {
+        navigator.share({ title: product.name, url: window.location.href });
+    } else {
+        alert('Link copied to clipboard!');
+    }
+};
+
+const handleOrderNow = () => {
+    alert('Proceeding to checkout...');
+    // Your direct buy/checkout logic goes here
+};
 
     return (
 
@@ -361,6 +407,33 @@ export default function ProductDetail1({ initialProduct }) {
                             </div>
 
                         )}
+
+                        <div className="product-actions-wrapper">
+  {/* NEW ROW: Add to Cart button alongside Wishlist & Share icons */}
+  <div className="cart-and-icons-row">
+    <button className="add-to-cart-btn" onClick={handleAddToCart}>
+      ADD TO CART
+    </button>
+    
+    {/* Wishlist Button */}
+    <button className="action-icon-btn" onClick={handleAddToWishlist}>
+      <svg /* your heart icon svg */ />
+    </button>
+    
+    {/* Share Button */}
+    <button className="action-icon-btn" onClick={handleShare}>
+      <svg /* your share icon svg */ />
+    </button>
+  </div>
+
+  {/* EXISTING ROW: Order Now button (Keep your existing onClick function here) */}
+  <button className="order-now-btn" onClick={handleOrderNow}>
+    ORDER NOW
+  </button>
+  
+  {/* Existing Enquire Now button below */}
+  <button className="enquire-now-btn">ENQUIRE NOW</button>
+</div>
 
 
 

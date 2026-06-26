@@ -10,6 +10,7 @@ import PrivacyTerms from './components/PrivacyTerms';
 import AppointmentsPage from './components/AppointmentsPage';
 import ShippingDelivery from './components/ShippingDelivery';
 import ReturnExchange from './components/ReturnExchange';
+import ProductDetail1 from './components/ProductDetail1';
 
 import Home from './pages/Home';
 import Shop from './pages/Shop';
@@ -62,7 +63,7 @@ export default function App() {
               <Route path="/blog" element={<Blog />} />
               <Route path="/reports" element={<Reports />} />
             </Routes>
-
+<Route path="/product/:id" element={<ProductDetail1 />} />
             <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} cartItems={cartItems} />
             <Footer />
             <WhatsAppButton />

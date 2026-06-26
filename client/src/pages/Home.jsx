@@ -334,7 +334,34 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 9. Newsletter Banner */}
+      {/* NEW: 9. Explore More (Blog & Reports Links) */}
+      <section className="explore-more section-pad" style={{ background: '#faf9f8' }}>
+        <div className="container">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '32px' }}>
+
+            {/* Journal / Blog Card */}
+            <div style={{ background: '#fff', padding: '48px 32px', textAlign: 'center', border: '1px solid #eaeaea', borderRadius: '4px' }}>
+              <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '24px', marginBottom: '16px', color: '#1a1a1a' }}>Journal & News</h3>
+              <p style={{ color: '#666', marginBottom: '28px', fontSize: '15px', lineHeight: '1.6' }}>
+                Explore our latest collections, styling guides, and stories of craftsmanship from the heart of Ojas Couture.
+              </p>
+              <Link to="/blog" className="btn-outline-gold" style={{ display: 'inline-block' }}>Read the Journal</Link>
+            </div>
+
+            {/* Reports Card */}
+            <div style={{ background: '#fff', padding: '48px 32px', textAlign: 'center', border: '1px solid #eaeaea', borderRadius: '4px' }}>
+              <h3 style={{ fontFamily: 'Georgia, serif', fontSize: '24px', marginBottom: '16px', color: '#1a1a1a' }}>Reports & Publications</h3>
+              <p style={{ color: '#666', marginBottom: '28px', fontSize: '15px', lineHeight: '1.6' }}>
+                Access our sustainability reports, media kits, business summaries, and event documentation.
+              </p>
+              <Link to="/reports" className="btn-outline-gold" style={{ display: 'inline-block' }}>View Reports</Link>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 10. Newsletter Banner */}
       <section className="home-newsletter section-pad" style={{ background: 'var(--forest)', color: 'white', textAlign: 'center' }}>
         <div className="container">
           <h2 className="section-title" style={{ color: 'var(--warm-white)' }}>Join the Ojas Family</h2>

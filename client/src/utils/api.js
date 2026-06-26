@@ -5,6 +5,10 @@ const api = axios.create({
   timeout: 10000,
 });
 
+// Add this exported object to your api.js file
+export const orderAPI = {
+  create: (orderData) => api.post('/orders', orderData),
+};
 export const productAPI = {
   getAll: (params = {}) => api.get('/products', { params }),
   getById: (id) => api.get(`/products/${id}`),

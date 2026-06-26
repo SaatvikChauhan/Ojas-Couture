@@ -112,7 +112,7 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
 
             {/* WISHLIST */}
-            <Link to="/wishlist" title="Wishlist" style={{ color: '#4a5568', display: 'flex', alignItems: 'center' }}>
+            <Link to="" title="Wishlist" style={{ color: '#4a5568', display: 'flex', alignItems: 'center' }}>
               <FiHeart size={22} />
             </Link>
 
@@ -167,25 +167,18 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
 
                     {/* Standard links */}
                     <div style={{ display: 'flex', flexDirection: 'column', padding: '6px 0' }}>
-                      <Link to="/account" style={dropdownLinkStyle}>
+                      <Link to="" style={dropdownLinkStyle}>
                         <FiUser size={16} style={{ color: '#dfba6b' }} /> My Profile
                       </Link>
-                      <Link to="/account?tab=orders" style={dropdownLinkStyle}>
+                      <Link to="" style={dropdownLinkStyle}>
                         <FiPackage size={16} style={{ color: '#dfba6b' }} /> Orders History
                       </Link>
-                      <Link to="/wishlist" style={dropdownLinkStyle}>
+                      <Link to="" style={dropdownLinkStyle}>
                         <FiHeart size={16} style={{ color: '#dfba6b' }} /> My Wishlist
                       </Link>
                     </div>
 
-                    {/* ── Admin Link Section (Only displays if logged-in user is an admin) ── */}
-                    {user && user.isAdmin && (
-                      <div style={{ borderTop: '1px solid #f1f5f9', padding: '6px 0' }}>
-                        <Link to="/admin" style={{ ...dropdownLinkStyle, color: '#1a1a1a' }}>
-                          <FiSettings size={16} style={{ color: '#dfba6b' }} /> Admin Dashboard
-                        </Link>
-                      </div>
-                    )}
+                    
 
                     {/* Logout */}
                     <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '6px' }}>

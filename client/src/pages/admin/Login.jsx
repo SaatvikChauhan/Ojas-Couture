@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { api } from './api';
 import { s } from './ui';
+import { Link } from 'react-router-dom';
 
 export default function Login({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -26,8 +27,8 @@ export default function Login({ onLogin }) {
 
   return (
     <div style={{
-      minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-      background: '#f9fafb', padding: 16,
+      minHeight: '100vh', display: 'flex', flexDirection:'column', alignItems: 'center', justifyContent: 'center',
+      background: '#f9fafb', padding: 16, gap: '1rem',
     }}>
       <div style={{ width: '100%', maxWidth: 380 }}>
         {/* Logo */}
@@ -77,6 +78,20 @@ export default function Login({ onLogin }) {
             </button>
           </form>
         </div>
+      </div>
+      <div>
+        <Link to="/" style={{
+          display: 'inline-block',
+          padding: '10px 18px',
+          background: '#1a1a1a',
+          borderRadius: 8,
+          textDecoration: 'none',
+          color: '#fff',
+          fontSize: 14,
+          fontWeight: 500,
+        }}>
+          Go to Website
+        </Link>
       </div>
     </div>
   );

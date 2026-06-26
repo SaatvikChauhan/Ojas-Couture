@@ -265,47 +265,163 @@ export default function ProductDetail1({ initialProduct }) {
                             </div>
                         )}
 
-                        {/* Integrated Actions Section */}
-                        <div className="product-actions-wrapper" style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                            {/* NEW PRIMARY ACTION: Add to Cart button sits clearly above Order Now */}
-                            <button 
-                                className="add-to-cart-btn btn-secondary" 
-                                onClick={handleAddToCart} 
-                                style={{ width: '100%', padding: '14px', fontSize: '15px', fontWeight: 'bold' }}
-                            >
-                                ADD TO CART
-                            </button>
+                       {/* Integrated Actions Section */}
+<div className="product-actions-wrapper" style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '20px', width: '100%', fontFamily: 'sans-serif' }}>
+    
+    {/* PRIMARY ACTION ROW: Add to Cart + Wishlist + Share */}
+    <div style={{ display: 'flex', gap: '12px', alignItems: 'center', width: '100%' }}>
+        <button 
+            className="add-to-cart-btn" 
+            onClick={handleAddToCart} 
+            style={{ 
+                flex: 1, 
+                padding: '16px', 
+                fontSize: '15px', 
+                fontWeight: '500',
+                letterSpacing: '0.5px',
+                backgroundColor: '#5A3E2B', // Luxury deep brown overlay fill
+                color: '#ffffff',          
+                border: 'none',
+                cursor: 'pointer',
+                height: '51px'
+            }}
+        >
+            Add to Cart
+        </button>
 
-                            {/* EXISTING PRIMARY ACTION: Order Now */}
-                            <button 
-                                className="btn-primary order-now-btn" 
-                                onClick={() => setShowOrderModal(true)}
-                                style={{ cursor: 'pointer', border: 'none', width: '100%', padding: '14px', fontSize: '15px', fontWeight: 'bold' }}
-                            >
-                                ORDER NOW
-                            </button>
-                            
-                            {/* SECONDARY ACTIONS ROW: Enquire & Share */}
-                            <div className="secondary-actions-row" style={{ display: 'flex', gap: '12px' }}>
-                                <a
-                                    href={`https://wa.me/919876543210?text=${encodeURIComponent(`I want to know more about "${product.name}"`)}`}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="btn-secondary enquire-now-btn"
-                                    style={{ flex: 1, padding: '12px', textAlign: 'center', fontSize: '14px' }}
-                                >
-                                    ENQUIRE NOW
-                                </a>
-                                
-                                <button 
-                                    className="btn-secondary action-icon-btn" 
-                                    onClick={handleShare} 
-                                    style={{ flex: 1, padding: '12px', fontSize: '14px' }}
-                                >
-                                    SHARE STYLING
-                                </button>
-                            </div>
-                        </div>
+        {/* Wishlist Button */}
+        <button 
+            onClick={handleAddToWishlist} 
+            style={{
+                padding: '14px',
+                backgroundColor: '#e8e5e0',
+                border: '1px solid #d1cdb8',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '51px',
+                width: '51px'
+            }}
+            aria-label="Add to wishlist"
+        >
+            <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" strokeWidth="1.5" width="20" height="20">
+                <path d="M12 21s-7.5-4.6-10-9.3C0.3 8.6 2 5 5.5 5 8 5 10 6.7 12 9c2-2.3 4-4 6.5-4C22 5 23.7 8.6 22 11.7 19.5 16.4 12 21 12 21z" />
+            </svg>
+        </button>
+
+        {/* Share Button */}
+        <button 
+            onClick={handleShare} 
+            style={{
+                padding: '14px',
+                backgroundColor: '#e8e5e0',
+                border: '1px solid #d1cdb8',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '51px',
+                width: '51px'
+            }}
+            aria-label="Share"
+        >
+            <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" strokeWidth="1.5" width="20" height="20">
+                <circle cx="18" cy="5" r="3" />
+                <circle cx="6" cy="12" r="3" />
+                <circle cx="18" cy="19" r="3" />
+                <path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98" />
+            </svg>
+        </button>
+    </div>
+
+    {/* SECONDARY ACTION: Buy it Now */}
+    <button 
+        className="btn-primary order-now-btn" 
+        onClick={() => setShowOrderModal(true)}
+        style={{ 
+            cursor: 'pointer', 
+            width: '100%', 
+            padding: '16px', 
+            fontSize: '15px', 
+            fontWeight: '500',
+            letterSpacing: '0.5px',
+            backgroundColor: '#e8e5e0', // Clean soft background matches screen
+            color: '#1a1a1a',          
+            border: '1px solid #d1cdb8',
+            height: '51px'
+        }}
+    >
+        Buy it now
+    </button>
+    
+    {/* SECTION 1: Shipping & Policy Icons Grid */}
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', textAlign: 'center', marginTop: '10px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <span style={{ fontSize: '20px', marginBottom: '4px' }}>🚚</span>
+            <span style={{ fontSize: '10px', fontWeight: '600', textTransform: 'uppercase', color: '#4a4a4a', letterSpacing: '0.5px', lineHeight: '1.2' }}>Worldwide<br/>Shipping</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <span style={{ fontSize: '20px', marginBottom: '4px' }}>🔄</span>
+            <span style={{ fontSize: '10px', fontWeight: '600', textTransform: 'uppercase', color: '#4a4a4a', letterSpacing: '0.5px', lineHeight: '1.2' }}>10-Day<br/>Exchange</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <span style={{ fontSize: '20px', marginBottom: '4px' }}>🛡️</span>
+            <span style={{ fontSize: '10px', fontWeight: '600', textTransform: 'uppercase', color: '#4a4a4a', letterSpacing: '0.5px', lineHeight: '1.2' }}>Secure<br/>Checkout</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <span style={{ fontSize: '20px', marginBottom: '4px' }}>💵</span>
+            <span style={{ fontSize: '10px', fontWeight: '600', textTransform: 'uppercase', color: '#4a4a4a', letterSpacing: '0.5px', lineHeight: '1.2' }}>Cash On<br/>Delivery</span>
+        </div>
+    </div>
+
+    {/* SECTION 2: Ada Points Banner */}
+    <div style={{ 
+        backgroundColor: '#7A6242', 
+        color: '#ffffff', 
+        padding: '12px 16px', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        gap: '6px',
+        fontSize: '14px', 
+        fontWeight: '400',
+        borderRadius: '2px',
+        marginTop: '5px'
+    }}>
+        <span>✦</span>
+        <span>Earn upto 131 Ada Points on this purchase</span>
+        <span style={{ cursor: 'pointer', fontSize: '12px', border: '1px solid #ffffff', borderRadius: '50%', width: '14px', height: '14px', display: 'flex', alignItems: 'center', justifycontent: 'center', lineHeight: '1', fontSize: '10px', marginLeft: '2px' }}>i</span>
+    </div>
+
+    {/* SECTION 3: Brand Core Badges Grid (6 Columns) */}
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '6px', textAlign: 'center', marginTop: '10px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <span style={{ fontSize: '18px', marginBottom: '4px' }}>👩🏽‍🤝‍👩🏻</span>
+            <span style={{ fontSize: '8px', color: '#6a6a6a', fontWeight: '600', textTransform: 'uppercase', lineHeight: '1.2' }}>Supporting<br/>30,000+ Women<br/>Artisans</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <span style={{ fontSize: '18px', marginBottom: '4px' }}>📜</span>
+            <span style={{ fontSize: '8px', color: '#6a6a6a', fontWeight: '600', textTransform: 'uppercase', lineHeight: '1.2' }}>GI Certified &<br/>100%<br/>% Handcrafted</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <span style={{ fontSize: '18px', marginBottom: '4px' }}>🤝</span>
+            <span style={{ fontSize: '8px', color: '#6a6a6a', fontWeight: '600', textTransform: 'uppercase', lineHeight: '1.2' }}>Customer<br/>Support</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <span style={{ fontSize: '18px', marginBottom: '4px' }}>🏅</span>
+            <span style={{ fontSize: '8px', color: '#6a6a6a', fontWeight: '600', textTransform: 'uppercase', lineHeight: '1.2' }}>Assured<br/>Quality</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <span style={{ fontSize: '18px', marginBottom: '4px' }}>🕌</span>
+            <span style={{ fontSize: '8px', color: '#6a6a6a', fontWeight: '600', textTransform: 'uppercase', lineHeight: '1.2' }}>Made In Avadh<br/>Region</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <span style={{ fontSize: '18px', marginBottom: '4px' }}>🎁</span>
+            <span style={{ fontSize: '8px', color: '#6a6a6a', fontWeight: '600', textTransform: 'uppercase', lineHeight: '1.2' }}>Earn<br/>Rewards</span>
+        </div>
+    </div>
+</div>
 
                         {/* Need urgent delivery / chat bar */}
                         <a

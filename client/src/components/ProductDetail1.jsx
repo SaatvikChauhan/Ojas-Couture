@@ -266,33 +266,44 @@ export default function ProductDetail1({ initialProduct }) {
                         )}
 
                         {/* Integrated Actions Section */}
-                        <div className="product-actions-wrapper" style={{ marginTop: 24, display: 'flex', flexDirection: 'column', gap: 12 }}>
-                            <div className="cart-and-icons-row" style={{ display: 'flex', gap: 12 }}>
-                                <button className="add-to-cart-btn btn-secondary" onClick={handleAddToCart} style={{ flex: 1, padding: '14px' }}>
-                                    ADD TO CART
-                                </button>
-                                <button className="action-icon-btn" onClick={handleShare} aria-label="Share product" style={{ padding: '0 12px' }}>
-                                    Share
-                                </button>
-                            </div>
+                        <div className="product-actions-wrapper" style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            {/* NEW PRIMARY ACTION: Add to Cart button sits clearly above Order Now */}
+                            <button 
+                                className="add-to-cart-btn btn-secondary" 
+                                onClick={handleAddToCart} 
+                                style={{ width: '100%', padding: '14px', fontSize: '15px', fontWeight: 'bold' }}
+                            >
+                                ADD TO CART
+                            </button>
 
-                            <div className="detail-actions" style={{ display: 'flex', gap: 12 }}>
-                                <button 
-                                    className="btn-primary order-now-btn" 
-                                    onClick={() => setShowOrderModal(true)}
-                                    style={{ cursor: 'pointer', border: 'none', flex: 1, padding: '14px', fontSize: '15px' }}
-                                >
-                                    ORDER NOW
-                                </button>
+                            {/* EXISTING PRIMARY ACTION: Order Now */}
+                            <button 
+                                className="btn-primary order-now-btn" 
+                                onClick={() => setShowOrderModal(true)}
+                                style={{ cursor: 'pointer', border: 'none', width: '100%', padding: '14px', fontSize: '15px', fontWeight: 'bold' }}
+                            >
+                                ORDER NOW
+                            </button>
+                            
+                            {/* SECONDARY ACTIONS ROW: Enquire & Share */}
+                            <div className="secondary-actions-row" style={{ display: 'flex', gap: '12px' }}>
                                 <a
                                     href={`https://wa.me/919876543210?text=${encodeURIComponent(`I want to know more about "${product.name}"`)}`}
                                     target="_blank"
                                     rel="noreferrer"
                                     className="btn-secondary enquire-now-btn"
-                                    style={{ padding: '14px', textAlign: 'center' }}
+                                    style={{ flex: 1, padding: '12px', textAlign: 'center', fontSize: '14px' }}
                                 >
                                     ENQUIRE NOW
                                 </a>
+                                
+                                <button 
+                                    className="btn-secondary action-icon-btn" 
+                                    onClick={handleShare} 
+                                    style={{ flex: 1, padding: '12px', fontSize: '14px' }}
+                                >
+                                    SHARE STYLING
+                                </button>
                             </div>
                         </div>
 
@@ -302,6 +313,7 @@ export default function ProductDetail1({ initialProduct }) {
                             target="_blank"
                             rel="noreferrer"
                             className="urgent-chat-bar"
+                            style={{ marginTop: '16px', display: 'flex' }}
                         >
                             <span className="urgent-chat-icon">
                                 <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">

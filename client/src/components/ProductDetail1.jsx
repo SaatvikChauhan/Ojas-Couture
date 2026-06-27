@@ -796,6 +796,11 @@ export default function ProductDetail1({ initialProduct }) {
     );
 }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 6136e5a (trigger: redeploy)
 const inputStyle = {
     padding: '10px 14px', border: '1px solid #d1d5db', borderRadius: '4px', fontSize: '14px', width: '100%', boxSizing: 'border-box'
 };

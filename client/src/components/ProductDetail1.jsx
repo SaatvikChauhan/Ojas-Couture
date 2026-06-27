@@ -352,7 +352,7 @@ export default function ProductDetail1({ initialProduct }) {
                                 onClick={() => setShowOrderModal(true)}
                                 style={{ 
                                     cursor: 'pointer', 
-                                width: '100%', 
+                                    width: '100%', 
                                     padding: '16px', 
                                     fontSize: '15px', 
                                     fontWeight: '500',
@@ -572,16 +572,35 @@ export default function ProductDetail1({ initialProduct }) {
                     </div>
                 </div>
 
-                {/* Reviews */}
+                {/* Reviews Section */}
                 <section className="reviews-section" style={{ padding: '40px 0', fontFamily: 'sans-serif' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                        <h2 className="section-title" style={{ textAlign: 'left', margin: 0 }}>Customer Reviews</h2>
-                        
-                        {/* Elegant Trigger Button */}
+                    <h2 className="section-title" style={{ textAlign: 'left', marginBottom: '24px' }}>Customer Reviews</h2>
+                    <div className="divider-gold" style={{ margin: '0 0 32px' }} />
+
+                    {product.reviews?.length > 0 ? (
+                        <div className="reviews-list" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                            {product.reviews.map((r, i) => (
+                                <div className="review-item" key={i}>
+                                    <div className="review-header">
+                                        <strong>{r.name}</strong>
+                                        <span className="stars" style={{ fontSize: 13 }}>{'★'.repeat(r.rating)}</span>
+                                        <span className="review-date">{new Date(r.date).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                                    </div>
+                                    <p>{r.comment}</p>
+                                    {r.verified && <span className="verified-badge">✓ Verified Purchase</span>}
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p style={{ color: 'var(--gray-warm)' }}>No reviews yet. Be the first to review!</p>
+                    )}
+
+                    {/* Elegant Trigger Button Placed Cleanly Below Reviews List */}
+                    <div style={{ marginTop: '32px', display: 'flex', justifyContent: 'flex-start' }}>
                         <button 
                             onClick={() => setShowReviewModal(true)}
                             style={{ 
-                                padding: '10px 20px', 
+                                padding: '12px 28px', 
                                 backgroundColor: '#5A3E2B', 
                                 color: '#ffffff', 
                                 border: 'none', 
@@ -595,23 +614,6 @@ export default function ProductDetail1({ initialProduct }) {
                             Write a Review
                         </button>
                     </div>
-                    <div className="divider-gold" style={{ margin: '0 0 32px' }} />
-
-                    {product.reviews?.length > 0 ? (
-                        <div className="reviews-list">
-                            {product.reviews.map((r, i) => (
-                                <div className="review-item" key={i}>
-                                    <div className="review-header">
-                                        <strong>{r.name}</strong>
-                                        <span className="stars" style={{ fontSize: 13 }}>{'★'.repeat(r.rating)}</span>
-                                        <span className="review-date">{new Date(r.date).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-                                    </div>
-                                    <p>{r.comment}</p>
-                                    {r.verified && <span className="verified-badge">✓ Verified Purchase</span>}
-                                </div>
-                            ))}
-                        </div>
-                    ) : <p style={{ color: 'var(--gray-warm)' }}>No reviews yet. Be the first to review!</p>}
                 </section>
             </div>
 
@@ -780,7 +782,7 @@ export default function ProductDetail1({ initialProduct }) {
                 </div>
             )}
 
-            {/* WRITE A REVIEW MODAL CARD INSIDE RETURN WRAPPER */}
+            {/* WRITE A REVIEW MODAL CARD */}
             {showReviewModal && (
                 <div className="modal-overlay" onClick={() => setShowReviewModal(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10000 }}>
                     <div className="review-modal-card" onClick={e => e.stopPropagation()} style={{ backgroundColor: '#ffffff', width: '100%', maxWidth: '500px', padding: '28px', borderRadius: '4px', boxSizing: 'border-box', position: 'relative', fontFamily: 'sans-serif' }}>

@@ -44,6 +44,7 @@ export default function ProductDetail1({ initialProduct }) {
     const [activeAccordion, setActiveAccordion] = useState('description');
     const [activeInfoAccordion, setActiveInfoAccordion] = useState(null);
     const [sizeChartTab, setSizeChartTab] = useState('india');
+    const [showReviewModal, setShowReviewModal] = useState(false);
 
     // Order Modal State
     const [showOrderModal, setShowOrderModal] = useState(false);
@@ -153,6 +154,15 @@ export default function ProductDetail1({ initialProduct }) {
             alert('Link copied to clipboard!');
         }
     };
+    const inputStyle = {
+    width: '100%',
+    padding: '10px 12px',
+    fontSize: '14px',
+    border: '1px solid #d1cdb8',
+    borderRadius: '4px',
+    outline: 'none',
+    boxSizing: 'border-box'
+};
 
     return (
         <div className="product-detail" style={{ paddingTop: 72 }}>

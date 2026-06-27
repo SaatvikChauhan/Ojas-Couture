@@ -561,9 +561,29 @@ export default function ProductDetail1({ initialProduct }) {
                     </div>
                 </div>
 
-                {/* Reviews */}
-                <section className="reviews-section">
-                    <h2 className="section-title" style={{ textAlign: 'left', marginBottom: 8 }}>Customer Reviews</h2>
+              {/* Reviews */}
+                <section className="reviews-section" style={{ padding: '40px 0', fontFamily: 'sans-serif' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                        <h2 className="section-title" style={{ textAlign: 'left', margin: 0 }}>Customer Reviews</h2>
+                        
+                        {/* Elegant Trigger Button */}
+                        <button 
+                            onClick={() => setShowReviewModal(true)}
+                            style={{ 
+                                padding: '10px 20px', 
+                                backgroundColor: '#5A3E2B', 
+                                color: '#ffffff', 
+                                border: 'none', 
+                                fontSize: '14px', 
+                                fontWeight: '500', 
+                                cursor: 'pointer',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.5px'
+                            }}
+                        >
+                            Write a Review
+                        </button>
+                    </div>
                     <div className="divider-gold" style={{ margin: '0 0 32px' }} />
 
                     {product.reviews?.length > 0 ? (
@@ -581,50 +601,6 @@ export default function ProductDetail1({ initialProduct }) {
                             ))}
                         </div>
                     ) : <p style={{ color: 'var(--gray-warm)' }}>No reviews yet. Be the first to review!</p>}
-
-                    <div className="review-form-wrap">
-                        <h3>Write a Review</h3>
-                        <form onSubmit={handleReviewSubmit} className="review-form">
-                            <div className="form-group">
-                                <label>Your Name</label>
-                                <input
-                                    type="text"
-                                    value={reviewForm.name}
-                                    onChange={e => setReviewForm(f => ({ ...f, name: e.target.value }))}
-                                    placeholder="Enter your name"
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Rating</label>
-                                <div className="star-select">
-                                    {[1, 2, 3, 4, 5].map(n => (
-                                        <button
-                                            key={n}
-                                            type="button"
-                                            className={`star-btn ${reviewForm.rating >= n ? 'active' : ''}`}
-                                            onClick={() => setReviewForm(f => ({ ...f, rating: n }))}
-                                        >
-                                            ★
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label>Review</label>
-                                <textarea
-                                    value={reviewForm.comment}
-                                    onChange={e => setReviewForm(f => ({ ...f, comment: e.target.value }))}
-                                    placeholder="Share your experience..."
-                                    required
-                                />
-                            </div>
-                            <button type="submit" className="btn-primary" disabled={submitting}>
-                                {submitting ? 'Submitting...' : 'Submit Review'}
-                            </button>
-                            {reviewMsg && <p className="review-msg">{reviewMsg}</p>}
-                        </form>
-                    </div>
                 </section>
             </div>
 
@@ -796,11 +772,70 @@ export default function ProductDetail1({ initialProduct }) {
     );
 }
 
-<<<<<<< HEAD
-=======
+{/* WRITE A REVIEW MODAL CARD */}
+            {showReviewModal && (
+                <div className="modal-overlay" onClick={() => setShowReviewModal(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10000 }}>
+                    <div className="review-modal-card" onClick={e => e.stopPropagation()} style={{ backgroundColor: '#ffffff', width: '100%', maxWidth: '500px', padding: '28px', borderRadius: '4px', boxSizing: 'border-box', position: 'relative', fontFamily: 'sans-serif' }}>
+                        
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #f0f0f0', paddingBottom: '12px' }}>
+                            <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600', color: '#1a1a1a' }}>Write a Review</h3>
+                            <button className="modal-close" onClick={() => setShowReviewModal(false)} style={{ background: 'none', border: 'none', fontSize: '18px', cursor: 'pointer', color: '#999' }} aria-label="Close">✕</button>
+                        </div>
 
+                        <form onSubmit={(e) => { handleReviewSubmit(e); setShowReviewModal(false); }} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                <label style={{ fontSize: '13px', fontWeight: '600', color: '#4a4a4a', textTransform: 'uppercase' }}>Your Name</label>
+                                <input
+                                    type="text"
+                                    value={reviewForm.name}
+                                    onChange={e => setReviewForm(f => ({ ...f, name: e.target.value }))}
+                                    placeholder="Enter your name"
+                                    style={inputStyle}
+                                    required
+                                />
+                            </div>
 
->>>>>>> 6136e5a (trigger: redeploy)
+                            <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                <label style={{ fontSize: '13px', fontWeight: '600', color: '#4a4a4a', textTransform: 'uppercase' }}>Rating</label>
+                                <div className="star-select" style={{ display: 'flex', gap: '6px' }}>
+                                    {[1, 2, 3, 4, 5].map(n => (
+                                        <button
+                                            key={n}
+                                            type="button"
+                                            className={`star-btn ${reviewForm.rating >= n ? 'active' : ''}`}
+                                            onClick={() => setReviewForm(f => ({ ...f, rating: n }))}
+                                            style={{ background: 'none', border: 'none', fontSize: '24px', cursor: 'pointer', padding: 0, color: reviewForm.rating >= n ? '#D4AF37' : '#e0e0e0' }}
+                                        >
+                                            ★
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                <label style={{ fontSize: '13px', fontWeight: '600', color: '#4a4a4a', textTransform: 'uppercase' }}>Review</label>
+                                <textarea
+                                    value={reviewForm.comment}
+                                    onChange={e => setReviewForm(f => ({ ...f, comment: e.target.value }))}
+                                    placeholder="Share your experience..."
+                                    style={{ ...inputStyle, height: '120px', resize: 'vertical' }}
+                                    required
+                                />
+                            </div>
+
+                            <button 
+                                type="submit" 
+                                className="btn-primary" 
+                                disabled={submitting}
+                                style={{ marginTop: '8px', padding: '14px', backgroundColor: '#5A3E2B', color: '#ffffff', border: 'none', fontWeight: '600', fontSize: '15px', cursor: 'pointer', textTransform: 'uppercase' }}
+                            >
+                                {submitting ? 'Submitting...' : 'Submit Review'}
+                            </button>
+                            {reviewMsg && <p className="review-msg" style={{ margin: 0, textAlign: 'center', color: 'green', fontSize: '14px' }}>{reviewMsg}</p>}
+                        </form>
+                    </div>
+                </div>
+            )}
 const inputStyle = {
     padding: '10px 14px', border: '1px solid #d1d5db', borderRadius: '4px', fontSize: '14px', width: '100%', boxSizing: 'border-box'
 };

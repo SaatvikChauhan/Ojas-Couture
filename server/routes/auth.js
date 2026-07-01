@@ -27,14 +27,14 @@ router.post('/signup', async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
-    res.json({ token, user: { name, email } });
+    res.json({ token, user: { name, email, isAdmin: user.isAdmin || false } });
 
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// LOGIN
+// LOGIN (UNIFIED FOR CUSTOMERS & ADMINS)
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -45,12 +45,14 @@ router.post('/login', async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
 
-    // 🔥 Send Login Alert Email
-    sendEmail(
-      email,
-      "Login Alert 🔐",
-      `<p>You just logged in to your Ojas Couture account.</p>`
-    );
+    // 🔥 Send Login Alert Email ONLY if it's a regular customer
+    if (!user.isAdmin) {
+      sendEmail(
+        email,
+        "Login Alert 🔐",
+        `<p>You just logged in to your Ojas Couture account.</p>`
+      );
+    }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 

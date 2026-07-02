@@ -505,17 +505,74 @@ export default function ProductDetail1({ initialProduct }) {
                         </div>
 
                         {/* Accordion Setup */}
+                       {/* ACCORDION/TAB SYSTEM */}
                         <div className="detail-tabs">
-                            {/* Little Wonders has 3 tabs (Sheetal Batra style), Shop All completely excludes Customization (Ada Chikan style) */}
-                            {(isLittleWonders ? ['description', 'customization', 'shipping'] : ['description', 'shipping']).map(tab => (
-                                <button
-                                    key={tab}
-                                    className={`detail-tab ${activeAccordion === tab ? 'active' : ''}`}
-                                    onClick={() => setActiveAccordion(tab)}
-                                >
-                                    {tab === 'shipping' && isLittleWonders ? 'Policies & Shipping' : tab.charAt(0).toUpperCase() + tab.slice(1)}
-                                </button>
-                            ))}
+                            {isLittleWonders ? (
+                                // Sheetal Batra Style for Little Wonders
+                                ['description', 'customization', 'policies'].map(tab => (
+                                    <button
+                                        key={tab}
+                                        className={`detail-tab ${activeAccordion === tab ? 'active' : ''}`}
+                                        onClick={() => setActiveAccordion(tab)}
+                                    >
+                                        {tab === 'customization' ? 'Customization & Video Call' : tab === 'policies' ? 'Policies & Shipping' : 'Description'}
+                                    </button>
+                                ))
+                            ) : (
+                                // Ada Chikan Style: Standard simple Description view only
+                                <button className="detail-tab active">Description</button>
+                            )}
+                        </div>
+
+                        <div className="detail-tab-content">
+                            {/* Standard Description (Used by Both Styles) */}
+                            {(!isLittleWonders || activeAccordion === 'description') && (
+                                <div>
+                                    <p className="detail-desc">{product.description}</p>
+                                    {product.fabric && <p className="meta-line"><strong>Material/Fabric:</strong> {product.fabric}</p>}
+                                    <p className="meta-line"><strong>COD Available</strong> | Shipping Worldwide</p>
+                                    <p className="meta-line"><strong>Wash Care:</strong> Dry Clean Only</p>
+                                    <p className="meta-line"><strong>Delivery Timeline:</strong> {isLittleWonders ? '12–15 Days (Tailored Custom Stitched)' : '7–10 Days'}</p>
+                                    <p className="meta-line color-vary"><strong>Color may vary slightly.</strong></p>
+                                </div>
+                            )}
+                            
+                            {/* Little Wonders Specific Customization Tab */}
+                            {isLittleWonders && activeAccordion === 'customization' && (
+                                <div className="customization-grid">
+                                    <div className="custom-item">
+                                        <strong>Video Call Consulting</strong>
+                                        <p>Discover the piece you love closely with our on-call stylists.</p>
+                                    </div>
+                                    <div className="custom-item">
+                                        <strong>Need it sooner?</strong>
+                                        <p>Skip the queue — let us know when you have an event!</p>
+                                    </div>
+                                    <div className="custom-item">
+                                        <strong>Bespoke Customise Options</strong>
+                                        <p>Change the color, neckline, or design as per your liking.</p>
+                                    </div>
+                                    <div className="custom-item">
+                                        <strong>Add or remove from set</strong>
+                                        <p>Need a matching dupatta? It's all possible!</p>
+                                    </div>
+                                    <a
+                                        href="https://wa.me/919876543210?text=Hi! I'd like to discuss customization options for Little Wonders."
+                                        target="_blank" rel="noreferrer" className="custom-chat-link"
+                                    >
+                                        Chat with us, and we can help you with all of the above! Connect on <strong>+91 98765 43210</strong>
+                                    </a>
+                                </div>
+                            )}
+
+                            {/* Little Wonders Specific Sheetal Batra Policies Tab */}
+                            {isLittleWonders && activeAccordion === 'policies' && (
+                                <div>
+                                    <p className="meta-line"><strong>Bespoke Custom Production:</strong> Since each Little Wonders outfit is curated individually to custom fits, manufacturing takes 12–15 business days before shipping.</p>
+                                    <p className="meta-line"><strong>Adjustments & Fittings:</strong> Eligible for free measurement sizing adjustments and adjustments within 10 days of delivery.</p>
+                                    <p className="meta-line color-vary">Our pieces are artisanal fabric crafts made with specialized custom details.</p>
+                                </div>
+                            )}
                         </div>
                         <div className="detail-tab-content">
                             {activeAccordion === 'description' && (
@@ -580,39 +637,16 @@ export default function ProductDetail1({ initialProduct }) {
                             )}
                         </div>
 
-                        {/* FAQ-style dropdowns (Only visible for standard Shop All to match Ada view) */}
-                        {!isLittleWonders && (
+                        {/* Extra informational dropdowns are hidden for standard Ada style pages */}
+                        {isLittleWonders && (
                             <div className="info-accordions">
                                 {[
                                     {
-                                        key: 'faqs',
-                                        title: 'FAQs',
-                                        icon: 'ⓘ',
+                                        key: 'faqs', title: 'FAQs', icon: 'ⓘ',
                                         content: (
                                             <div>
-                                                <p className="meta-line"><strong>How long will my order take?</strong><br />Most orders are dispatched within 7–10 days. Custom stitched pieces may take longer.</p>
+                                                <p className="meta-line"><strong>How long will my order take?</strong><br />Most orders are dispatched within 12-15 days.</p>
                                                 <p className="meta-line"><strong>Can I customise this piece?</strong><br />Yes! Color, fabric, and fit changes are available — chat with us on WhatsApp.</p>
-                                                <p className="meta-line"><strong>Do you ship internationally?</strong><br />Yes, we ship worldwide. Duties and taxes may apply at your destination.</p>
-                                            </div>
-                                        )
-                                    },
-                                    {
-                                        key: 'price-match',
-                                        title: 'Price Match Promise',
-                                        icon: '🏷',
-                                        content: (
-                                            <p className="meta-line">If you find this exact piece available elsewhere at a lower price, share the details with us on WhatsApp within 24 hours of purchase and we'll match it — subject to verification.</p>
-                                        )
-                                    },
-                                    {
-                                        key: 'returns',
-                                        title: 'Returns & Exchange Policy',
-                                        icon: '♻',
-                                        content: (
-                                            <div>
-                                                <p className="meta-line">We accept exchanges within 7 days of delivery for size issues or manufacturing defects.</p>
-                                                <p className="meta-line">Items must be unworn, unwashed, and in original packaging with tags intact.</p>
-                                                <p className="meta-line color-vary"><strong>Custom-stitched pieces are not eligible for return or exchange.</strong></p>
                                             </div>
                                         )
                                     },
@@ -623,14 +657,11 @@ export default function ProductDetail1({ initialProduct }) {
                                             onClick={() => setActiveInfoAccordion(activeInfoAccordion === item.key ? null : item.key)}
                                         >
                                             <span className="info-accordion-title">
-                                                <span className="info-accordion-icon">{item.icon}</span>
-                                                {item.title}
+                                                <span className="info-accordion-icon">{item.icon}</span>{item.title}
                                             </span>
                                             <span className="info-accordion-toggle">{activeInfoAccordion === item.key ? '−' : '+'}</span>
                                         </button>
-                                        {activeInfoAccordion === item.key && (
-                                            <div className="info-accordion-body">{item.content}</div>
-                                        )}
+                                        {activeInfoAccordion === item.key && <div className="info-accordion-body">{item.content}</div>}
                                     </div>
                                 ))}
                             </div>

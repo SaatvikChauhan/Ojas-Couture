@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { productAPI, orderAPI } from '../utils/api';
 
 const FALLBACK = {
@@ -33,8 +33,47 @@ const FALLBACK_RELATED = [
 ];
 
 export default function ProductDetail1({ initialProduct }) {
+    const { id } = useParams(); // Extracts the dynamic ID from your URL path
     const [product, setProduct] = useState(initialProduct || FALLBACK);
+    const [loading, setLoading] = useState(!initialProduct); 
     const [activeImg, setActiveImg] = useState(0);
+
+    // Dynamic data fetch logic whenever a user clicks a new product ID
+    useEffect(() => {
+        if (!initialProduct && id) {
+            setLoading(true);
+            productAPI.getById(id)
+                .then(res => {
+                    if (res.data) {
+                        setProduct(res.data);
+                        setActiveImg(0); // Reset main image focus on navigation
+                    }
+                })
+                .catch(err => {
+                    console.error("Error fetching unique product:", err);
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+        }
+    }, [id, initialProduct]);
+
+    // Handle initial loading states cleanly
+    if (loading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh', fontSize: '18px', color: '#5A3E2B', fontFamily: 'sans-serif' }}>
+                Loading Product Details...
+            </div>
+        );
+    }
+
+    if (!product) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh', fontSize: '18px', color: 'red', fontFamily: 'sans-serif' }}>
+                Product Not Found.
+            </div>
+        );
+    }
     const [selectedSize, setSelectedSize] = useState('');
     const [selectedColor, setSelectedColor] = useState(0);
     const [reviewForm, setReviewForm] = useState({ name: '', rating: 5, comment: '' });

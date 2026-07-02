@@ -13,27 +13,33 @@ export default function AuthModal({ onClose }) {
         ? await authAPI.login(form)
         : await authAPI.signup(form);
 
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      const { token, user } = res.data;
 
-      onClose();
-      window.location.reload();
+      // Check if user is Admin
+      if (user.isAdmin) {
+        // Save to Admin-specific keys
+        localStorage.setItem("ojasAdminToken", token);
+        localStorage.setItem("ojasAdminUser", JSON.stringify(user));
+        
+        onClose();
+        navigate('/admin'); // Redirect to Admin Dashboard
+      } else {
+        // Save to Customer-specific keys
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        
+        onClose();
+        window.location.reload(); // Refresh to update navbar state
+      }
     } catch (err) {
-      alert(err.response?.data?.msg || "Error");
+      alert(err.response?.data?.msg || "Login failed. Please check your credentials.");
     }
-  };
-
-  const goAdmin = () => {
-    onClose();
-    navigate('/admin');
   };
 
   return (
     <div className="modal-overlay">
-      {/* Added position: 'relative' so the absolute button anchors to this container */}
       <div className="modal" style={{ position: 'relative' }}>
         
-        {/* Absolutely positioned close button */}
         <button 
           onClick={onClose} 
           style={{ 
@@ -58,18 +64,21 @@ export default function AuthModal({ onClose }) {
         {!isLogin && (
           <input
             placeholder="Name"
+            value={form.name}
             onChange={e => setForm({ ...form, name: e.target.value })}
           />
         )}
 
         <input
           placeholder="Email"
+          value={form.email}
           onChange={e => setForm({ ...form, email: e.target.value })}
         />
 
         <input
           type="password"
           placeholder="Password"
+          value={form.password}
           onChange={e => setForm({ ...form, password: e.target.value })}
         />
 
@@ -77,19 +86,13 @@ export default function AuthModal({ onClose }) {
           {isLogin ? "Login" : "Sign Up"}
         </button>
 
-        <p onClick={() => setIsLogin(!isLogin)} style={{ cursor: 'pointer' }}>
+        <p 
+          onClick={() => setIsLogin(!isLogin)} 
+          style={{ cursor: 'pointer', marginTop: '15px', fontSize: '0.9rem' }}
+        >
           {isLogin ? "Create account" : "Already have an account?"}
         </p>
 
-        {/* Subtle admin entry — unobtrusive, below the fold */}
-        <p style={{ marginTop: 20, textAlign: 'center' }}>
-          <button
-            onClick={goAdmin}
-            className='btn-secondary'
-          >
-            Admin access
-          </button>
-        </p>
       </div>
     </div>
   );

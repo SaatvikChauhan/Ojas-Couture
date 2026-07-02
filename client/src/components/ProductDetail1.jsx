@@ -58,22 +58,7 @@ export default function ProductDetail1({ initialProduct }) {
         }
     }, [id, initialProduct]);
 
-    // Handle initial loading states cleanly
-    if (loading) {
-        return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh', fontSize: '18px', color: '#5A3E2B', fontFamily: 'sans-serif' }}>
-                Loading Product Details...
-            </div>
-        );
-    }
-
-    if (!product) {
-        return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh', fontSize: '18px', color: 'red', fontFamily: 'sans-serif' }}>
-                Product Not Found.
-            </div>
-        );
-    }
+    
     const [selectedSize, setSelectedSize] = useState('');
     const [selectedColor, setSelectedColor] = useState(0);
     const [reviewForm, setReviewForm] = useState({ name: '', rating: 5, comment: '' });
@@ -206,6 +191,27 @@ export default function ProductDetail1({ initialProduct }) {
         outline: 'none',
         boxSizing: 'border-box'
     };
+
+   // ... all your states, hooks, and handler functions are up here ...
+
+    // PUT THE CHECKS HERE (Right before the final return statement):
+    if (loading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh', fontSize: '18px', color: '#5A3E2B', fontFamily: 'sans-serif' }}>
+                Loading Product Details...
+            </div>
+        );
+    }
+
+    if (!product) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh', fontSize: '18px', color: 'red', fontFamily: 'sans-serif' }}>
+                Product Not Found.
+            </div>
+        );
+    }
+
+    
 
     return (
         <div className="product-detail" style={{ paddingTop: 72 }}>

@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FiMenu, FiX, FiShoppingBag, FiSearch, FiHeart, FiUser, FiChevronDown, FiLogOut, FiPackage, FiSettings } from 'react-icons/fi';
 import AuthModal from "./AuthModal";
+// 1. IMPORT YOUR NEW ACCOUNT SIDEBAR COMPONENT HERE
+import AccountDashboard from './account'; 
 
 const navLinks = [
   { label: 'Home', path: '/' },
@@ -17,6 +19,9 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [user, setUser] = useState(null);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  
+  // 2. STATE HOOK TO CONTROL SIDEBAR DRAWER OPEN/CLOSE
+  const [accountSidebarOpen, setAccountSidebarOpen] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -43,9 +48,9 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    document.body.style.overflow = (menuOpen || accountSidebarOpen) ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
-  }, [menuOpen]);
+  }, [menuOpen, accountSidebarOpen]);
 
   const isActive = (path) => {
     if (path === '/') return location.pathname === '/';
@@ -111,10 +116,14 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
           {/* RIGHT: ICON ACTIONS */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
 
-            {/* WISHLIST */}
-            <Link to="" title="Wishlist" style={{ color: '#4a5568', display: 'flex', alignItems: 'center' }}>
+            {/* WISHLIST ICON LINK (OPENS SIDEBAR DIRECTLY TO WISHLIST) */}
+            <button 
+              onClick={() => user ? setAccountSidebarOpen(true) : setShowAuth(true)}
+              title="Wishlist" 
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#4a5568', display: 'flex', alignItems: 'center', padding: '5px' }}
+            >
               <FiHeart size={22} />
-            </Link>
+            </button>
 
             {/* CART */}
             <button
@@ -165,20 +174,33 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
                       <p style={{ margin: '2px 0 0', color: '#718096', fontSize: '0.8rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.email}</p>
                     </div>
 
-                    {/* Standard links */}
+                    {/* 3. CONVERTED LINKS INTO BUTTON TRIGGERS TO OPEN THE SIDEBAR PANELS */}
                     <div style={{ display: 'flex', flexDirection: 'column', padding: '6px 0' }}>
-                      <Link to="" style={dropdownLinkStyle}>
+                      <button 
+                        onClick={() => { setAccountSidebarOpen(true); setProfileDropdownOpen(false); }} 
+                        style={dropdownLinkStyle}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f8fafc'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                      >
                         <FiUser size={16} style={{ color: '#dfba6b' }} /> My Profile
-                      </Link>
-                      <Link to="" style={dropdownLinkStyle}>
+                      </button>
+                      <button 
+                        onClick={() => { setAccountSidebarOpen(true); setProfileDropdownOpen(false); }} 
+                        style={dropdownLinkStyle}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f8fafc'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                      >
                         <FiPackage size={16} style={{ color: '#dfba6b' }} /> Orders History
-                      </Link>
-                      <Link to="" style={dropdownLinkStyle}>
+                      </button>
+                      <button 
+                        onClick={() => { setAccountSidebarOpen(true); setProfileDropdownOpen(false); }} 
+                        style={dropdownLinkStyle}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f8fafc'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                      >
                         <FiHeart size={16} style={{ color: '#dfba6b' }} /> My Wishlist
-                      </Link>
+                      </button>
                     </div>
-
-                    
 
                     {/* Logout */}
                     <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '6px' }}>
@@ -261,6 +283,20 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
       )}
 
       {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
+
+      {/* 4. RENDER THE SEPARATE ACCOUNT PROFILE SLIDER DRAWER CONTAINER */}
+      {accountSidebarOpen && (
+        <>
+          <div 
+            onClick={() => setAccountSidebarOpen(false)}
+            style={{
+              position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+              backgroundColor: 'rgba(0,0,0,0.4)', zIndex: 14999
+            }}
+          />
+          <AccountDashboard onClose={() => setAccountSidebarOpen(false)} />
+        </>
+      )}
     </>
   );
 }
@@ -271,4 +307,5 @@ const dropdownLinkStyle = {
   textDecoration: 'none', fontSize: '0.85rem',
   fontWeight: '500', textAlign: 'left',
   transition: 'background-color 0.15s',
+  background: 'none', border: 'none', width: '100%', cursor: 'pointer'
 };

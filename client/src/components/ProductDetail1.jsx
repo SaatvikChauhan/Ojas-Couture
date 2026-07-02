@@ -45,8 +45,6 @@ export default function ProductDetail1({ initialProduct }) {
     const [activeInfoAccordion, setActiveInfoAccordion] = useState(null);
     const [sizeChartTab, setSizeChartTab] = useState('india');
     const [showReviewModal, setShowReviewModal] = useState(false);
-    const [showCartSidebar, setShowCartSidebar] = useState(false);
-    const [cartQuantity, setCartQuantity] = useState(1);
 
     // Order Modal State
     const [showOrderModal, setShowOrderModal] = useState(false);
@@ -55,6 +53,9 @@ export default function ProductDetail1({ initialProduct }) {
         name: '', email: '', phone: '',
         street: '', city: '', state: '', zip: ''
     });
+
+    // Check if the current page path belongs to Little Wonders
+    const isLittleWonders = window.location.pathname.includes('little-wonders') || product.category === 'little-wonders';
 
     const handleReviewSubmit = async (e) => {
         e.preventDefault();
@@ -97,17 +98,16 @@ export default function ProductDetail1({ initialProduct }) {
             },
             products: [{ 
                 name: `${product.name} ${selectedSize ? `(Size: ${selectedSize})` : ''}`, 
-                quantity: cartQuantity, 
+                quantity: 1, 
                 price: product.price 
             }],
-            totalAmount: product.price * cartQuantity
+            totalAmount: product.price
         };
 
         try {
             const res = await orderAPI.create(orderData);
             alert(`Success! Your order has been placed. Order ID: ${res.data.orderId}`);
             setShowOrderModal(false);
-            setShowCartSidebar(false);
             setOrderForm({ name: '', email: '', phone: '', street: '', city: '', state: '', zip: '' });
         } catch (err) {
             alert('Failed to place order. Please try again.');
@@ -116,15 +116,13 @@ export default function ProductDetail1({ initialProduct }) {
         }
     };
 
-    const handleAddToCart = async () => {
-        if (product.sizes?.length > 0 && !selectedSize) {
-            alert('Please select a size before adding to cart.');
-            return;
-        }
+    const discountPct = product.originalPrice && product.originalPrice > product.price ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : null;
+    const brandLabel = isLittleWonders ? 'Little Wonders by Pratibha Rajput' : (product.brand || 'Ojas Couture');
+    const colorOptions = product.colors?.length > 0 ? product.colors : ['#1a1a1a', '#c9a84c', '#7f1d1d', '#2d4a2d', '#6b4226', '#8b4789'];
 
+    const handleAddToCart = async () => {
         try {
-            // Hit your backend endpoint to sync cart state
-            await fetch('/api/cart/add', {
+            const response = await fetch('/api/cart/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -136,12 +134,16 @@ export default function ProductDetail1({ initialProduct }) {
                     quantity: 1
                 })
             });
-        } catch (err) {
-            console.error('Error syncing cart with database:', err);
-        }
 
-        // Open the local sidebar immediately for checkout view
-        setShowCartSidebar(true);
+            const data = await response.json();
+            if (response.ok) {
+                alert('Product added to cart successfully!');
+            } else {
+                alert(data.error || 'Failed to add item to cart');
+            }
+        } catch (err) {
+            console.error('Error adding to cart:', err);
+        }
     };
 
     const handleAddToWishlist = () => {
@@ -166,15 +168,11 @@ export default function ProductDetail1({ initialProduct }) {
         boxSizing: 'border-box'
     };
 
-    const discountPct = product.originalPrice && product.originalPrice > product.price ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : null;
-    const brandLabel = product.brand || 'Ojas Couture · Little Wonders by Pratibha Rajput';
-    const colorOptions = product.colors?.length > 0 ? product.colors : ['#1a1a1a', '#c9a84c', '#7f1d1d', '#2d4a2d', '#6b4226', '#8b4789'];
-
     return (
         <div className="product-detail" style={{ paddingTop: 72 }}>
             <div className="container">
                 <nav className="breadcrumb-nav">
-                    <Link to="/">Home</Link> › <Link to="/shop">Shop</Link> › <span>{product.name}</span>
+                    <Link to="/">Home</Link> › <Link to={isLittleWonders ? "/little-wonders" : "/shop"}>{isLittleWonders ? "Little Wonders" : "Shop"}</Link> › <span>{product.name}</span>
                 </nav>
 
                 <div className="detail-layout">
@@ -371,7 +369,7 @@ export default function ProductDetail1({ initialProduct }) {
                                 Buy it now
                             </button>
                             
-                            {/* Policy Icons Grid */}
+                            {/* SECTION 1: Shipping & Policy Icons Grid */}
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', textAlign: 'center', marginTop: '10px' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                     <span style={{ fontSize: '20px', marginBottom: '4px' }}>🚚</span>
@@ -391,7 +389,7 @@ export default function ProductDetail1({ initialProduct }) {
                                 </div>
                             </div>
 
-                            {/* Ada Points Banner */}
+                            {/* SECTION 2: Ada Points Banner */}
                             <div style={{ 
                                 backgroundColor: '#7A6242', 
                                 color: '#ffffff', 
@@ -409,9 +407,37 @@ export default function ProductDetail1({ initialProduct }) {
                                 <span>Earn upto 131 Ada Points on this purchase</span>
                                 <span style={{ cursor: 'pointer', fontSize: '12px', border: '1px solid #ffffff', borderRadius: '50%', width: '14px', height: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', lineHeight: '1', marginLeft: '2px' }}>i</span>
                             </div>
+
+                            {/* SECTION 3: Brand Core Badges Grid (6 Columns) */}
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '6px', textAlign: 'center', marginTop: '10px' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <span style={{ fontSize: '18px', marginBottom: '4px' }}>👩🏽‍🤝‍👩🏻</span>
+                                    <span style={{ fontSize: '8px', color: '#6a6a6a', fontWeight: '600', textTransform: 'uppercase', lineHeight: '1.2' }}>Supporting<br/>30,000+ Women<br/>Artisans</span>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <span style={{ fontSize: '18px', marginBottom: '4px' }}>📜</span>
+                                    <span style={{ fontSize: '8px', color: '#6a6a6a', fontWeight: '600', textTransform: 'uppercase', lineHeight: '1.2' }}>GI Certified &<br/>100%<br/>% Handcrafted</span>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <span style={{ fontSize: '18px', marginBottom: '4px' }}>🤝</span>
+                                    <span style={{ fontSize: '8px', color: '#6a6a6a', fontWeight: '600', textTransform: 'uppercase', lineHeight: '1.2' }}>Customer<br/>Support</span>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <span style={{ fontSize: '18px', marginBottom: '4px' }}>🏅</span>
+                                    <span style={{ fontSize: '8px', color: '#6a6a6a', fontWeight: '600', textTransform: 'uppercase', lineHeight: '1.2' }}>Assured<br/>Quality</span>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <span style={{ fontSize: '18px', marginBottom: '4px' }}>🕌</span>
+                                    <span style={{ fontSize: '8px', color: '#6a6a6a', fontWeight: '600', textTransform: 'uppercase', lineHeight: '1.2' }}>Made In Avadh<br/>Region</span>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <span style={{ fontSize: '18px', marginBottom: '4px' }}>🎁</span>
+                                    <span style={{ fontSize: '8px', color: '#6a6a6a', fontWeight: '600', textTransform: 'uppercase', lineHeight: '1.2' }}>Earn<br/>Rewards</span>
+                                </div>
+                            </div>
                         </div>
 
-                        {/* WhatsApp urgent delivery */}
+                        {/* Need urgent delivery / chat bar */}
                         <a
                             href={`https://wa.me/919876543210?text=${encodeURIComponent(`Hi! I need urgent delivery info for "${product.name}".`)}`}
                             target="_blank"
@@ -428,21 +454,21 @@ export default function ProductDetail1({ initialProduct }) {
                             <span className="online-dot">Online</span>
                         </a>
 
-                        {/* Gift box notes */}
                         <div className="info-banner">
                             <span className="info-banner-icon">★</span>
                             <span>All products arrive in a complimentary <strong>Ojas Couture</strong> gift box — beautifully packaged and ready to gift.</span>
                         </div>
 
-                        {/* Description Accordion */}
+                        {/* Accordion Setup */}
                         <div className="detail-tabs">
-                            {['description', 'customization', 'shipping'].map(tab => (
+                            {/* Little Wonders has 3 tabs (Sheetal Batra style), Shop All completely excludes Customization (Ada Chikan style) */}
+                            {(isLittleWonders ? ['description', 'customization', 'shipping'] : ['description', 'shipping']).map(tab => (
                                 <button
                                     key={tab}
                                     className={`detail-tab ${activeAccordion === tab ? 'active' : ''}`}
                                     onClick={() => setActiveAccordion(tab)}
                                 >
-                                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                                    {tab === 'shipping' && isLittleWonders ? 'Policies & Shipping' : tab.charAt(0).toUpperCase() + tab.slice(1)}
                                 </button>
                             ))}
                         </div>
@@ -453,25 +479,117 @@ export default function ProductDetail1({ initialProduct }) {
                                     {product.fabric && <p className="meta-line"><strong>Material/Fabric:</strong> {product.fabric}</p>}
                                     <p className="meta-line"><strong>COD Available</strong> | Shipping Worldwide</p>
                                     <p className="meta-line"><strong>Wash Care:</strong> Dry Clean Only</p>
-                                    <p className="meta-line"><strong>Delivery Timeline:</strong> 7–10 Days</p>
+                                    <p className="meta-line"><strong>Delivery Timeline:</strong> {isLittleWonders ? '12–15 Days (Tailored Custom Stitched)' : '7–10 Days'}</p>
                                     <p className="meta-line color-vary"><strong>Color may vary slightly.</strong></p>
                                 </div>
                             )}
-                            {activeAccordion === 'customization' && (
+                            
+                            {/* Customization Grid is visible ONLY for Little Wonders */}
+                            {activeAccordion === 'customization' && isLittleWonders && (
                                 <div className="customization-grid">
-                                    <div className="custom-item"><strong>Video Call</strong><p>Discover the piece closely with stylists.</p></div>
-                                    <div className="custom-item"><strong>Need it sooner?</strong><p>Let us know when you have an event!</p></div>
-                                    <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="custom-chat-link">
-                                        Connect on <strong>+91 98765 43210</strong>
+                                    <div className="custom-item">
+                                        <strong>Video Call Consulting</strong>
+                                        <p>Discover the piece you love closely with our on-call stylists.</p>
+                                    </div>
+                                    <div className="custom-item">
+                                        <strong>Need it sooner?</strong>
+                                        <p>Skip the queue — let us know when you have an event!</p>
+                                    </div>
+                                    <div className="custom-item">
+                                        <strong>Bespoke Customise Options</strong>
+                                        <p>Change the color, neckline, or design as per your liking.</p>
+                                    </div>
+                                    <div className="custom-item">
+                                        <strong>Add or remove from set</strong>
+                                        <p>Need a matching dupatta? It's all possible!</p>
+                                    </div>
+                                    <a
+                                        href="https://wa.me/919876543210?text=Hi! I'd like to discuss customization options for Little Wonders."
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="custom-chat-link"
+                                    >
+                                        Chat with us, and we can help you with all of the above! Connect on <strong>+91 98765 43210</strong>
                                     </a>
                                 </div>
                             )}
+
                             {activeAccordion === 'shipping' && (
                                 <div>
-                                    <p className="meta-line">Standard shipping: 5–7 business days within India.</p>
+                                    {isLittleWonders ? (
+                                        /* Sheetal Batra Styled Custom Policy Terms */
+                                        <>
+                                            <p className="meta-line"><strong>Bespoke Custom Production:</strong> Since each Little Wonders outfit is curated individually to custom fits, manufacturing takes 12–15 business days before shipping.</p>
+                                            <p className="meta-line"><strong>Adjustments & Fittings:</strong> Eligible for free measurement sizing adjustments and adjustments within 10 days of delivery.</p>
+                                            <p className="meta-line color-vary">Our pieces are artisanal fabric crafts made with specialized custom details.</p>
+                                        </>
+                                    ) : (
+                                        /* Clean Ada Chikan Styled Standard Terms */
+                                        <>
+                                            <p className="meta-line">Standard shipping: 5–7 business days within India.</p>
+                                            <p className="meta-line">International shipping available — duties may apply.</p>
+                                            <p className="meta-line">Easy exchanges within 7 days of delivery for size issues.</p>
+                                        </>
+                                    )}
                                 </div>
                             )}
                         </div>
+
+                        {/* FAQ-style dropdowns (Only visible for standard Shop All to match Ada view) */}
+                        {!isLittleWonders && (
+                            <div className="info-accordions">
+                                {[
+                                    {
+                                        key: 'faqs',
+                                        title: 'FAQs',
+                                        icon: 'ⓘ',
+                                        content: (
+                                            <div>
+                                                <p className="meta-line"><strong>How long will my order take?</strong><br />Most orders are dispatched within 7–10 days. Custom stitched pieces may take longer.</p>
+                                                <p className="meta-line"><strong>Can I customise this piece?</strong><br />Yes! Color, fabric, and fit changes are available — chat with us on WhatsApp.</p>
+                                                <p className="meta-line"><strong>Do you ship internationally?</strong><br />Yes, we ship worldwide. Duties and taxes may apply at your destination.</p>
+                                            </div>
+                                        )
+                                    },
+                                    {
+                                        key: 'price-match',
+                                        title: 'Price Match Promise',
+                                        icon: '🏷',
+                                        content: (
+                                            <p className="meta-line">If you find this exact piece available elsewhere at a lower price, share the details with us on WhatsApp within 24 hours of purchase and we'll match it — subject to verification.</p>
+                                        )
+                                    },
+                                    {
+                                        key: 'returns',
+                                        title: 'Returns & Exchange Policy',
+                                        icon: '♻',
+                                        content: (
+                                            <div>
+                                                <p className="meta-line">We accept exchanges within 7 days of delivery for size issues or manufacturing defects.</p>
+                                                <p className="meta-line">Items must be unworn, unwashed, and in original packaging with tags intact.</p>
+                                                <p className="meta-line color-vary"><strong>Custom-stitched pieces are not eligible for return or exchange.</strong></p>
+                                            </div>
+                                        )
+                                    },
+                                ].map(item => (
+                                    <div className="info-accordion-item" key={item.key}>
+                                        <button
+                                            className="info-accordion-header"
+                                            onClick={() => setActiveInfoAccordion(activeInfoAccordion === item.key ? null : item.key)}
+                                        >
+                                            <span className="info-accordion-title">
+                                                <span className="info-accordion-icon">{item.icon}</span>
+                                                {item.title}
+                                            </span>
+                                            <span className="info-accordion-toggle">{activeInfoAccordion === item.key ? '−' : '+'}</span>
+                                        </button>
+                                        {activeInfoAccordion === item.key && (
+                                            <div className="info-accordion-body">{item.content}</div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -487,19 +605,31 @@ export default function ProductDetail1({ initialProduct }) {
                                     <div className="review-header">
                                         <strong>{r.name}</strong>
                                         <span className="stars" style={{ fontSize: 13 }}>{'★'.repeat(r.rating)}</span>
+                                        <span className="review-date">{new Date(r.date).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
                                     </div>
                                     <p>{r.comment}</p>
+                                    {r.verified && <span className="verified-badge">✓ Verified Purchase</span>}
                                 </div>
                             ))}
                         </div>
                     ) : (
-                        <p style={{ color: 'var(--gray-warm)' }}>No reviews yet.</p>
+                        <p style={{ color: 'var(--gray-warm)' }}>No reviews yet. Be the first to review!</p>
                     )}
 
                     <div style={{ marginTop: '32px', display: 'flex', justifyContent: 'flex-start' }}>
                         <button 
                             onClick={() => setShowReviewModal(true)}
-                            style={{ padding: '12px 28px', backgroundColor: '#5A3E2B', color: '#ffffff', border: 'none', fontSize: '14px', fontWeight: '500', cursor: 'pointer' }}
+                            style={{ 
+                                padding: '12px 28px', 
+                                backgroundColor: '#5A3E2B', 
+                                color: '#ffffff', 
+                                border: 'none', 
+                                fontSize: '14px', 
+                                fontWeight: '500', 
+                                cursor: 'pointer',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.5px'
+                            }}
                         >
                             Write a Review
                         </button>
@@ -507,132 +637,167 @@ export default function ProductDetail1({ initialProduct }) {
                 </section>
             </div>
 
-            {/* SIDEBAR CART DRAWER */}
-            {showCartSidebar && (
-                <div 
-                    onClick={() => setShowCartSidebar(false)}
-                    style={{
-                        position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-                        backgroundColor: 'rgba(0, 0, 0, 0.4)', zIndex: 11000,
-                        display: 'flex', justifyContent: 'flex-end', transition: 'all 0.3s ease-in-out'
-                    }}
-                >
-                    <div 
-                        onClick={(e) => e.stopPropagation()}
-                        style={{
-                            width: '100%', maxWidth: '420px', height: '100%', backgroundColor: '#ffffff',
-                            boxShadow: '-4px 0 20px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column',
-                            fontFamily: 'sans-serif', position: 'relative', animation: 'slideIn 0.25s ease-out'
-                        }}
-                    >
-                        {/* Sidebar Header */}
-                        <div style={{ padding: '20px', borderBottom: '1px solid #f0edf0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600', color: '#1a1a1a', letterSpacing: '0.5px' }}>Shopping Cart</h3>
-                            <button 
-                                onClick={() => setShowCartSidebar(false)}
-                                style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#666' }}
-                            >
-                                ✕
-                            </button>
-                        </div>
+            {/* Discover More Styles */}
+            <section className="discover-more">
+                <div className="container">
+                    <h2 className="section-title">Discover More Styles</h2>
+                    <div className="divider-gold" />
+                    <p className="section-subtitle">You might also love these</p>
 
-                        {/* Cart Items Area */}
-                        <div style={{ flex: 1, overflowY: 'auto', padding: '20px' }}>
-                            <div style={{ display: 'flex', gap: '16px', borderBottom: '1px solid #f5f5f5', paddingBottom: '20px' }}>
-                                <img 
-                                    src={product.images?.[0] || FALLBACK.images[0]} 
-                                    alt={product.name} 
-                                    style={{ width: '80px', height: '106px', objectFit: 'cover', borderRadius: '2px' }}
-                                />
-                                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                    <div>
-                                        <h4 style={{ margin: '0 0 4px', fontSize: '14px', fontWeight: '500', color: '#1a1a1a', lineHeight: '1.4' }}>{product.name}</h4>
-                                        {selectedSize && <p style={{ margin: '0 0 6px', fontSize: '12px', color: '#7a7a7a' }}>Size: <strong>{selectedSize}</strong></p>}
-                                    </div>
-                                    
-                                    {/* Quantity Toggle */}
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #d1cdb8' }}>
-                                            <button 
-                                                onClick={() => cartQuantity > 1 && setCartQuantity(cartQuantity - 1)}
-                                                style={{ background: 'none', border: 'none', width: '28px', height: '28px', cursor: 'pointer', fontSize: '14px' }}
-                                            >
-                                                -
-                                            </button>
-                                            <span style={{ fontSize: '13px', width: '24px', textAlign: 'center' }}>{cartQuantity}</span>
-                                            <button 
-                                                onClick={() => setCartQuantity(cartQuantity + 1)}
-                                                style={{ background: 'none', border: 'none', width: '28px', height: '28px', cursor: 'pointer', fontSize: '14px' }}
-                                            >
-                                                +
-                                            </button>
-                                        </div>
-                                        <span style={{ fontSize: '14px', fontWeight: '600', color: '#1a1a1a', marginLeft: 'auto' }}>
-                                            ₹{(product.price * cartQuantity).toLocaleString('en-IN')}
-                                        </span>
-                                    </div>
+                    <div className="products-grid">
+                        {(product.relatedProducts?.length ? product.relatedProducts : FALLBACK_RELATED).map(p => (
+                            <Link to={`/product/${p._id}`} className="product-card" key={p._id} style={{ display: 'block' }}>
+                                <div className="product-card-img-wrap">
+                                    {p.badge && <div className="product-card-badge"><span className="badge">{p.badge}</span></div>}
+                                    <img className="product-img" src={p.images?.[0]} alt={p.name} loading="lazy" />
                                 </div>
-                            </div>
+                                <div className="product-card-info">
+                                    <h3 className="product-card-name">{p.name}</h3>
+                                    <span className="product-card-price">₹{p.price?.toLocaleString('en-IN')}</span>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+
+                    <div style={{ textAlign: 'center', marginTop: 40 }}>
+                        <Link to={isLittleWonders ? "/little-wonders" : "/shop"} className="btn-secondary">
+                            View All {isLittleWonders ? "Little Wonders" : "Products"}
+                        </Link>
+                    </div>
+                </div>
+            </section>
+
+            {/* Sticky mobile bar */}
+            <div className="sticky-buy-bar">
+                <div className="sticky-info">
+                    <span className="sticky-name">{product.name}</span>
+                    <span className="sticky-price">
+                        ₹{product.price?.toLocaleString('en-IN')}
+                        {product.originalPrice && product.originalPrice > product.price && (
+                            <span className="sticky-original">₹{product.originalPrice?.toLocaleString('en-IN')}</span>
+                        )}
+                    </span>
+                </div>
+                <div className="sticky-actions">
+                    <a
+                        href={`https://wa.me/919876543210?text=${encodeURIComponent(`I want to know more about "${product.name}"`)}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="btn-secondary sticky-cta-secondary"
+                    >
+                        Enquire
+                    </a>
+                    <button 
+                        className="btn-primary sticky-cta" 
+                        onClick={() => setShowOrderModal(true)}
+                        style={{ border: 'none', cursor: 'pointer' }}
+                    >
+                        Order Now
+                    </button>
+                </div>
+            </div>
+
+            {/* Size Chart Modal */}
+            {showSizeChart && (
+                <div className="modal-overlay" onClick={() => setShowSizeChart(false)}>
+                    <div className="size-chart-modal" onClick={e => e.stopPropagation()}>
+                        <div className="size-chart-header">
+                            <h3>Size Chart</h3>
+                            <button className="modal-close" onClick={() => setShowSizeChart(false)} aria-label="Close">✕</button>
                         </div>
 
-                        {/* Checkout Footer Elements */}
-                        <div style={{ padding: '20px', borderTop: '1px solid #f0edf0', backgroundColor: '#faf9f6' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
-                                <span style={{ fontSize: '14px', color: '#4a4a4a' }}>Subtotal</span>
-                                <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a' }}>
-                                    ₹{(product.price * cartQuantity).toLocaleString('en-IN')}
-                                </span>
-                            </div>
-                            <p style={{ margin: '0 0 16px', fontSize: '12px', color: '#7a7a7a', lineHeight: '1.4' }}>
-                                Shipping, taxes, and discounts calculated at checkout.
-                            </p>
-                            
-                            <button 
-                                onClick={() => { setShowCartSidebar(false); setShowOrderModal(true); }}
-                                style={{
-                                    width: '100%', padding: '16px', backgroundColor: '#5A3E2B', color: '#ffffff',
-                                    border: 'none', fontSize: '15px', fontWeight: '500', letterSpacing: '0.5px',
-                                    cursor: 'pointer', textTransform: 'uppercase'
-                                }}
+                        <div className="size-chart-tabs">
+                            <button
+                                className={`sc-tab ${sizeChartTab === 'india' ? 'active' : ''}`}
+                                onClick={() => setSizeChartTab('india')}
                             >
-                                Proceed to Checkout
+                                India
+                            </button>
+                            <button
+                                className={`sc-tab ${sizeChartTab === 'intl' ? 'active' : ''}`}
+                                onClick={() => setSizeChartTab('intl')}
+                            >
+                                International
                             </button>
                         </div>
+
+                        <div className="size-chart-table-wrap">
+                            <table className="size-chart-table">
+                                <thead>
+                                    <tr>
+                                        <th>US Size</th>
+                                        {Object.keys(SIZE_CHART).map(s => <th key={s}>{s}</th>)}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Bust (in/cm)</td>
+                                        {Object.values(SIZE_CHART).map((v, i) => <td key={i}>{v.bust}</td>)}
+                                    </tr>
+                                    <tr>
+                                        <td>Waist (in/cm)</td>
+                                        {Object.values(SIZE_CHART).map((v, i) => <td key={i}>{v.waist}</td>)}
+                                    </tr>
+                                    <tr>
+                                        <td>Hip (in/cm)</td>
+                                        {Object.values(SIZE_CHART).map((v, i) => <td key={i}>{v.hip}</td>)}
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p className="size-chart-note">Outfits come with an approximate 2-inch ease built in for comfort, styling, and ideal fit.</p>
+                        <p className="size-chart-note">Your perfect fit matters — easy size exchanges within 7 days.</p>
+                        <p className="size-chart-note"><strong>Note:</strong> The sizes mentioned are body measurements.</p>
+                        <p className="size-chart-note">
+                            Connect with us on a live video call for guided measurement support. Contact us on{' '}
+                            <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="size-chart-link-inline">+91 98765 43210</a>
+                        </p>
                     </div>
                 </div>
             )}
 
             {/* ORDER MODAL */}
             {showOrderModal && (
-                <div className="modal-overlay" onClick={() => setShowOrderModal(false)} style={{ zIndex: 12000 }}>
+                <div className="modal-overlay" onClick={() => setShowOrderModal(false)} style={{ zIndex: 9999 }}>
                     <div className="size-chart-modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 500, padding: 24 }}>
                         <div className="size-chart-header">
-                            <h3>Secure Checkout</h3>
-                            <button className="modal-close" onClick={() => setShowOrderModal(false)}>✕</button>
+                            <h3>Place Your Order</h3>
+                            <button className="modal-close" onClick={() => setShowOrderModal(false)} aria-label="Close">✕</button>
                         </div>
                         
                         <div style={{ padding: '16px 0', borderBottom: '1px solid #eee', marginBottom: 16 }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold' }}>
-                                <span>{product.name} (x{cartQuantity})</span>
-                                <span>₹{(product.price * cartQuantity).toLocaleString('en-IN')}</span>
+                                <span>{product.name} {selectedSize && `(${selectedSize})`}</span>
+                                <span>₹{product.price?.toLocaleString('en-IN')}</span>
                             </div>
                         </div>
 
                         <form onSubmit={handlePlaceOrder} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                            <input style={inputStyle} type="text" placeholder="Full Name" required value={orderForm.name} onChange={e => setOrderForm({...orderForm, name: e.target.value})} />
+                            <input style={inputStyle} type="text" placeholder="Full Name" required 
+                                value={orderForm.name} onChange={e => setOrderForm({...orderForm, name: e.target.value})} />
+                            
                             <div style={{ display: 'flex', gap: 12 }}>
-                                <input style={inputStyle} type="email" placeholder="Email" required value={orderForm.email} onChange={e => setOrderForm({...orderForm, email: e.target.value})} />
-                                <input style={inputStyle} type="tel" placeholder="Phone Number" required value={orderForm.phone} onChange={e => setOrderForm({...orderForm, phone: e.target.value})} />
+                                <input style={inputStyle} type="email" placeholder="Email" required 
+                                    value={orderForm.email} onChange={e => setOrderForm({...orderForm, email: e.target.value})} />
+                                <input style={inputStyle} type="tel" placeholder="Phone Number" required 
+                                    value={orderForm.phone} onChange={e => setOrderForm({...orderForm, phone: e.target.value})} />
                             </div>
-                            <input style={inputStyle} type="text" placeholder="Street Address" required value={orderForm.street} onChange={e => setOrderForm({...orderForm, street: e.target.value})} />
+
+                            <input style={inputStyle} type="text" placeholder="Street Address" required 
+                                value={orderForm.street} onChange={e => setOrderForm({...orderForm, street: e.target.value})} />
+                            
                             <div style={{ display: 'flex', gap: 12 }}>
-                                <input style={inputStyle} type="text" placeholder="City" required value={orderForm.city} onChange={e => setOrderForm({...orderForm, city: e.target.value})} />
-                                <input style={inputStyle} type="text" placeholder="State" required value={orderForm.state} onChange={e => setOrderForm({...orderForm, state: e.target.value})} />
-                                <input style={inputStyle} type="text" placeholder="ZIP Code" required value={orderForm.zip} onChange={e => setOrderForm({...orderForm, zip: e.target.value})} />
+                                <input style={inputStyle} type="text" placeholder="City" required 
+                                    value={orderForm.city} onChange={e => setOrderForm({...orderForm, city: e.target.value})} />
+                                <input style={inputStyle} type="text" placeholder="State" required 
+                                    value={orderForm.state} onChange={e => setOrderForm({...orderForm, state: e.target.value})} />
+                                <input style={inputStyle} type="text" placeholder="ZIP Code" required 
+                                    value={orderForm.zip} onChange={e => setOrderForm({...orderForm, zip: e.target.value})} />
                             </div>
 
                             <button type="submit" className="btn-primary" disabled={orderSubmitting} style={{ marginTop: 16, cursor: 'pointer', border: 'none' }}>
-                                {orderSubmitting ? 'Processing Payment...' : `Pay & Place Order • ₹${(product.price * cartQuantity).toLocaleString('en-IN')}`}
+                                {orderSubmitting ? 'Processing...' : `Confirm Order • ₹${product.price?.toLocaleString('en-IN')}`}
                             </button>
                         </form>
                     </div>
@@ -641,16 +806,64 @@ export default function ProductDetail1({ initialProduct }) {
 
             {/* WRITE A REVIEW MODAL CARD */}
             {showReviewModal && (
-                <div className="modal-overlay" onClick={() => setShowReviewModal(false)} style={{ zIndex: 12000 }}>
-                    <div className="review-modal-card" onClick={e => e.stopPropagation()} style={{ backgroundColor: '#ffffff', width: '100%', maxWidth: '500px', padding: '28px', borderRadius: '4px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-                            <h3 style={{ margin: 0 }}>Write a Review</h3>
-                            <button className="modal-close" onClick={() => setShowReviewModal(false)}>✕</button>
+                <div className="modal-overlay" onClick={() => setShowReviewModal(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10000 }}>
+                    <div className="review-modal-card" onClick={e => e.stopPropagation()} style={{ backgroundColor: '#ffffff', width: '100%', maxWidth: '500px', padding: '28px', borderRadius: '4px', boxSizing: 'border-box', position: 'relative', fontFamily: 'sans-serif' }}>
+                        
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #f0f0f0', paddingBottom: '12px' }}>
+                            <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600', color: '#1a1a1a' }}>Write a Review</h3>
+                            <button className="modal-close" onClick={() => setShowReviewModal(false)} style={{ background: 'none', border: 'none', fontSize: '18px', cursor: 'pointer', color: '#999' }} aria-label="Close">✕</button>
                         </div>
+
                         <form onSubmit={(e) => { handleReviewSubmit(e); setShowReviewModal(false); }} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                            <input type="text" value={reviewForm.name} onChange={e => setReviewForm(f => ({ ...f, name: e.target.value }))} placeholder="Your Name" style={inputStyle} required />
-                            <textarea value={reviewForm.comment} onChange={e => setReviewForm(f => ({ ...f, comment: e.target.value }))} placeholder="Share your experience..." style={{ ...inputStyle, height: '100px' }} required />
-                            <button type="submit" style={{ padding: '14px', backgroundColor: '#5A3E2B', color: '#ffffff', border: 'none', cursor: 'pointer' }}>Submit Review</button>
+                            <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                <label style={{ fontSize: '13px', fontWeight: '600', color: '#4a4a4a', textTransform: 'uppercase' }}>Your Name</label>
+                                <input
+                                    type="text"
+                                    value={reviewForm.name}
+                                    onChange={e => setReviewForm(f => ({ ...f, name: e.target.value }))}
+                                    placeholder="Enter your name"
+                                    style={inputStyle}
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                <label style={{ fontSize: '13px', fontWeight: '600', color: '#4a4a4a', textTransform: 'uppercase' }}>Rating</label>
+                                <div className="star-select" style={{ display: 'flex', gap: '6px' }}>
+                                    {[1, 2, 3, 4, 5].map(n => (
+                                        <button
+                                            key={n}
+                                            type="button"
+                                            className={`star-btn ${reviewForm.rating >= n ? 'active' : ''}`}
+                                            onClick={() => setReviewForm(f => ({ ...f, rating: n }))}
+                                            style={{ background: 'none', border: 'none', fontSize: '24px', cursor: 'pointer', padding: 0, color: reviewForm.rating >= n ? '#D4AF37' : '#e0e0e0' }}
+                                        >
+                                            ★
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                <label style={{ fontSize: '13px', fontWeight: '600', color: '#4a4a4a', textTransform: 'uppercase' }}>Review</label>
+                                <textarea
+                                    value={reviewForm.comment}
+                                    onChange={e => setReviewForm(f => ({ ...f, comment: e.target.value }))}
+                                    placeholder="Share your experience..."
+                                    style={{ ...inputStyle, height: '120px', resize: 'vertical' }}
+                                    required
+                                />
+                            </div>
+
+                            <button 
+                                type="submit" 
+                                className="btn-primary" 
+                                disabled={submitting}
+                                style={{ marginTop: '8px', padding: '14px', backgroundColor: '#5A3E2B', color: '#ffffff', border: 'none', fontWeight: '600', fontSize: '15px', cursor: 'pointer', textTransform: 'uppercase' }}
+                            >
+                                {submitting ? 'Submitting...' : 'Submit Review'}
+                            </button>
+                            {reviewMsg && <p className="review-msg" style={{ margin: 0, textAlign: 'center', color: 'green', fontSize: '14px' }}>{reviewMsg}</p>}
                         </form>
                     </div>
                 </div>

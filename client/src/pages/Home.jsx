@@ -97,7 +97,8 @@ export default function Home() {
           <p className="hero-subtitle">Elegant Indian Women's Clothing Online</p>
           <div className="hero-actions">
             <Link to="/shop" className="btn-primary">Discover More</Link>
-            <Link to="/little-wonders" className="btn-outline-gold">Explore Styles</Link>
+            {/* CHANGED THIS BUTTON TO LINK TO MEMBERSHIP PAGE */}
+            <Link to="/become-member" className="btn-outline-gold">Become a Member</Link>
           </div>
         </div>
         <div className="hero-scroll">
@@ -368,7 +369,7 @@ export default function Home() {
           <p style={{ color: 'rgba(255,254,249,0.7)', marginBottom: 32, maxWidth: 480, margin: '0 auto 32px' }}>
             Get first access to new arrivals, exclusive offers, and styling inspiration.
           </p>
-          <Link to="/join-family" className="btn-primary">Become a Member</Link>
+          <Link to="/become-member" className="btn-primary">Become a Member</Link>
         </div>
       </section>
     </div>

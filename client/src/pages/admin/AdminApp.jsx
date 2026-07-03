@@ -14,6 +14,7 @@ import Homepage from './Homepage';
 // NEW: Import the Order and Customer components
 import Orders from './Orders';
 import Customers from './Customers';
+import AdminMemberships from './AdminMemberships';
 
 export default function AdminApp() {
   const [user, setUser] = useState(() => {
@@ -53,6 +54,7 @@ export default function AdminApp() {
         <Route path="categories" element={<Categories />} />
         <Route path="collections" element={<Collections />} />
         <Route path="homepage" element={<Homepage />} />
+        <Route path="memberships" element={<AdminMemberships />} />
         <Route path="*" element={<Navigate to="/admin" replace />} />
       </Routes>
     </Layout>

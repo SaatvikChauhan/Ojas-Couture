@@ -56,6 +56,7 @@ app.use('/api/testimonials', require('./routes/testimonials'));
 app.use('/api/contact', require('./routes/contact'));
 app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/newsletter', require('./routes/newsletter'));
+app.use('/api/memberships', require('./routes/memberships'));
 
 // --- EXPORT FOR VERCEL ---
 module.exports = app;

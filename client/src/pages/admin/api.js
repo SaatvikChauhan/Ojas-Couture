@@ -71,28 +71,34 @@ export const api = {
     return req('POST', '/homepage/upload', fd, true);
   },
 
+  // ── Memberships ───────────────────────────────────────
+  getMembershipApplications: () => req('GET', '/memberships/admin/applications'),
+  getMembershipDirectory: () => req('GET', '/memberships/admin/directory'),
+  updateMembershipStatus: (id, status) => req('PUT', `/memberships/admin/${id}/status`, { status }),
+  
   // ── Orders & Customers ────────────────────────────────
   getOrders: () => req('GET', '/admin/orders'),
   updateStatus: (id, status) => req('PUT', `/admin/orders/${id}/status`, { status }),
   getCustomers: () => req('GET', '/admin/orders/customers'),
   emailInvoice: (id) => req('POST', `/admin/orders/${id}/invoice/email`),
-  
+
   // Download requires handling the raw blob, so we bypass the standard 'req' which forces res.json()
   downloadInvoice: async (id) => {
     const res = await fetch(`${BASE}/api/admin/orders/${id}/invoice/download`, {
       method: 'GET',
       headers: headers()
     });
-    
+
     if (res.status === 401 || res.status === 403) {
       localStorage.removeItem('ojasAdminToken');
       window.location.href = '/admin/login';
       return;
     }
-    
+
     if (!res.ok) throw new Error('Failed to download invoice');
-    
+
     // Return the raw blob instead of trying to parse it as JSON
     return res.blob();
   }
+
 };

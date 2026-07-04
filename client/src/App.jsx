@@ -23,6 +23,7 @@ import TermsOfService from './components/TermsOfService';
 
 // Admin
 import AdminApp from './pages/admin/AdminApp';
+import BecomeMember from './pages/BecomeAMember';
 
 export default function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -62,6 +63,7 @@ export default function App() {
               <Route path="/return-exchange" element={<ReturnExchange />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/reports" element={<Reports />} />
+              <Route path="/become-member" element={<BecomeMember />} />
             </Routes>
 
             <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} cartItems={cartItems} />

@@ -85,6 +85,7 @@ export default function Dashboard() {
           { label: 'Edit Homepage', to: '/admin/homepage' },
           { label: 'Manage Orders', to: '/admin/orders' },
           { label: 'Manage Customers', to: '/admin/customers' },
+          { label: 'Manage Members', to: '/admin/memberships' },
         ].map(({ label, to }) => (
           <Link key={to} to={to} style={{
             padding: '10px 18px',

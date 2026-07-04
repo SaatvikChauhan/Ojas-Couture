@@ -9,6 +9,7 @@ const NAV = [
   { to: '/admin/categories', label: 'Categories', icon: '🏷️' },
   { to: '/admin/collections', label: 'Collections', icon: '✨' },
   // NEW: Added Customers link
+  { to: '/admin/memberships', label: 'Memberships', icon: '👑' },
   { to: '/admin/customers', label: 'Customers', icon: '👥' },
   { to: '/admin/homepage', label: 'Homepage', icon: '🏠' },
 ];

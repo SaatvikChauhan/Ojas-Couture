@@ -44,4 +44,8 @@ export const authAPI = {
   signup: (data) => api.post('/auth/signup', data),
   login: (data) => api.post('/auth/login', data),
 };
+export const membershipAPI = {
+  apply: (data) => api.post('/memberships/apply', data),
+  getStatus: (email) => api.get(`/memberships/status/${email}`)
+};
 export default api;

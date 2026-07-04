@@ -75,6 +75,10 @@ export default function ProductDetail1({ initialProduct }) {
     const [activeInfoAccordion, setActiveInfoAccordion] = useState(null);
     const [sizeChartTab, setSizeChartTab] = useState('india');
     const [showReviewModal, setShowReviewModal] = useState(false);
+    const [showEnquiryModal, setShowEnquiryModal] = useState(false);
+    const [enquiryType, setEnquiryType] = useState('');
+    const [enquiryMessage, setEnquiryMessage] = useState('');
+    const [enquirySubmitting, setEnquirySubmitting] = useState(false);
 
     // Order Modal State
     const [showOrderModal, setShowOrderModal] = useState(false);
@@ -145,6 +149,54 @@ export default function ProductDetail1({ initialProduct }) {
         } finally {
             setOrderSubmitting(false);
         }
+    };
+
+    const handleWhatsAppEnquiry = () => {
+        const phoneNumber = "919650656166"; // Ojas Couture phone number
+        const text = encodeURIComponent(
+            `Hi Ojas Couture, I am interested in inquiring about the "${product.name}". Can you please guide me further?`
+        );
+        window.open(`https://wa.me/${phoneNumber}?text=${text}`, '_blank');
+    };
+
+    const handleEnquirySubmit = async (e) => {
+        e.preventDefault();
+        setEnquirySubmitting(true);
+        
+        const enquiryData = {
+            productId: product._id,
+            productName: product.name,
+            customerName: orderForm.name || "Guest User", // Reuse current order form name or custom field
+            customerEmail: orderForm.email || "guest@example.com",
+            enquiryType,
+            message: enquiryMessage
+        };
+
+        try {
+            const response = await fetch('/api/enquiries', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(enquiryData)
+            });
+            const data = await response.json();
+            if (data.success) {
+                alert(`${enquiryType} submitted successfully!`);
+                setShowEnquiryModal(false);
+                setEnquiryMessage('');
+            } else {
+                alert('Failed to submit enquiry.');
+            }
+        } catch (err) {
+            console.error("Error submitting enquiry:", err);
+            alert('Something went wrong. Please try again.');
+        } finally {
+            setEnquirySubmitting(false);
+        }
+    };
+
+    const openEnquiryModal = (type) => {
+        setEnquiryType(type);
+        setShowEnquiryModal(true);
     };
 
     const discountPct = product.originalPrice && product.originalPrice > product.price ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : null;
@@ -420,6 +472,23 @@ export default function ProductDetail1({ initialProduct }) {
                             >
                                 Buy it now
                             </button>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '10px' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                                    <button type="button" onClick={() => openEnquiryModal('Request Price')} style={{ padding: '14px', border: '1px solid #5A3E2B', background: 'transparent', color: '#5A3E2B', cursor: 'pointer', fontWeight: '500' }}>
+                                        Request Price
+                                    </button>
+                                    <button type="button" onClick={() => openEnquiryModal('Book Consultation')} style={{ padding: '14px', border: '1px solid #5A3E2B', background: 'transparent', color: '#5A3E2B', cursor: 'pointer', fontWeight: '500' }}>
+                                        Book Consultation
+                                    </button>
+                                </div>
+                                <button type="button" onClick={() => openEnquiryModal('Custom Order')} style={{ padding: '14px', backgroundColor: '#7A6242', color: '#ffffff', border: 'none', cursor: 'pointer', fontWeight: '500' }}>
+                                    Custom Order Request
+                                </button>
+                                <button type="button" onClick={handleWhatsAppEnquiry} style={{ padding: '14px', backgroundColor: '#25D366', color: '#ffffff', border: 'none', cursor: 'pointer', fontWeight: '500', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                                    WhatsApp Enquiry
+                                </button>
+                            </div>
                             
                             {/* SECTION 1: Shipping & Policy Icons Grid */}
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', textAlign: 'center', marginTop: '10px' }}>
@@ -994,6 +1063,35 @@ export default function ProductDetail1({ initialProduct }) {
         </div>
     </div>
 )}
+
+{/* --- ADD THIS COUTURE ENQUIRY MODAL AT THE BOTTOM --- */}
+            {showEnquiryModal && (
+                <div className="modal-overlay" onClick={() => setShowEnquiryModal(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10001 }}>
+                    <div className="review-modal-card" onClick={e => e.stopPropagation()} style={{ backgroundColor: '#ffffff', width: '100%', maxWidth: '450px', padding: '24px', borderRadius: '4px', boxSizing: 'border-box', fontFamily: 'sans-serif' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid #f0f0f0', paddingBottom: '12px' }}>
+                            <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>{enquiryType}</h3>
+                            <button className="modal-close" onClick={() => setShowEnquiryModal(false)} style={{ background: 'none', border: 'none', fontSize: '18px', cursor: 'pointer', color: '#999' }}>✕</button>
+                        </div>
+                        <p style={{ fontSize: '14px', color: '#6a6a6a', marginBottom: '16px' }}>Enquiring for: <strong>{product.name}</strong></p>
+                        <form onSubmit={handleEnquirySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                <label style={{ fontSize: '12px', fontWeight: '600', color: '#4a4a4a' }}>MESSAGE / CUSTOM REQUIREMENT</label>
+                                <textarea 
+                                    value={enquiryMessage}
+                                    onChange={e => setEnquiryMessage(e.target.value)}
+                                    placeholder="Enter details about sizing adjustments, expected timelines, or questions..."
+                                    style={{ ...inputStyle, height: '120px', resize: 'vertical' }}
+                                    required
+                                />
+                            </div>
+                            <button type="submit" className="btn-primary" disabled={enquirySubmitting} style={{ border: 'none', padding: '14px', backgroundColor: '#5A3E2B', color: '#ffffff', fontWeight: '600', cursor: 'pointer' }}>
+                                {enquirySubmitting ? 'Submitting Request...' : 'Submit Enquiry'}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
+            {/* ----------------------------------------------------- */}
         </div>
     );
 }

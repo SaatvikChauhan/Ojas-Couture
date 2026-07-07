@@ -88,6 +88,38 @@ export default function ProductDetail1({ initialProduct }) {
         street: '', city: '', state: '', zip: ''
     });
 
+    // 1. Add this hook at the top with your other states:
+const [isWishlisted, setIsWishlisted] = useState(false);
+
+// 2. Fetch initial wishlist state on load:
+useEffect(() => {
+    if (product && product._id && localStorage.getItem('token')) {
+        wishlistAPI.get()
+            .then(data => {
+                if (data && data.products) {
+                    const saved = data.products.some(p => p._id === product._id || p === product._id);
+                    setIsWishlisted(saved);
+                }
+            })
+            .catch(err => console.error("Error matching wishlist item:", err));
+    }
+}, [product]);
+
+// 3. Update your handleAddToWishlist function to run dynamically:
+const handleAddToWishlist = async () => {
+    if (!localStorage.getItem('token')) {
+        alert('Please log in to save items to your wishlist.');
+        return;
+    }
+    try {
+        const res = await wishlistAPI.toggle(product._id);
+        setIsWishlisted(res.isWishlisted);
+        alert(res.message);
+    } catch (err) {
+        console.error("Wishlist action failed:", err);
+    }
+};
+
     // Check if the current page path belongs to Little Wonders
     const isLittleWonders = window.location.pathname.includes('little-wonders') || product.category === 'little-wonders';
 
@@ -288,7 +320,34 @@ export default function ProductDetail1({ initialProduct }) {
                                 alt={product.name}
                                 onError={e => { e.target.src = FALLBACK.images[0]; }}
                             />
+
                             {product.badge && <span className="badge detail-badge">{product.badge}</span>}
+                            <button 
+        onClick={handleAddToWishlist} 
+        style={{
+            padding: '14px',
+            backgroundColor: '#e8e5e0',
+            border: '1px solid #d1cdb8',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '51px',
+            width: '51px'
+        }}
+        aria-label="Add to wishlist"
+    >
+        <svg 
+            viewBox="0 0 24 24" 
+            fill={isWishlisted ? "#D4AF37" : "none"} 
+            stroke={isWishlisted ? "#D4AF37" : "#1a1a1a"} 
+            strokeWidth="1.5" 
+            width="20" 
+            height="20"
+        >
+            <path d="M12 21s-7.5-4.6-10-9.3C0.3 8.6 2 5 5.5 5 8 5 10 6.7 12 9c2-2.3 4-4 6.5-4C22 5 23.7 8.6 22 11.7 19.5 16.4 12 21 12 21z" />
+        </svg>
+    </button>
                             <button className="wishlist-btn" onClick={handleAddToWishlist} aria-label="Add to wishlist">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" width="20" height="20">
                                     <path d="M12 21s-7.5-4.6-10-9.3C0.3 8.6 2 5 5.5 5 8 5 10 6.7 12 9c2-2.3 4-4 6.5-4C22 5 23.7 8.6 22 11.7 19.5 16.4 12 21 12 21z" />

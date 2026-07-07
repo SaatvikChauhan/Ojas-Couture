@@ -44,6 +44,20 @@ export const authAPI = {
   signup: (data) => api.post('/auth/signup', data),
   login: (data) => api.post('/auth/login', data),
 };
+export const wishlistAPI = {
+    get: () => fetch('/api/wishlist', {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    }).then(res => res.json()),
+
+    toggle: (productId) => fetch('/api/wishlist/toggle', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ productId })
+    }).then(res => res.json())
+};
 export const membershipAPI = {
   apply: (data) => api.post('/memberships/apply', data),
   getStatus: (email) => api.get(`/memberships/status/${email}`)

@@ -38,25 +38,28 @@ export default function ProductDetail1({ initialProduct }) {
     const [loading, setLoading] = useState(!initialProduct); 
     const [activeImg, setActiveImg] = useState(0);
 
-    // Dynamic data fetch logic whenever a user clicks a new product ID
-    useEffect(() => {
-        if (!initialProduct && id) {
-            setLoading(true);
-            productAPI.getById(id)
-                .then(res => {
-                    if (res.data) {
-                        setProduct(res.data);
-                        setActiveImg(0); // Reset main image focus on navigation
-                    }
-                })
-                .catch(err => {
-                    console.error("Error fetching unique product:", err);
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-        }
-    }, [id, initialProduct]);
+    
+    // Dynamic data fetch logic (FIXED to refresh on every new ID click)
+useEffect(() => {
+    if (id) {
+        setLoading(true);
+        productAPI.getById(id)
+            .then(res => {
+                // Handle different potential API response shapes safely
+                const freshProductData = res.data || res; 
+                if (freshProductData) {
+                    setProduct(freshProductData);
+                    setActiveImg(0); // Reset main image focus to the first image
+                }
+            })
+            .catch(err => {
+                console.error("Error fetching unique product:", err);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }
+}, [id]); // Only depend on the ID changing
 
     
     const [selectedSize, setSelectedSize] = useState('');

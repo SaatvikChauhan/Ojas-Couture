@@ -261,10 +261,6 @@ const handleAddToWishlist = async () => {
         }
     };
 
-    const handleAddToWishlist = () => {
-        alert('Added to wishlist!');
-    };
-
     const handleShare = () => {
         if (navigator.share) {
             navigator.share({ title: product.name, url: window.location.href });

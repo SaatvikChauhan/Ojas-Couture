@@ -15,6 +15,7 @@ export const productAPI = {
   getAll: (params = {}) => api.get('/products', { params }),
   getById: (id) => api.get(`/products/${id}`),
   addReview: (id, data) => api.post(`/products/${id}/reviews`, data),
+<<<<<<< HEAD
   
   markHelpful: (productId, reviewId) => 
     api.post(`/products/${productId}/review/${reviewId}/helpful`).then(res => res.data),
@@ -23,6 +24,16 @@ export const productAPI = {
     api.put(`/products/${productId}/review/${reviewId}/approve`, {}, {
       headers: { 'Authorization': `Bearer ${localStorage.getItem('ojasAdminToken')}` }
     }).then(res => res.data)
+=======
+  markHelpful: (productId, reviewId) => fetch(`/api/products/${productId}/review/${reviewId}/helpful`, {
+        method: 'POST'
+    }).then(res => res.json()),
+
+    approveReview: (productId, reviewId) => fetch(`/api/products/${productId}/review/${reviewId}/approve`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('ojasAdminToken')}` }
+    }).then(res => res.json())
+>>>>>>> 795e044a8801857bcf55f80db12994efe93e2c1a
 };
 
 // ── WISHLIST ENDPOINTS ───────────────────────────────────────────────────────
@@ -81,5 +92,9 @@ export const membershipAPI = {
   apply: (data) => api.post('/memberships/apply', data),
   getStatus: (email) => api.get(`/memberships/status/${email}`)
 };
+<<<<<<< HEAD
 
 export default api;
+=======
+export default api;
+>>>>>>> 795e044a8801857bcf55f80db12994efe93e2c1a

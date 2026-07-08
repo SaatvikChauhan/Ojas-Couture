@@ -1,11 +1,61 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet'); // 1. Import Helmet for Security Headers
 const mongoose = require('mongoose');
 
 const app = express();
 
-// --- MIDDLEWARE ---
+// ── 2. SECURITY HEADERS CONFIGURATION (HELMET) ──────────────────────────────────
+app.use(
+  helmet({
+    // Content Security Policy (CSP): Prevents XSS and unauthorized data injection
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        // Allow scripts from self, Razorpay, and Cloudflare Turnstile
+        scriptSrc: [
+          "'self'", 
+          "https://checkout.razorpay.com", 
+          "https://challenges.cloudflare.com"
+        ],
+        // Allow connection endpoints to your API, Razorpay servers, and Turnstile
+        connectSrc: [
+          "'self'", 
+          "https://api.razorpay.com", 
+          "https://challenges.cloudflare.com"
+        ],
+        // Allow images from your server, Unsplash assets, and Razorpay CDNs
+        imgSrc: [
+          "'self'", 
+          "data:", 
+          "https://images.unsplash.com", 
+          "https://*.razorpay.com"
+        ],
+        // Allow checkout and validation iframe overlay windows
+        frameSrc: [
+          "'self'", 
+          "https://api.razorpay.com", 
+          "https://challenges.cloudflare.com"
+        ],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        upgradeInsecureRequests: [],
+      },
+    },
+    // X-Frame-Options: Strict mitigation against Clickjacking attacks
+    frameguard: {
+      action: 'deny',
+    },
+    // X-Content-Type-Options: Prevents browsers from guessing/sniffing MIME response types
+    noSniff: true,
+    // Referrer-Policy: Safely restricts referral data leaks to external sites
+    referrerPolicy: {
+      policy: 'strict-origin-when-cross-origin',
+    },
+  })
+);
+
+// --- OTHER BASE MIDDLEWARES ---
 app.use(cors({
   origin: '*',
   credentials: true
@@ -28,7 +78,6 @@ const connectDB = async () => {
     console.error('MongoDB connection error:', err);
   }
 };
-
 
 app.get('/api/health', (req, res) => {
   return res.json({ status: 'OK', message: 'Ojas Couture API running' });
@@ -57,6 +106,9 @@ app.use('/api/contact', require('./routes/contact'));
 app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/newsletter', require('./routes/newsletter'));
 app.use('/api/memberships', require('./routes/memberships'));
+
+// 3. MOUNT THE MISSING PAYMENT ROUTE ENGINE
+app.use('/api/payment', require('./routes/payment'));
 
 // --- EXPORT FOR VERCEL ---
 module.exports = app;

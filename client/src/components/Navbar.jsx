@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FiMenu, FiX, FiShoppingBag, FiSearch, FiHeart, FiUser, FiChevronDown, FiLogOut, FiPackage, FiSettings } from 'react-icons/fi';
+import { FiMenu, FiX, FiShoppingBag, FiSearch, FiHeart, FiUser, FiChevronDown, FiLogOut, FiPackage } from 'react-icons/fi';
 import AuthModal from "./AuthModal";
-// 1. IMPORT YOUR NEW ACCOUNT SIDEBAR COMPONENT HERE
 import AccountDashboard from './account'; 
 
 const navLinks = [
@@ -19,8 +18,6 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [user, setUser] = useState(null);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-  
-  // 2. STATE HOOK TO CONTROL SIDEBAR DRAWER OPEN/CLOSE
   const [accountSidebarOpen, setAccountSidebarOpen] = useState(false);
 
   const location = useLocation();
@@ -81,10 +78,8 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
         zIndex: 1000,
         boxShadow: '0 2px 10px rgba(0,0,0,0.05)'
       }}>
-
         {/* ROW 1: BRANDING, SEARCH & USER UTILITIES */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px 40px', boxSizing: 'border-box', width: '100%' }}>
-
           {/* LEFT: LOGO */}
           <Link to="/" onClick={() => setMenuOpen(false)}>
             <img src="/logo.avif" alt="Ojas Couture Logo" style={{ height: '45px', display: 'block' }} />
@@ -115,8 +110,7 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
 
           {/* RIGHT: ICON ACTIONS */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-
-            {/* WISHLIST ICON LINK (OPENS SIDEBAR DIRECTLY TO WISHLIST) */}
+            {/* WISHLIST ICON LINK */}
             <button 
               onClick={() => user ? setAccountSidebarOpen(true) : setShowAuth(true)}
               title="Wishlist" 
@@ -168,13 +162,11 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
                     boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
                     zIndex: 1100, overflow: 'hidden', padding: '12px 0'
                   }}>
-                    {/* User summary */}
                     <div style={{ padding: '4px 18px 12px 18px', borderBottom: '1px solid #f1f5f9', textAlign: 'left' }}>
                       <p style={{ margin: 0, fontWeight: 'bold', color: '#111', fontSize: '0.95rem' }}>{user.name}</p>
                       <p style={{ margin: '2px 0 0', color: '#718096', fontSize: '0.8rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.email}</p>
                     </div>
 
-                    {/* 3. CONVERTED LINKS INTO BUTTON TRIGGERS TO OPEN THE SIDEBAR PANELS */}
                     <div style={{ display: 'flex', flexDirection: 'column', padding: '6px 0' }}>
                       <button 
                         onClick={() => { setAccountSidebarOpen(true); setProfileDropdownOpen(false); }} 
@@ -202,7 +194,6 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
                       </button>
                     </div>
 
-                    {/* Logout */}
                     <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '6px' }}>
                       <button
                         onClick={handleLogout}
@@ -230,7 +221,6 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
               </button>
             )}
 
-            {/* HAMBURGER (MOBILE) */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               className="menu-toggle"
@@ -284,7 +274,7 @@ export default function Navbar({ onCartOpen, cartCount = 0 }) {
 
       {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
 
-      {/* 4. RENDER THE SEPARATE ACCOUNT PROFILE SLIDER DRAWER CONTAINER */}
+      {/* RENDER SIDEBAR DRAWER CONTAINER */}
       {accountSidebarOpen && (
         <>
           <div 

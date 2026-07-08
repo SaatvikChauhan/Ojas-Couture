@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { wishlistAPI } from '../utils/api';
 
 // Mock Data representing a professional database response
 const MOCK_USER = {

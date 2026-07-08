@@ -25,11 +25,16 @@ export default function Footer() {
     e.preventDefault();
     if (!email) return;
     try {
-      const res = await newsletterAPI.subscribe(email);
-      setMsg(res.data.message);
+      // Collect the form element to easily parse data if needed
+      const formData = new FormData(e.target);
+      const turnstileToken = formData.get('cf-turnstile-response');
+
+      // Passes both the email and verification response payload down to backend validators
+      const res = await newsletterAPI.subscribe(email, turnstileToken);
+      setMsg(res.data.message || 'Successfully subscribed! 🎉');
       setEmail('');
-    } catch {
-      setMsg('Something went wrong. Please try again.');
+    } catch (err) {
+      setMsg(err.response?.data?.error || 'Something went wrong. Please try again.');
     }
   };
 
@@ -45,7 +50,6 @@ export default function Footer() {
           <div className="footer-group">
             <h4>ABOUT US</h4>
             <p>
-              {/* Fallback to original text if db text is missing. You can also truncate db text if it's too long */}
               {homeData?.aboutText 
                 ? `${homeData.aboutText.substring(0, 160)}...` 
                 : "Rooted in tradition and led by women for decades, we bring the magic and simple opulence of the past back to life, creating timeless styles for today’s little wonders."}
@@ -89,36 +93,40 @@ export default function Footer() {
 
         {/* Column 4: NEWSLETTER & SOCIALS */}
         <div className="footer-column newsletter-column">
+          {/* Unified Form Integration */}
           <form onSubmit={handleSubscribe} className="newsletter-form">
             <label htmlFor="newsletter-email" className="newsletter-label">
               Enter your email address
             </label>
             <input
               id="newsletter-email"
+              name="email"
               type="email"
               placeholder="Your email here"
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
+              style={{ marginBottom: '12px', width: '100%' }}
             />
-            <button type="submit" className="btn-submit-query">
+            
+            {/* 🔒 ANTI-BOT TURNSTILE ELEMENT MOUNTED INSIDE THE FORM CONTAINER */}
+            <div 
+              className="cf-turnstile" 
+              data-sitekey="YOUR_CF_SITE_KEY" 
+              style={{ marginBottom: '12px' }}
+            ></div>
+            
+            <button type="submit" className="btn-submit-query" style={{ width: '100%' }}>
               Submit your query
             </button>
           </form>
-          {msg && <p className="newsletter-msg">{msg}</p>}
-<div className="newsletter-form-container">
-  <input type="email" placeholder="Your email here" required />
-  
+          
+          {msg && <p className="newsletter-msg" style={{ marginTop: '10px' }}>{msg}</p>}
 
-  <div className="cf-turnstile" data-sitekey="YOUR_CF_SITE_KEY"></div>
-  
-  <button type="submit">Submit your query</button>
-</div>
-          <div className="footer-socials">
+          <div className="footer-socials" style={{ marginTop: '20px' }}>
             <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook">
               <i className="fab fa-facebook-f"></i>
             </a>
-            {/* Dynamically link to Instagram based on the handle in the database */}
             <a 
               href={instaHandle ? `https://instagram.com/${instaHandle}` : "https://instagram.com"} 
               target="_blank" 
@@ -127,7 +135,6 @@ export default function Footer() {
             >
               <i className="fab fa-instagram"></i>
             </a>
-            {/* Optionally add WhatsApp if provided in admin */}
             {homeData?.whatsappNumber && (
               <a 
                 href={`https://wa.me/${homeData.whatsappNumber.replace(/[^0-9]/g, '')}`} 
@@ -157,7 +164,6 @@ export default function Footer() {
             </button>
           </p>
 
-          {/* Expanded Luxury Content Blocks */}
           {isExpanded && (
             <div className="expanded-brand-content" style={{ marginTop: '20px', fontSize: '13px', lineHeight: '1.6', color: '#aaa' }}>
               <h3 style={{ color: '#fff', marginTop: '15px', fontSize: '16px' }}>Ojas Couture: Luxury Designer Ethnic Wear for Women</h3>

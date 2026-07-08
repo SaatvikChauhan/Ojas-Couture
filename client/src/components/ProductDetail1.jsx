@@ -809,6 +809,56 @@ const handleAddToWishlist = async () => {
                     <h2 className="section-title" style={{ textAlign: 'left', marginBottom: '24px' }}>Customer Reviews</h2>
                     <div className="divider-gold" style={{ margin: '0 0 32px' }} />
 
+{product.reviews?.length > 0 ? (
+    <div className="reviews-list" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        {product.reviews.map((r, i) => (
+            <div className="review-item" key={i} style={{ borderBottom: '1px solid #f0f0f0', paddingBottom: '16px' }}>
+                <div className="review-header" style={{ marginBottom: '8px' }}>
+                    <strong style={{ marginRight: '10px' }}>{r.name}</strong>
+                    {r.verifiedPurchase && (
+                        <span style={{ fontSize: '11px', backgroundColor: '#e6f4ea', color: '#137333', padding: '2px 6px', borderRadius: '4px', marginRight: '10px', fontWeight: 'bold' }}>
+                            ✓ Verified Purchase
+                        </span>
+                    )}
+                    <span className="stars" style={{ fontSize: 13, color: '#D4AF37' }}>{'★'.repeat(r.rating)}</span>
+                    <span className="review-date" style={{ float: 'right', color: '#888', fontSize: '12px' }}>
+                        {new Date(r.date).toLocaleDateString('en-IN')}
+                    </span>
+                </div>
+                
+                {/* Title */}
+                <h4 style={{ margin: '0 0 6px 0', fontSize: '15px', fontWeight: '600', color: '#1a1a1a' }}>{r.title}</h4>
+                
+                {/* Comment Text */}
+                <p style={{ margin: '0 0 12px 0', color: '#4a4a4a', lineHeight: '1.5' }}>{r.comment}</p>
+
+                {/* Images Attachment Gallery Grid */}
+                {r.images?.length > 0 && (
+                    <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+                        {r.images.map((img, idx) => (
+                            <img key={idx} src={img} alt="User upload attachment" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #ddd' }} />
+                        ))}
+                    </div>
+                )}
+
+                {/* Helpfulness Tracker Action Counter */}
+                <button 
+                    onClick={async () => {
+                        const updated = await productAPI.markHelpful(product._id, r._id);
+                        // Refresh product context state variable to view update increments
+                        productAPI.getById(product._id).then(res => setProduct(res.data));
+                    }}
+                    style={{ background: 'none', border: 'none', color: '#0066cc', cursor: 'pointer', fontSize: '13px', padding: 0 }}
+                >
+                    Helpful ({r.helpfulCount || 0})
+                </button>
+            </div>
+        ))}
+    </div>
+) : (
+    <p style={{ color: 'var(--gray-warm)' }}>No reviews yet. Be the first to review!</p>
+)}
+
                     {product.reviews?.length > 0 ? (
                         <div className="reviews-list" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                             {product.reviews.map((r, i) => (

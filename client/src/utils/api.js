@@ -62,4 +62,16 @@ export const membershipAPI = {
   apply: (data) => api.post('/memberships/apply', data),
   getStatus: (email) => api.get(`/memberships/status/${email}`)
 };
+export const productAPI = {
+    // ... your existing getById and addReview endpoints ...
+    
+    markHelpful: (productId, reviewId) => fetch(`/api/products/${productId}/review/${reviewId}/helpful`, {
+        method: 'POST'
+    }).then(res => res.json()),
+
+    approveReview: (productId, reviewId) => fetch(`/api/products/${productId}/review/${reviewId}/approve`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('ojasAdminToken')}` }
+    }).then(res => res.json())
+};
 export default api;

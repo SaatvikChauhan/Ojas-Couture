@@ -57,8 +57,10 @@ app.use(
 
 // --- OTHER BASE MIDDLEWARES ---
 app.use(cors({
-  origin: '*',
-  credentials: true
+  origin: ['https://ojas-couture.vercel.app', 'http://localhost:5173'], // Allows both your live production and local dev environment
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

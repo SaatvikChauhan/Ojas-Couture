@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { productAPI, orderAPI } from '../utils/api';
+import { productAPI, orderAPI, wishlistAPI } from '../utils/api';
 
 const FALLBACK = {
     _id: '1', name: 'Black Embroidered Kurti Set', price: 1699, originalPrice: 1999,

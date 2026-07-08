@@ -12,6 +12,8 @@
     "concurrently": "^8.2.2"
   },
   "dependencies": {
+    "express-rate-limit": "^8.5.2",
+    "express-validator": "^7.3.2",
     "razorpay": "^2.9.6",
     "react-helmet-async": "^3.0.0",
     "serverless-http": "^4.0.0"

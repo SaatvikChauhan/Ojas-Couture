@@ -6,6 +6,7 @@ const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const adminAuth = require('../middleware/adminAuth');
 const Product = require('../models/Product');
 const ActivityLog = require('../models/activityLog'); // Import the tracking model
+const { formRateLimiter, validateReviewForm } = require('../middleware/formSecurity');
 
 // ── Cloudinary setup ──────────────────────────────────────────────────────────
 cloudinary.config({
@@ -104,6 +105,21 @@ router.post('/:id/reviews', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+router.post('/:id/reviews', formRateLimiter, validateReviewForm, async (req, res) => {
+  try {
+    const { name, rating, comment } = req.body;
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ error: 'Product not found' });
+
+    product.reviews.push({ name, rating: Number(rating), comment });
+    await product.save();
+    res.status(201).json({ message: 'Review added', reviews: product.reviews });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // ADMIN ROUTES  (adminAuth middleware on every handler)

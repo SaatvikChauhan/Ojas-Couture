@@ -106,7 +106,14 @@ export default function Footer() {
             </button>
           </form>
           {msg && <p className="newsletter-msg">{msg}</p>}
+<div className="newsletter-form-container">
+  <input type="email" placeholder="Your email here" required />
+  
 
+  <div className="cf-turnstile" data-sitekey="YOUR_CF_SITE_KEY"></div>
+  
+  <button type="submit">Submit your query</button>
+</div>
           <div className="footer-socials">
             <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook">
               <i className="fab fa-facebook-f"></i>

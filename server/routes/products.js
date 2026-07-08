@@ -5,6 +5,7 @@ const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const adminAuth = require('../middleware/adminAuth');
 const Product = require('../models/Product');
+const ActivityLog = require('../models/activityLog'); // Import the tracking model
 
 // ── Cloudinary setup ──────────────────────────────────────────────────────────
 cloudinary.config({
@@ -115,6 +116,15 @@ router.post('/create', adminAuth, async (req, res) => {
 
     const product = new Product(data);
     await product.save();
+
+    // 🛡️ SECURITY TRACKING: Log creation action
+    await ActivityLog.create({
+      adminId: req.user.id,
+      adminName: req.user.name || 'Admin',
+      action: 'CREATE_PRODUCT',
+      details: `Added product: ${product.name} (${product._id})`
+    });
+
     res.status(201).json(product);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -140,6 +150,15 @@ router.put('/:id', adminAuth, async (req, res) => {
       req.params.id, data, { new: true, runValidators: true }
     );
     if (!product) return res.status(404).json({ msg: 'Not found' });
+
+    // 🛡️ SECURITY TRACKING: Log update action
+    await ActivityLog.create({
+      adminId: req.user.id,
+      adminName: req.user.name || 'Admin',
+      action: 'EDIT_PRODUCT',
+      details: `Edited product fields for: ${product.name} (${product._id})`
+    });
+
     res.json(product);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -162,6 +181,14 @@ router.delete('/:id', adminAuth, async (req, res) => {
         return cloudinary.uploader.destroy(publicId).catch(() => {});
       }));
     }
+
+    // 🛡️ SECURITY TRACKING: Log delete action
+    await ActivityLog.create({
+      adminId: req.user.id,
+      adminName: req.user.name || 'Admin',
+      action: 'DELETE_PRODUCT',
+      details: `Deleted product: ${product.name} (${product._id})`
+    });
 
     res.json({ msg: 'Product deleted' });
   } catch (err) {

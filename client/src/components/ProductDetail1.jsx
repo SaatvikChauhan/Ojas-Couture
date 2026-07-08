@@ -38,18 +38,18 @@ export default function ProductDetail1({ initialProduct }) {
     const [loading, setLoading] = useState(!initialProduct); 
     const [activeImg, setActiveImg] = useState(0);
 
-    
-    // Dynamic data fetch logic (FIXED to refresh on every new ID click)
+    // Dynamic data fetch logic 
 useEffect(() => {
     if (id) {
+        setProduct(null); 
         setLoading(true);
+        
         productAPI.getById(id)
             .then(res => {
-                // Handle different potential API response shapes safely
                 const freshProductData = res.data || res; 
                 if (freshProductData) {
                     setProduct(freshProductData);
-                    setActiveImg(0); // Reset main image focus to the first image
+                    setActiveImg(0); 
                 }
             })
             .catch(err => {
@@ -59,7 +59,7 @@ useEffect(() => {
                 setLoading(false);
             });
     }
-}, [id]); // Only depend on the ID changing
+}, [id]); 
 
     
     const [selectedSize, setSelectedSize] = useState('');

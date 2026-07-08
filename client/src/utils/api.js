@@ -13,6 +13,14 @@ export const productAPI = {
   getAll: (params = {}) => api.get('/products', { params }),
   getById: (id) => api.get(`/products/${id}`),
   addReview: (id, data) => api.post(`/products/${id}/reviews`, data),
+  markHelpful: (productId, reviewId) => fetch(`/api/products/${productId}/review/${reviewId}/helpful`, {
+        method: 'POST'
+    }).then(res => res.json()),
+
+    approveReview: (productId, reviewId) => fetch(`/api/products/${productId}/review/${reviewId}/approve`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('ojasAdminToken')}` }
+    }).then(res => res.json())
 };
 
 export const testimonialAPI = {
@@ -61,17 +69,5 @@ export const wishlistAPI = {
 export const membershipAPI = {
   apply: (data) => api.post('/memberships/apply', data),
   getStatus: (email) => api.get(`/memberships/status/${email}`)
-};
-export const productAPI = {
-    // ... your existing getById and addReview endpoints ...
-    
-    markHelpful: (productId, reviewId) => fetch(`/api/products/${productId}/review/${reviewId}/helpful`, {
-        method: 'POST'
-    }).then(res => res.json()),
-
-    approveReview: (productId, reviewId) => fetch(`/api/products/${productId}/review/${reviewId}/approve`, {
-        method: 'PUT',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('ojasAdminToken')}` }
-    }).then(res => res.json())
 };
 export default api;

@@ -14,16 +14,36 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+// 1. Storage setup (Uploads are sent to Cloudinary, completely outside local folders)
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: 'ojas-couture/products',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'], // Cloudinary will reject other formats
   },
 });
 
-const upload = multer({ storage });
+// 2. Strict Frontend/Backend Filter for Multer
+const fileFilter = (req, file, cb) => {
+  // Reject dangerous extensions explicitly (php, exe, js, html)
+  if (file.originalname.match(/\.(php|exe|js|html)$/i)) {
+    return cb(new Error('Dangerous file extension blocked!'), false);
+  }
+  
+  // Accept only valid imagery extensions
+  if (!file.originalname.match(/\.(jpg|jpeg|png|webp)$/i)) {
+    return cb(new Error('Only image files (jpg, jpeg, png, webp) are allowed!'), false);
+  }
+  
+  cb(null, true);
+};
 
+// 3. Initialize Multer with Size Limits (e.g., 5MB max per image)
+const upload = multer({ 
+  storage,
+  fileFilter,
+  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit protects against denial-of-service bloating
+});
 // ═══════════════════════════════════════════════════════════════════════════════
 // PUBLIC ROUTES  (no auth required)
 // ═══════════════════════════════════════════════════════════════════════════════

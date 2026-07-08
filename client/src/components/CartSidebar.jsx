@@ -8,6 +8,83 @@ const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
+  // 1. Inject the Razorpay checkout overlay script dynamically
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  // 2. Handle the Payment Gateway Trigger on click
+  const handlePayment = async () => {
+    // Dynamically calculate total from the real cart array items
+    const totalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    
+    if (totalAmount <= 0) {
+      alert("Your cart is empty!");
+      return;
+    }
+
+    const isScriptLoaded = await loadRazorpayScript();
+    if (!isScriptLoaded) {
+      alert("Razorpay SDK failed to load. Please check your internet connection.");
+      return;
+    }
+
+    try {
+      // Create the official Order ID on your server backend
+      const orderResponse = await fetch("/api/payment/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: totalAmount }) 
+      });
+      const orderData = await orderResponse.json();
+
+      
+      const options = {
+        key: "rzp_test_XXXXXXXXXXXXXX", // ⚠️NEED TO REPLACE WITH  REAL PUBLIC KEY ID FROM RAZORPAY DASHBOARD
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: "Ojas Couture",
+        description: "Secure Order Payment",
+        order_id: orderData.id,
+        handler: async function (response) {
+          // Send cryptographic transaction details back to server for verification
+          const verifyResponse = await fetch("/api/payment/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            }),
+          });
+          
+          const verification = await verifyResponse.json();
+          if (verification.status === "success") {
+            alert("Payment Successful! Order Confirmed 🎉");
+            onClose(); // Close cart drawer panel layout view
+          } else {
+            alert("Payment verification failed ❌");
+          }
+        },
+        theme: {
+          color: "#4A0E17" // Optional: Matches elegant royal maroon/wine velvet themes
+        }
+      };
+
+      const paymentWindow = new window.Razorpay(options);
+      paymentWindow.open();
+    } catch (err) {
+      console.error("Checkout transaction error:", err);
+      alert("Something went wrong initializing checkout.");
+    }
+  };
+
   return (
     <>
       {/* Dark tint backdrop overlay layer */}
@@ -56,7 +133,10 @@ const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
               ₹{cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}
             </span>
           </div>
-          <button className="checkout-btn">Proceed to Checkout</button>
+          {/* Linked click hook directly to Razorpay automation sequence execution */}
+          <button onClick={handlePayment} className="checkout-btn">
+            Proceed to Checkout
+          </button>
         </div>
       </div>
     </>

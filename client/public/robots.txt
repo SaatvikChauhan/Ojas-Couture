@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Directories to protect
+Disallow: /checkout/
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://ojas-couture.com/sitemap.xml

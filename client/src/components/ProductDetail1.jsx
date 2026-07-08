@@ -304,8 +304,26 @@ const handleAddToWishlist = async () => {
 
     
 
+    const productSchemaJSON = {
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": product.name,
+  "image": product.images,
+  "description": product.description,
+  "offers": {
+    "@type": "Offer",
+    "url": window.location.href,
+    "priceCurrency": "INR",
+    "price": product.price,
+    "availability": product.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+  }
+};
+
     return (
         <div className="product-detail" style={{ paddingTop: 72 }}>
+            <script type="application/ld+json">
+      {JSON.stringify(productSchemaJSON)}
+    </script>
             <div className="container">
                 <nav className="breadcrumb-nav">
                     <Link to="/">Home</Link> › <Link to={isLittleWonders ? "/little-wonders" : "/shop"}>{isLittleWonders ? "Little Wonders" : "Shop"}</Link> › <span>{product.name}</span>

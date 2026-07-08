@@ -92,12 +92,18 @@ export default function ProductDetail1({ initialProduct }) {
 const [isWishlisted, setIsWishlisted] = useState(false);
 
 // 2. Fetch initial wishlist state on load:
+// 2. Fetch initial wishlist state on load (FIXED):
 useEffect(() => {
     if (product && product._id && localStorage.getItem('token')) {
         wishlistAPI.get()
             .then(data => {
-                if (data && data.products) {
+                // Safeguard: Check if data and the products array exist before looping
+                if (data && data.products && Array.isArray(data.products)) {
                     const saved = data.products.some(p => p._id === product._id || p === product._id);
+                    setIsWishlisted(saved);
+                } else if (Array.isArray(data)) { 
+                    // Fallback in case your API returns a direct array instead of an object
+                    const saved = data.some(p => p._id === product._id || p === product._id);
                     setIsWishlisted(saved);
                 }
             })

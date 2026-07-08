@@ -38,10 +38,10 @@ export default function ProductDetail1({ initialProduct }) {
     const [loading, setLoading] = useState(!initialProduct); 
     const [activeImg, setActiveImg] = useState(0);
 
-    // Dynamic data fetch logic 
+   
+      
 useEffect(() => {
     if (id) {
-        setProduct(null); 
         setLoading(true);
         
         productAPI.getById(id)
@@ -49,7 +49,7 @@ useEffect(() => {
                 const freshProductData = res.data || res; 
                 if (freshProductData) {
                     setProduct(freshProductData);
-                    setActiveImg(0); 
+                    setActiveImg(0); // Reset image view back to the first one
                 }
             })
             .catch(err => {

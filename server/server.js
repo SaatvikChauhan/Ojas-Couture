@@ -119,5 +119,11 @@ app.use('/api/memberships', require('./routes/memberships'));
 // 3. MOUNT THE MISSING PAYMENT ROUTE ENGINE
 app.use('/api/payment', require('./routes/payment'));
 
+// --- Start server when run directly (useful for local dev/testing) ---
+if (require.main === module) {
+  const port = process.env.PORT || 5001;
+  app.listen(port, () => console.log(`Server listening on port ${port}`));
+}
+
 // --- EXPORT FOR VERCEL ---
 module.exports = app;

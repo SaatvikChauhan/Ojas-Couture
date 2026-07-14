@@ -1,6 +1,15 @@
 const sgMail = require('@sendgrid/mail');
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// Protect against invalid or missing SendGrid key at startup (avoid crashing the server)
+if (process.env.SENDGRID_API_KEY) {
+  try {
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  } catch (e) {
+    console.warn('SendGrid API key not applied (invalid or misconfigured):', e.message);
+  }
+} else {
+  console.log('SendGrid not configured — skipping email setup');
+}
 
 const sendEmail = async (to, subject, html) => {
   const msg = {

@@ -84,13 +84,19 @@ router.post('/verify', async (req, res) => {
       return res.status(200).json({ status: "success", message: "Payment verified successfully" });
     } else {
       
-      // SECURITY: Log suspicious/failed payment attempts
-      await ActivityLog.create({
-        adminId: 'SYSTEM_ALERT',
-        adminName: 'Security Monitor',
-        action: 'PAYMENT_FAILURE',
-        details: `TAMPERING WARNING: Invalid payment signature detected for Order ID: ${razorpay_order_id}`
-      });
+      // SECURITY: Log suspicious/failed payment attempts (skip in mock/no-db mode)
+      if (process.env.MOCK_MODE !== 'true') {
+        try {
+          await ActivityLog.create({
+            adminId: 'SYSTEM_ALERT',
+            adminName: 'Security Monitor',
+            action: 'PAYMENT_FAILURE',
+            details: `TAMPERING WARNING: Invalid payment signature detected for Order ID: ${razorpay_order_id}`
+          });
+        } catch (e) {
+          console.warn('ActivityLog create skipped/failed:', e.message);
+        }
+      }
 
       return res.status(400).json({ status: "failure", message: "Invalid payment signature!" });
     }

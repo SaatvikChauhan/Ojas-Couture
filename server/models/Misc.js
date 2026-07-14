@@ -19,8 +19,12 @@ const faqSchema = new mongoose.Schema({
 
 const newsletterSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
+  name: { type: String },
   subscribedAt: { type: Date, default: Date.now },
-  active: { type: Boolean, default: true }
+  active: { type: Boolean, default: true },
+  category: { type: String, default: 'general' },
+  source: { type: String, default: 'website' },
+  unsubToken: { type: String }
 });
 
 module.exports = {

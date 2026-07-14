@@ -67,7 +67,16 @@ export const faqAPI = {
 
 // ── NEWSLETTER ENDPOINTS ─────────────────────────────────────────────────────
 export const newsletterAPI = {
-  subscribe: (email) => api.post('/newsletter', { email }),
+  // subscribe(email, turnstileToken)
+  subscribe: (email, token, name) => api.post('/newsletter/subscribe', { email, name, 'cf-turnstile-response': token }),
+  unsubscribe: (tokenOrEmail) => api.post('/newsletter/unsubscribe', tokenOrEmail),
+  admin: {
+    list: (params) => api.get('/newsletter/admin', { params }),
+    export: () => api.get('/newsletter/admin/export', { responseType: 'blob' }),
+    delete: (id) => api.delete(`/newsletter/admin/${id}`),
+    update: (id, data) => api.put(`/newsletter/admin/${id}`, data),
+    import: (items) => api.post('/newsletter/admin/import', items),
+  }
 };
 
 // ── AUTH ENDPOINTS ───────────────────────────────────────────────────────────

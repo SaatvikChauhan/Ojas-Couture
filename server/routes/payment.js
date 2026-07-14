@@ -13,8 +13,11 @@ const razorpay = new Razorpay({
 // 1. ROUTE: Create a new Order ID from Razorpay servers
 router.post('/order', async (req, res) => {
   try {
+    const amount = Number(req.body.amount);
+    if (!amount || amount <= 0) return res.status(400).json({ error: 'Invalid amount' });
+
     const options = {
-      amount: req.body.amount * 100, // Razorpay expects amount in paisa (e.g., ₹12,000 = 1200000)
+      amount: Math.round(amount * 100), // Razorpay expects amount in paisa
       currency: "INR",
       receipt: `receipt_${Date.now()}`,
     };
@@ -22,6 +25,7 @@ router.post('/order', async (req, res) => {
     const order = await razorpay.orders.create(options);
     res.json(order);
   } catch (err) {
+    console.error('Razorpay order creation error:', err);
     res.status(500).json({ error: err.message });
   }
 });

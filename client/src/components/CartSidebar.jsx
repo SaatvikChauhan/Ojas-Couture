@@ -42,11 +42,17 @@ const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: totalAmount }) 
       });
+      if (!orderResponse.ok) {
+        const errorBody = await orderResponse.text();
+        console.error('Order creation failed:', errorBody);
+        alert('Unable to create payment order. Please try again later.');
+        return;
+      }
       const orderData = await orderResponse.json();
 
       
       const options = {
-        key: "rzp_test_XXXXXXXXXXXXXX", // ⚠️NEED TO REPLACE WITH  REAL PUBLIC KEY ID FROM RAZORPAY DASHBOARD
+      key: import.meta.env.VITE_RAZORPAY_KEY || "rzp_test_XXXXXXXXXXXXXX", // Public Key provided via Vite env (VITE_RAZORPAY_KEY)
         amount: orderData.amount,
         currency: orderData.currency,
         name: "Ojas Couture",

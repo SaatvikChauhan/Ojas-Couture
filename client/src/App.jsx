@@ -10,7 +10,7 @@ import PrivacyTerms from './components/PrivacyTerms';
 import AppointmentsPage from './components/AppointmentsPage';
 import ShippingDelivery from './components/ShippingDelivery';
 import ReturnExchange from './components/ReturnExchange';
-import ProductDetail from './pages/ProductDetail';
+import ProductDetail1 from './components/ProductDetail1'; // This is your updated UI file!
 
 import Home from './pages/Home';
 import Shop from './pages/Shop';
@@ -50,8 +50,8 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/shop" element={<Shop />} />
               <Route path="/shop/:category" element={<Shop />} />
-              {/* Use the dedicated product page so route-based product loading works reliably */}
-              <Route path="/product/:id" element={<ProductDetail />} />
+              {/* FIXED: Pointing directly to your updated layout file */}
+              <Route path="/product/:id" element={<ProductDetail1 />} />
               <Route path="/little-wonders" element={<LittleWonders />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />

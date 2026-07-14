@@ -2,11 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default function ProductCard({ product }) {
-  const id = product._id || product.id;
-  const { name, price, originalPrice, images, badge } = product;
+  const { _id, name, price, originalPrice, images, badge } = product;
 
   return (
-    <Link to={`/product/${id}`} className="product-card" style={{ display: 'block' }}>
+    <Link to={`/product/${_id}`} className="product-card" style={{ display: 'block' }}>
       <div className="product-card-img-wrap">
         {badge && <div className="product-card-badge"><span className="badge">{badge}</span></div>}
         <img

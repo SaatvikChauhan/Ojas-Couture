@@ -34,47 +34,32 @@ const FALLBACK_RELATED = [
 
 export default function ProductDetail1({ initialProduct }) {
     const { id } = useParams(); // Extracts the dynamic ID from your URL path
-    const [product, setProduct] = useState(initialProduct || null);
-    const [loading, setLoading] = useState(!initialProduct);
-    const [error, setError] = useState(null);
+    const [product, setProduct] = useState(initialProduct || FALLBACK);
+    const [loading, setLoading] = useState(!initialProduct); 
     const [activeImg, setActiveImg] = useState(0);
 
-    useEffect(() => {
-        if (initialProduct) {
-            setProduct(initialProduct);
-            setActiveImg(0);
-            setError(null);
-            setLoading(false);
-            return;
-        }
-
-        if (!id) {
-            setError('Invalid product identifier.');
-            setLoading(false);
-            return;
-        }
-
+   
+      
+useEffect(() => {
+    if (id) {
         setLoading(true);
-        setError(null);
-
+        
         productAPI.getById(id)
             .then(res => {
-                const freshProductData = res.data || res;
+                const freshProductData = res.data || res; 
                 if (freshProductData) {
                     setProduct(freshProductData);
                     setActiveImg(0); // Reset image view back to the first one
-                } else {
-                    setError('Product not found.');
                 }
             })
             .catch(err => {
-                console.error('Error fetching unique product:', err);
-                setError('Unable to load the selected product.');
+                console.error("Error fetching unique product:", err);
             })
             .finally(() => {
                 setLoading(false);
             });
-    }, [id, initialProduct]);
+    }
+}, [id]); 
 
     
     const [selectedSize, setSelectedSize] = useState('');
@@ -310,14 +295,6 @@ const handleAddToWishlist = async () => {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh', fontSize: '18px', color: '#5A3E2B', fontFamily: 'sans-serif' }}>
                 Loading Product Details...
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh', fontSize: '18px', color: 'red', fontFamily: 'sans-serif' }}>
-                {error}
             </div>
         );
     }

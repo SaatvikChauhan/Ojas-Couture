@@ -71,4 +71,43 @@ router.post('/verify', async (req, res) => {
   }
 });
 
+// Mock payment simulation endpoint for local E2E testing when MOCK_MODE=true
+router.post('/mockPay', async (req, res) => {
+  try {
+    const { order_id } = req.body;
+    if (!order_id) return res.status(400).json({ error: 'order_id required' });
+
+    // Create a fake payment id
+    const payment_id = 'pay_' + Date.now();
+
+    // Create a fake signature exactly like Razorpay does: HMAC_SHA256(order_id + '|' + payment_id)
+    const expectedSign = crypto
+      .createHmac('sha256', process.env.RAZORPAY_SECRET || 'mock_secret')
+      .update(order_id + '|' + payment_id)
+      .digest('hex');
+
+    // Optionally log the mock payment
+    try {
+      await ActivityLog.create({
+        adminId: 'MOCK_USER',
+        adminName: 'Mock Gateway',
+        action: 'MOCK_PAYMENT_CREATED',
+        details: `Mock payment created for order ${order_id}`,
+      });
+    } catch (e) {
+      // ignore logging errors in mock mode
+    }
+
+    // Return the simulated payment response that the real Razorpay overlay would provide
+    return res.json({
+      razorpay_order_id: order_id,
+      razorpay_payment_id: payment_id,
+      razorpay_signature: expectedSign,
+    });
+  } catch (err) {
+    console.error('Mock payment error:', err);
+    return res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

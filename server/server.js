@@ -69,6 +69,13 @@ app.use(express.urlencoded({ extended: true }));
 let isConnected = false;
 
 const connectDB = async () => {
+  // Allow running in MOCK_MODE without a real MongoDB (useful for local testing)
+  if (process.env.MOCK_MODE === 'true' || !process.env.MONGO_URI) {
+    if (!process.env.MONGO_URI) console.warn('Warning: MONGO_URI not set — running in mock/no-db mode');
+    if (process.env.MOCK_MODE === 'true') console.log('Mock mode enabled — skipping DB connect');
+    return;
+  }
+
   if (isConnected) return;
   try {
     await mongoose.connect(process.env.MONGO_URI, {

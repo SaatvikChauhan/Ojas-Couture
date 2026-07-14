@@ -68,12 +68,18 @@ router.post('/verify', async (req, res) => {
     if (razorpay_signature === expectedSign) {
       
       // SECURITY: Log all successful payment events
-      await ActivityLog.create({
-        adminId: req.user?.id || razorpay_payment_id, // Identifies tracking context
-        adminName: req.user?.name || 'Razorpay Gateway',
-        action: 'PAYMENT_SUCCESS',
-        details: `Payment verified successfully for Order ID: ${razorpay_order_id} | Payment ID: ${razorpay_payment_id}`
-      });
+      if (process.env.MOCK_MODE !== 'true') {
+        try {
+          await ActivityLog.create({
+            adminId: req.user?.id || razorpay_payment_id, // Identifies tracking context
+            adminName: req.user?.name || 'Razorpay Gateway',
+            action: 'PAYMENT_SUCCESS',
+            details: `Payment verified successfully for Order ID: ${razorpay_order_id} | Payment ID: ${razorpay_payment_id}`
+          });
+        } catch (e) {
+          console.warn('ActivityLog create skipped/failed:', e.message);
+        }
+      }
 
       return res.status(200).json({ status: "success", message: "Payment verified successfully" });
     } else {
@@ -109,15 +115,17 @@ router.post('/mockPay', async (req, res) => {
       .digest('hex');
 
     // Optionally log the mock payment
-    try {
-      await ActivityLog.create({
-        adminId: 'MOCK_USER',
-        adminName: 'Mock Gateway',
-        action: 'MOCK_PAYMENT_CREATED',
-        details: `Mock payment created for order ${order_id}`,
-      });
-    } catch (e) {
-      // ignore logging errors in mock mode
+    if (process.env.MOCK_MODE !== 'true') {
+      try {
+        await ActivityLog.create({
+          adminId: 'MOCK_USER',
+          adminName: 'Mock Gateway',
+          action: 'MOCK_PAYMENT_CREATED',
+          details: `Mock payment created for order ${order_id}`,
+        });
+      } catch (e) {
+        // ignore logging errors in mock mode
+      }
     }
 
     // Return the simulated payment response that the real Razorpay overlay would provide

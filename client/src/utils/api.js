@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://ojas-couture-api.vercel.app/api/',
+  // Use a Vite-provided API base URL if set, otherwise call the same origin's /api/ (works on Vercel single-deploy setups)
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api/',
   timeout: 10000,
 });
 
